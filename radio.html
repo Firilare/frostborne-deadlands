@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#04070b" />
+  <title>Frostborne Radio | Радиоэфир и FAQ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Oswald:wght@500;600;700&family=Rajdhani:wght@600;700&family=Share+Tech+Mono&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg:#04070b; --panel:rgba(8,12,18,.88); --line:rgba(124,206,255,.18); --text:#e8f5ff; --muted:#8da6c0; --accent:#7cceff; --accent-2:#3a86ff; --danger:#ff3d56; --good:#34d399; --shadow:0 24px 70px rgba(0,0,0,.45);
+    }
+    *{box-sizing:border-box} html{scroll-behavior:smooth} body{margin:0;font-family:Inter,system-ui,sans-serif;color:var(--text);background:radial-gradient(circle at top, rgba(11,20,33,.9), rgba(3,6,10,.98)); min-height:100vh; overflow-x:hidden}
+    body::before{content:"";position:fixed;inset:0;pointer-events:none;z-index:0;opacity:.14;background-image:linear-gradient(rgba(255,255,255,.035) 1px,transparent 1px),linear-gradient(90deg, rgba(255,255,255,.025) 1px,transparent 1px);background-size:100% 4px, 80px 80px; mix-blend-mode:screen}
+    a{color:inherit;text-decoration:none} button,input,select,textarea{font:inherit} :focus-visible{outline:2px solid var(--accent); outline-offset:3px}
+    .container{width:min(1180px, calc(100% - 32px)); margin:0 auto; position:relative; z-index:1}
+    header{position:sticky; top:0; z-index:1000; background:rgba(4,7,11,.8); backdrop-filter:blur(16px); border-bottom:1px solid rgba(255,255,255,.08)}
+    .nav{display:flex; align-items:center; justify-content:space-between; gap:14px; min-height:76px}
+    .logo{display:flex; align-items:center; gap:12px; font-family:Oswald, sans-serif; font-weight:800; text-transform:uppercase; letter-spacing:.08em}
+    .logo-mark{width:42px;height:42px;border-radius:14px;display:grid;place-items:center;background:linear-gradient(135deg, rgba(124,206,255,.16), rgba(58,134,255,.08)); border:1px solid rgba(124,206,255,.22)}
+    .logo-mark svg{width:20px;height:20px;fill:var(--accent)}
+    .nav-links{display:flex; align-items:center; gap:18px}
+    .nav-link{color:#bed1e4; font-size:.86rem; font-weight:700; text-transform:uppercase; letter-spacing:.08em; position:relative}
+    .nav-link::after{content:"";position:absolute;left:0;bottom:-6px;width:100%;height:2px;background:linear-gradient(90deg, transparent, var(--accent), transparent); transform:scaleX(0); transform-origin:center; transition:transform .22s ease}
+    .nav-link:hover::after{transform:scaleX(1)}
+    .pill{display:inline-flex; align-items:center; gap:8px; padding:10px 14px; border-radius:999px; border:1px solid rgba(58,134,255,.25); background:rgba(58,134,255,.08); color:#dbeafe; font-size:.84rem; font-weight:700; text-transform:uppercase; letter-spacing:.08em}
+    .hero{padding:42px 0 20px}
+    .hero-grid{display:grid; grid-template-columns:1.05fr .95fr; gap:20px}
+    .panel{background:linear-gradient(180deg, rgba(9,15,25,.88), rgba(4,7,12,.95)); border:1px solid rgba(124,206,255,.14); border-radius:24px; box-shadow:var(--shadow); padding:22px}
+    .eyebrow{font-family:"Share Tech Mono", monospace; text-transform:uppercase; letter-spacing:.16em; font-size:.78rem; color:var(--accent)}
+    h1{margin:10px 0 12px; font-family:Oswald, sans-serif; text-transform:uppercase; font-size:clamp(2.6rem, 8vw, 4.6rem); line-height:1.02}
+    .glitch{position:relative; display:inline-block}
+    .glitch:hover::before,.glitch:hover::after{content:attr(data-text); position:absolute; inset:0; pointer-events:none; mix-blend-mode:screen}
+    .glitch:hover::before{color:var(--danger); transform:translate(2px,-1px); clip-path:inset(0 0 55% 0); animation:glitchShift .18s steps(2,end) infinite}
+    .glitch:hover::after{color:var(--accent); transform:translate(-1px,1px); clip-path:inset(55% 0 0 0); animation:glitchShift .18s steps(2,end) reverse infinite}
+    @keyframes glitchShift{0%{transform:translate(0)}25%{transform:translate(2px,-1px)}50%{transform:translate(-1px,1px)}75%{transform:translate(1px,2px)}100%{transform:translate(-2px,-1px)}}
+    .lede{color:#b6c6dc; max-width:60ch; font-size:1.02rem}
+    .chip-row{display:flex; flex-wrap:wrap; gap:10px; margin-top:18px}
+    .chip{padding:8px 12px; border-radius:999px; border:1px solid rgba(255,255,255,.08); background:rgba(255,255,255,.04); color:#d8e7f7; text-transform:uppercase; letter-spacing:.08em; font-size:.76rem; font-weight:800}
+    .live-card{display:grid; gap:10px}
+    .stat-grid{display:grid; grid-template-columns:repeat(2,1fr); gap:12px}
+    .mini{background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.08); border-radius:18px; padding:12px}
+    .mini-label{font-family:"Share Tech Mono", monospace; text-transform:uppercase; letter-spacing:.12em; color:var(--muted); font-size:.72rem}
+    .mini-value{font-family:Oswald, sans-serif; font-size:1.25rem; font-weight:800; color:#fff; margin-top:4px}
+    .signal{display:flex; align-items:center; gap:10px; color:#d7e6f8; font-family:"Share Tech Mono", monospace; font-size:.82rem; letter-spacing:.08em; text-transform:uppercase}
+    .dot{width:10px;height:10px;border-radius:999px;background:var(--good); box-shadow:0 0 12px rgba(64,242,160,.45)}
+    .wave{margin-top:8px; display:flex; gap:4px; align-items:flex-end; height:22px}
+    .wave span{width:4px;border-radius:999px;background:linear-gradient(180deg, var(--accent), rgba(255,255,255,.4)); opacity:.8; animation:wave 1.2s infinite}
+    .wave span:nth-child(2){animation-delay:.1s}.wave span:nth-child(3){animation-delay:.2s}.wave span:nth-child(4){animation-delay:.25s}.wave span:nth-child(5){animation-delay:.15s}
+    @keyframes wave{0%,100%{height:6px}50%{height:22px}}
+    .channels{display:flex; flex-wrap:wrap; gap:10px; margin-top:12px}
+    .channel-btn{border:1px solid rgba(255,255,255,.08); background:rgba(255,255,255,.04); color:#e3effa; border-radius:999px; padding:10px 12px; cursor:pointer; font-weight:800; text-transform:uppercase; font-size:.72rem; letter-spacing:.08em}
+    .channel-btn.active{background:rgba(124,206,255,.12); border-color:rgba(124,206,255,.25)}
+    .message-box{margin-top:12px; padding:14px; border-radius:18px; background:rgba(255,255,255,.03); border:1px solid rgba(255,255,255,.08)}
+    .message-kicker{font-family:"Share Tech Mono", monospace; text-transform:uppercase; letter-spacing:.12em; color:var(--danger); font-size:.72rem}
+    .message-title{font-family:Oswald, sans-serif; text-transform:uppercase; font-size:1.18rem; margin:6px 0 8px}
+    .message-copy{color:#c7d4e4; font-size:.95rem}
+    .secret-box{margin-top:12px; display:grid; gap:10px}
+    .secret-input{width:100%; padding:12px 14px; border-radius:14px; background:rgba(8,13,21,.9); color:#fff; border:1px solid rgba(255,255,255,.08)}
+    .secret-hint{color:#a9bed7; font-size:.88rem}
+    .grid{display:grid; grid-template-columns:1fr 1fr; gap:20px; margin-top:18px}
+    .card{background:linear-gradient(180deg, rgba(9,15,25,.9), rgba(4,7,12,.96)); border:1px solid rgba(124,206,255,.14); border-radius:24px; box-shadow:var(--shadow); padding:18px}
+    .card h2{margin:0 0 8px; font-family:Oswald, sans-serif; text-transform:uppercase; letter-spacing:.08em; font-size:1.25rem}
+    .card p{color:#b3c3d7; font-size:.95rem}
+    .archive-list{display:grid; gap:10px; margin-top:12px}
+    .archive-item{padding:12px; border-radius:16px; border:1px solid rgba(255,255,255,.08); background:rgba(255,255,255,.03)}
+    .archive-item strong{display:block; color:#fff; margin-bottom:4px}
+    .archive-item span{color:#a9bed7; font-size:.9rem}
+    .faq-item{border-top:1px solid rgba(255,255,255,.08); padding:14px 0}
+    .faq-item button{width:100%; border:none; background:transparent; color:#fff; text-align:left; display:flex; justify-content:space-between; align-items:center; cursor:pointer; font-family:Oswald, sans-serif; text-transform:uppercase; letter-spacing:.04em; font-size:1.02rem}
+    .faq-body{display:none; color:#b8c8de; font-size:.95rem; padding-top:8px}
+    .faq-item.open .faq-body{display:block}
+    .footer{padding:28px 0 40px; color:var(--muted); font-size:.85rem; text-align:center}
+    @media (max-width: 980px){.hero-grid,.grid{grid-template-columns:1fr}}
+    @media (max-width: 640px){.nav-links{display:none}.stat-grid{grid-template-columns:1fr}}
+  </style>
+</head>
+<body>
+  <header>
+    <div class="container nav">
+      <a class="logo" href="index.html">
+        <div class="logo-mark" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="M12 2 4 13h6l-2 9 12-14h-7l-1-6Z"></path></svg></div>
+        <span>FROSTBORNE // RADIO</span>
+      </a>
+      <nav class="nav-links" aria-label="Навигация страницы радио">
+        <a class="nav-link" href="index.html">Главная</a>
+        <a class="nav-link" href="#faq">FAQ</a>
+        <a class="nav-link" href="index.html#download">Скачать</a>
+      </nav>
+      <a class="pill" href="index.html#download">Скрытый шлюз</a>
+    </div>
+  </header>
+
+  <main class="container hero">
+    <section class="hero-grid">
+      <article class="panel">
+        <div class="eyebrow">Радиоэфир • live</div>
+        <h1 class="glitch" data-text="ЛИВЫЙ ЭФИР МЕРЗЛОТЫ">ЛИВЫЙ ЭФИР МЕРЗЛОТЫ</h1>
+        <p class="lede">Вот отдельная страница эфира: новости, скрытые частоты, архив сигналов и FAQ в одном месте. Здесь уже можно ощущать настоящий узел выживших, а не просто набор карточек.</p>
+        <div class="chip-row">
+          <span class="chip">Частота 101.3 MHz</span>
+          <span class="chip">Синхронизация 24/7</span>
+          <span class="chip">Секретный код: ICE-17</span>
+        </div>
+        <div class="channels" id="channels"></div>
+        <div class="message-box" id="message-box">
+          <div class="message-kicker">Текущий канал</div>
+          <div class="message-title" id="message-title">Новости базы</div>
+          <div class="message-copy" id="message-copy">Сигнал стабилен. Лаборатория подтверждает: маршрут каравана открыт, радионеполадки минимальны.</div>
+        </div>
+        <div class="secret-box">
+          <input id="secret-code" class="secret-input" type="text" placeholder="Введите код доступа…" aria-label="Код доступа" />
+          <div class="secret-hint">Подсказка: найдите скрытые слова, а затем введите код ICE-17, чтобы открыть секретный канал.</div>
+          <button class="pill" id="unlock-secret" type="button">Открыть секретный канал</button>
+        </div>
+      </article>
+
+      <aside class="panel live-card">
+        <div class="signal"><span class="dot"></span>СВЯЗЬ: стабильная</div>
+        <div class="wave" aria-hidden="true"><span></span><span></span><span></span><span></span><span></span></div>
+        <div class="stat-grid">
+          <div class="mini"><div class="mini-label">Режим</div><div class="mini-value" id="mode-label">Обычный эфир</div></div>
+          <div class="mini"><div class="mini-label">Сигнал</div><div class="mini-value" id="signal-label">+92%</div></div>
+          <div class="mini"><div class="mini-label">Лента</div><div class="mini-value" id="feed-label">6 активных пакетов</div></div>
+          <div class="mini"><div class="mini-label">Шум</div><div class="mini-value" id="noise-label">Низкий</div></div>
+        </div>
+        <div class="card" style="padding:14px; margin-top:4px">
+          <h2 style="font-size:1rem">Скрытые частоты</h2>
+          <p>Нажмите на канал, чтобы менять атмосферу эфира. Секретный канал активируется через код ICE-17, а также через комбинацию Ctrl + Shift + H.</p>
+        </div>
+      </aside>
+    </section>
+
+    <section class="grid">
+      <article class="card">
+        <h2>Архив передатчиков</h2>
+        <p>Короткие сигналы, которые можно читать как лор, как новости, как обрывки реальности.</p>
+        <div class="archive-list" id="archive-list"></div>
+      </article>
+
+      <article class="card" id="faq">
+        <h2>Информационный терминал</h2>
+        <p>Переехал сюда, чтобы главная страница оставалась чистой, а радио-узел стал центральной точкой атмосферы.</p>
+        <div class="faq-item open">
+          <button type="button" class="faq-toggle" aria-expanded="true">Как открыть секретную частоту?<span>+</span></button>
+          <div class="faq-body">Введите код ICE-17 или используйте комбинацию Ctrl + Shift + H. После этого эфир меняет тональность и появляется скрытый пакет.</div>
+        </div>
+        <div class="faq-item">
+          <button type="button" class="faq-toggle" aria-expanded="false">Почему на главной странице нет архива модов?<span>+</span></button>
+          <div class="faq-body">Потому что радиоэфир и FAQ теперь вынесены в отдельную страницу, а главная стала чище и сильнее в атмосфере.</div>
+        </div>
+        <div class="faq-item">
+          <button type="button" class="faq-toggle" aria-expanded="false">Что делает скрытый канал?<span>+</span></button>
+          <div class="faq-body">Он открывает редкие сообщения, усиливает шум и даёт дополнительный слой легенды: «под льдом есть ещё один мир».</div>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <footer class="footer">© 2026 Frostborne Deadlands • Радиоузел и FAQ теперь вынесены в отдельную страницу.</footer>
+
+  <script>
+    const channels = [
+      { key:'news', label:'Новости базы', title:'Новости базы', copy:'Сигнал стабилен. Лаборатория подтверждает: маршрут каравана открыт, радионеполадки минимальны.' },
+      { key:'alerts', label:'Аварийные сигналы', title:'Аварийные сигналы', copy:'Северный сектор нестабилен. Ветер усиливается, но связка узлов всё ещё держит линию.' },
+      { key:'rumors', label:'Слухи', title:'Слухи эфира', copy:'Те, кто слышал шёпот в тумане, говорят, что под льдом есть старый узел связи.' },
+      { key:'secret', label:'Секретный канал', title:'Секретный канал', copy:'Код ICE-17 принят. Доступ к скрытой ленте открыт, а звук стал глубже и холоднее.' }
+    ];
+    const archive = [
+      ['00:11', 'Караван прошёл северный коридор без потерь.'],
+      ['01:04', 'Терминалы зафиксировали слабый «шёпот» в синем тумане.'],
+      ['03:22', 'Радиоузел принял пакет с кодом ICE-17.'],
+      ['04:57', 'Старый бункер снова начал отвечать на запросы.']
+    ];
+    const els = {
+      channels: document.getElementById('channels'),
+      title: document.getElementById('message-title'),
+      copy: document.getElementById('message-copy'),
+      modeLabel: document.getElementById('mode-label'),
+      signalLabel: document.getElementById('signal-label'),
+      feedLabel: document.getElementById('feed-label'),
+      noiseLabel: document.getElementById('noise-label'),
+      archiveList: document.getElementById('archive-list'),
+      secretCode: document.getElementById('secret-code'),
+      unlockSecret: document.getElementById('unlock-secret')
+    };
+    function renderChannels(active='news') {
+      els.channels.innerHTML = channels.map(ch => `<button class="channel-btn ${ch.key === active ? 'active' : ''}" data-channel="${ch.key}" type="button">${ch.label}</button>`).join('');
+    }
+    function renderArchive() {
+      els.archiveList.innerHTML = archive.map(([time, text]) => `<div class="archive-item"><strong>${time}</strong><span>${text}</span></div>`).join('');
+    }
+    function applyChannel(key) {
+      const item = channels.find(c => c.key === key) || channels[0];
+      els.title.textContent = item.title;
+      els.copy.textContent = item.copy;
+      els.modeLabel.textContent = key === 'secret' ? 'Скрытый эфир' : key === 'alerts' ? 'Штормовой эфир' : 'Обычный эфир';
+      els.signalLabel.textContent = key === 'secret' ? '+98%' : key === 'alerts' ? '+88%' : '+92%';
+      els.feedLabel.textContent = key === 'secret' ? '8 активных пакетов' : key === 'alerts' ? '5 активных пакетов' : '6 активных пакетов';
+      els.noiseLabel.textContent = key === 'secret' ? 'Глубокий' : key === 'alerts' ? 'Сильный' : 'Низкий';
+      renderChannels(key);
+    }
+    renderChannels();
+    renderArchive();
+    applyChannel('news');
+    els.channels.addEventListener('click', (e) => {
+      const btn = e.target.closest('.channel-btn');
+      if (!btn) return;
+      applyChannel(btn.dataset.channel);
+    });
+    els.unlockSecret.addEventListener('click', () => {
+      const code = els.secretCode.value.trim().toUpperCase();
+      if (code === 'ICE-17' || code === 'ICE17') {
+        applyChannel('secret');
+        els.secretCode.value = '';
+        document.getElementById('message-box').style.boxShadow = '0 0 0 1px rgba(124,206,255,.24), 0 0 28px rgba(124,206,255,.16)';
+        setTimeout(() => document.getElementById('message-box').style.boxShadow = '', 1600);
+      } else {
+        els.modeLabel.textContent = 'Код не принят';
+      }
+    });
+    document.addEventListener('keydown', (e) => {
+      if (e.ctrlKey && e.shiftKey && (e.key || '').toLowerCase() === 's') {
+        e.preventDefault();
+        applyChannel('secret');
+        els.modeLabel.textContent = 'Скрытый эфир';
+      }
+    });
+    document.querySelectorAll('.faq-toggle').forEach(btn => btn.addEventListener('click', () => {
+      const item = btn.closest('.faq-item');
+      item.classList.toggle('open');
+      btn.setAttribute('aria-expanded', String(item.classList.contains('open')));
+    }));
+  </script>
+</body>
+</html>
