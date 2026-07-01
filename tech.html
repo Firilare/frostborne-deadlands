@@ -1,0 +1,533 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#04070b">
+<title>Технический отсек — Frostborne Deadlands</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Oswald:wght@400;500;600;700&family=Share+Tech+Mono&display=swap&subset=cyrillic,cyrillic-ext,latin,latin-ext" rel="stylesheet">
+<link rel="stylesheet" href="extras.css">
+<style>
+:root{
+  --bg:#04070b;--bg-2:#07121f;--ice:#7cceff;--ice-bright:#a8e0ff;--steel:#3a86ff;
+  --red:#b91c1c;--red-bright:#ef4444;--good:#34d399;--warn:#fbbf24;
+  --text:#c5d6e8;--muted:#6b8299;--muted-2:#4a5d70;
+  --line:rgba(124,206,255,.12);--line-2:rgba(255,255,255,.05);
+  --panel:rgba(10,20,33,.72);--shadow:0 28px 80px rgba(0,0,0,.5);--radius:18px;--radius-lg:24px;--header-h:72px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.62;overflow-x:hidden;min-height:100vh;font-size:clamp(15px,1.7vw,16px)}
+body::before{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;background:radial-gradient(ellipse 90% 60% at 50% -10%,rgba(58,134,255,.13),transparent 60%),radial-gradient(ellipse 70% 50% at 85% 8%,rgba(124,206,255,.07),transparent 55%),linear-gradient(180deg,#04070b,#060d18 45%,#04070b 100%)}
+body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.45;background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.1) 3px,transparent 4px);mix-blend-mode:multiply}
+a{color:inherit;text-decoration:none}button,input,select,textarea{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-radius:6px}
+::selection{background:rgba(124,206,255,.3);color:#fff}
+::-webkit-scrollbar{width:9px;height:9px}::-webkit-scrollbar-track{background:transparent}::-webkit-scrollbar-thumb{background:rgba(124,206,255,.2);border-radius:999px}
+.wrap{width:min(1180px,calc(100% - 36px));margin:0 auto;position:relative;z-index:2}
+
+header{position:fixed;top:0;left:0;right:0;height:var(--header-h);z-index:1000;background:rgba(4,7,11,.62);backdrop-filter:blur(20px);border-bottom:1px solid transparent;transition:.3s}
+header.scrolled{background:rgba(4,7,11,.9);border-bottom-color:var(--line)}
+.nav{height:var(--header-h);display:flex;align-items:center;justify-content:space-between;gap:14px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-mark{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(135deg,rgba(124,206,255,.18),rgba(58,134,255,.06));border:1px solid rgba(124,206,255,.25)}
+.brand-mark svg{width:22px;height:22px;fill:var(--ice);filter:drop-shadow(0 0 6px rgba(124,206,255,.4))}
+.brand-text{font-family:'Oswald',sans-serif;font-weight:600;font-size:1.02rem;letter-spacing:.05em;text-transform:uppercase;color:#fff;line-height:1}
+.brand-text b{color:var(--ice)}
+.brand-text small{display:block;font-family:'Share Tech Mono',monospace;font-size:.56rem;letter-spacing:.2em;color:var(--muted);margin-top:3px}
+.nav-right{display:flex;align-items:center;gap:12px}
+.back-link{display:inline-flex;align-items:center;gap:7px;padding:10px 15px;border-radius:999px;border:1px solid var(--line);background:rgba(124,206,255,.06);color:var(--ice-bright);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;transition:.2s}
+.back-link:hover{transform:translateY(-2px);background:rgba(124,206,255,.13)}
+@media(max-width:640px){.back-link span{display:none}.brand-text small{display:none}}
+
+.tech-hero{padding:calc(var(--header-h) + 44px) 0 20px;text-align:center}
+.tech-kicker{font-family:'Share Tech Mono',monospace;font-size:.76rem;letter-spacing:.24em;text-transform:uppercase;color:var(--ice);margin-bottom:14px}
+.tech-hero h1{font-family:'Oswald',sans-serif;font-weight:700;font-size:clamp(2.1rem,6vw,3.4rem);text-transform:uppercase;color:#fff;letter-spacing:.02em;line-height:1.02}
+.tech-hero h1 .ice{color:var(--ice);text-shadow:0 0 40px rgba(124,206,255,.4)}
+.tech-hero p{margin:16px auto 0;max-width:620px;color:var(--muted);font-size:1.02rem}
+.tool-tabs{display:flex;flex-wrap:wrap;justify-content:center;gap:10px;margin-top:34px}
+.tool-tab{display:inline-flex;align-items:center;gap:9px;font-family:'Oswald',sans-serif;font-weight:500;font-size:.96rem;letter-spacing:.03em;text-transform:uppercase;padding:14px 24px;border-radius:14px;border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--text);cursor:pointer;transition:.2s}
+.tool-tab:hover{border-color:rgba(124,206,255,.3);color:#fff;transform:translateY(-2px)}
+.tool-tab.active{background:linear-gradient(135deg,rgba(124,206,255,.16),rgba(58,134,255,.08));border-color:rgba(124,206,255,.4);color:var(--ice-bright)}
+.tool-tab .ic{font-size:1.1rem}
+
+section.tool{padding:36px 0 70px;display:none}
+section.tool.active{display:block;animation:fadeUp .5s}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+.tool-head{max-width:720px;margin:0 auto 36px;text-align:center}
+.tool-head h2{font-family:'Oswald',sans-serif;font-weight:600;font-size:clamp(1.6rem,4vw,2.3rem);text-transform:uppercase;color:#fff;letter-spacing:.02em}
+.tool-head h2 .ice{color:var(--ice)}
+.tool-head p{margin-top:12px;color:var(--muted);font-size:.98rem}
+.panel{background:var(--panel);border:1px solid var(--line);border-radius:var(--radius-lg);box-shadow:var(--shadow);backdrop-filter:blur(10px)}
+
+input[type=range]{width:100%;-webkit-appearance:none;appearance:none;height:6px;border-radius:999px;background:rgba(124,206,255,.15);outline:none;margin:16px 0}
+input[type=range]::-webkit-slider-thumb{-webkit-appearance:none;width:22px;height:22px;border-radius:50%;background:linear-gradient(135deg,var(--ice),var(--steel));cursor:pointer;box-shadow:0 0 14px rgba(124,206,255,.5);border:2px solid #04070b}
+input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;background:var(--ice);cursor:pointer;border:2px solid #04070b}
+
+/* ===== RAM CALCULATOR ===== */
+.ram-grid{display:grid;grid-template-columns:1fr 1fr;gap:18px;max-width:1000px;margin:0 auto}
+@media(max-width:820px){.ram-grid{grid-template-columns:1fr}}
+.ram-col{padding:30px}
+.ram-label{font-family:'Share Tech Mono',monospace;font-size:.7rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);margin-bottom:8px;display:block}
+.ram-big{font-family:'Oswald',sans-serif;font-weight:700;font-size:2.6rem;color:var(--ice);line-height:1}
+.ram-big small{font-size:1rem;color:var(--muted)}
+.ram-row{margin-bottom:24px}
+.autodetect{display:inline-flex;align-items:center;gap:7px;font-family:'Share Tech Mono',monospace;font-size:.66rem;letter-spacing:.05em;text-transform:uppercase;padding:8px 13px;border-radius:9px;border:1px solid rgba(52,211,153,.3);background:rgba(52,211,153,.06);color:var(--good);cursor:pointer;transition:.2s;margin-bottom:18px}
+.autodetect:hover{background:rgba(52,211,153,.12)}
+.seg{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.seg button{font-family:'Share Tech Mono',monospace;font-size:.68rem;letter-spacing:.04em;text-transform:uppercase;padding:10px 13px;border-radius:10px;border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--text);cursor:pointer;transition:.2s}
+.seg button:hover{border-color:rgba(124,206,255,.3)}
+.seg button.active{background:rgba(124,206,255,.13);border-color:rgba(124,206,255,.4);color:var(--ice-bright)}
+.preset-row{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:6px}
+.preset{font-family:'Oswald',sans-serif;font-weight:500;font-size:.82rem;text-transform:uppercase;letter-spacing:.03em;padding:10px 16px;border-radius:11px;border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--text);cursor:pointer;transition:.2s}
+.preset:hover{border-color:rgba(124,206,255,.3);transform:translateY(-2px)}
+.preset.active{background:linear-gradient(135deg,rgba(124,206,255,.16),rgba(58,134,255,.06));border-color:rgba(124,206,255,.4);color:var(--ice-bright)}
+.out-cards{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:18px}
+.out-card{padding:18px;border-radius:15px;background:rgba(124,206,255,.05);border:1px solid rgba(124,206,255,.18);text-align:center}
+.out-card .v{font-family:'Oswald',sans-serif;font-weight:700;font-size:1.9rem;color:#fff;line-height:1}
+.out-card .v.warn{color:var(--warn)}.out-card .v.good{color:var(--good)}
+.out-card .l{font-family:'Share Tech Mono',monospace;font-size:.64rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-top:7px}
+.rec-line{display:flex;justify-content:space-between;gap:12px;padding:11px 0;border-bottom:1px solid var(--line-2);font-size:.9rem}
+.rec-line:last-child{border-bottom:none}
+.rec-line .k{color:var(--muted)}.rec-line .v{color:#fff;font-weight:600;text-align:right}
+.rec-line .v.ice{color:var(--ice-bright)}
+.alloc-note{font-size:.86rem;color:var(--text);line-height:1.55;padding:14px;border-radius:12px;background:rgba(255,255,255,.03);border:1px dashed var(--line);margin:16px 0}
+.alloc-note.warn{border-color:rgba(251,191,36,.3);background:rgba(251,191,36,.05)}
+.launcher-tabs{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:12px}
+.launcher-tabs button{flex:1;min-width:80px;font-family:'Share Tech Mono',monospace;font-size:.64rem;text-transform:uppercase;letter-spacing:.03em;padding:9px;border-radius:9px;border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--muted);cursor:pointer;transition:.2s}
+.launcher-tabs button.active{background:rgba(124,206,255,.12);border-color:rgba(124,206,255,.35);color:var(--ice-bright)}
+.args-label{display:flex;justify-content:space-between;align-items:center;margin-bottom:8px}
+.args-label span{font-family:'Share Tech Mono',monospace;font-size:.68rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.copy-btn{font-family:'Share Tech Mono',monospace;font-size:.64rem;letter-spacing:.05em;text-transform:uppercase;padding:7px 12px;border-radius:8px;border:1px solid var(--line);background:rgba(124,206,255,.08);color:var(--ice);cursor:pointer;transition:.2s}
+.copy-btn:hover{background:rgba(124,206,255,.16)}
+.args-code{font-family:'Share Tech Mono',monospace;font-size:.72rem;line-height:1.6;color:#bfe3ff;background:rgba(2,8,16,.8);border:1px solid var(--line);border-radius:12px;padding:14px;word-break:break-all;max-height:150px;overflow:auto}
+.why{margin-top:16px;border:1px solid var(--line-2);border-radius:12px;overflow:hidden}
+.why summary{padding:14px 16px;cursor:pointer;font-family:'Oswald',sans-serif;font-weight:500;font-size:.92rem;color:var(--ice-bright);text-transform:uppercase;letter-spacing:.02em;list-style:none}
+.why summary::-webkit-details-marker{display:none}
+.why summary::before{content:'▸ ';color:var(--ice)}
+.why[open] summary::before{content:'▾ '}
+.why-body{padding:0 16px 16px;font-size:.86rem;color:var(--text);line-height:1.6}
+.why-body code{font-family:'Share Tech Mono',monospace;background:rgba(124,206,255,.1);padding:2px 6px;border-radius:5px;color:var(--ice-bright);font-size:.85em}
+.why-body p{margin-bottom:8px}
+
+/* ===== CRASH ANALYZER ===== */
+.crash-wrap{max-width:920px;margin:0 auto}
+.dropzone{padding:44px 30px;border:2px dashed rgba(124,206,255,.3);border-radius:var(--radius-lg);text-align:center;cursor:pointer;transition:.25s;background:rgba(124,206,255,.03)}
+.dropzone:hover,.dropzone.drag{border-color:var(--ice);background:rgba(124,206,255,.08)}
+.dropzone .dz-ic{font-size:2.6rem;margin-bottom:14px;opacity:.8}
+.dropzone h3{font-family:'Oswald',sans-serif;font-weight:600;font-size:1.3rem;text-transform:uppercase;color:#fff;margin-bottom:8px}
+.dropzone p{color:var(--muted);font-size:.9rem}
+.paste-area{margin-top:14px}
+.paste-area textarea{width:100%;min-height:90px;resize:vertical;padding:14px 16px;border-radius:14px;border:1px solid var(--line);background:rgba(8,14,24,.8);color:#fff;font-family:'Share Tech Mono',monospace;font-size:.78rem;line-height:1.5}
+.paste-area textarea:focus{border-color:rgba(124,206,255,.45);outline:none}
+.analyze-row{display:flex;gap:10px;justify-content:center;margin-top:12px;flex-wrap:wrap}
+.crash-result{margin-top:24px;display:none}
+.crash-result.show{display:block;animation:fadeUp .4s}
+.verdict{padding:24px;border-radius:18px;margin-bottom:18px;border:1px solid;text-align:center}
+.verdict.crit{border-color:rgba(239,68,68,.4);background:rgba(239,68,68,.07)}
+.verdict.warn{border-color:rgba(251,191,36,.35);background:rgba(251,191,36,.06)}
+.verdict.ok{border-color:rgba(52,211,153,.35);background:rgba(52,211,153,.06)}
+.verdict .vi{font-size:2.4rem;margin-bottom:10px}
+.verdict h3{font-family:'Oswald',sans-serif;font-weight:700;font-size:1.4rem;text-transform:uppercase;color:#fff;letter-spacing:.02em;margin-bottom:6px}
+.verdict p{color:var(--text);font-size:.92rem;max-width:560px;margin:0 auto}
+.env-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px;margin-bottom:18px}
+.env-card{padding:14px;border-radius:13px;background:rgba(255,255,255,.03);border:1px solid var(--line-2)}
+.env-card .el{font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted)}
+.env-card .ev{font-family:'Oswald',sans-serif;font-weight:600;font-size:1.05rem;color:#fff;margin-top:4px;word-break:break-word}
+.env-card .ev.warn{color:var(--warn)}.env-card .ev.good{color:var(--good)}.env-card .ev.dim{color:var(--muted-2);font-weight:400;font-size:.92rem}
+.diag-list{display:flex;flex-direction:column;gap:12px}
+.diag{display:flex;gap:16px;padding:20px;border-radius:16px;border:1px solid;align-items:flex-start}
+.diag.crit{border-color:rgba(239,68,68,.4);background:rgba(239,68,68,.07)}
+.diag.warn{border-color:rgba(251,191,36,.35);background:rgba(251,191,36,.06)}
+.diag.info{border-color:rgba(124,206,255,.3);background:rgba(124,206,255,.05)}
+.diag .di{font-size:1.6rem;flex-shrink:0}
+.diag h4{font-family:'Oswald',sans-serif;font-weight:600;font-size:1.1rem;text-transform:uppercase;color:#fff;margin-bottom:6px}
+.diag p{font-size:.9rem;color:var(--text);line-height:1.55}
+.diag code{font-family:'Share Tech Mono',monospace;font-size:.82em;background:rgba(2,8,16,.6);padding:2px 7px;border-radius:5px;color:var(--ice-bright);word-break:break-all}
+.diag .culprit{margin-top:8px;font-family:'Share Tech Mono',monospace;font-size:.74rem;color:var(--warn)}
+.crash-meta{font-family:'Share Tech Mono',monospace;font-size:.72rem;color:var(--muted);text-align:center;margin-top:14px}
+.crash-flash{animation:flashRed .5s 2}
+@keyframes flashRed{0%,100%{background:var(--bg)}50%{background:rgba(239,68,68,.06)}}
+.forum-cta{margin-top:16px;text-align:center}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:14px 22px;border-radius:13px;font-weight:700;font-size:.88rem;text-transform:uppercase;letter-spacing:.03em;cursor:pointer;border:1px solid transparent;transition:.2s}
+.btn-primary{background:linear-gradient(135deg,var(--ice),var(--steel));color:#02101c;box-shadow:0 12px 30px rgba(124,206,255,.25)}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 18px 40px rgba(124,206,255,.4)}
+.btn-ghost{background:rgba(255,255,255,.03);border-color:var(--line);color:var(--text)}
+.btn-ghost:hover{transform:translateY(-3px);background:rgba(255,255,255,.06)}
+
+.footer{padding:46px 0 38px;border-top:1px solid var(--line);text-align:center;margin-top:20px}
+.footer p{color:var(--muted);font-size:.82rem}
+.footer .mono{font-family:'Share Tech Mono',monospace;font-size:.68rem;letter-spacing:.1em;color:var(--muted-2);margin-top:8px}
+@media(max-width:560px){body{font-size:16.5px}.ram-col{padding:22px 18px}}
+</style>
+</head>
+<body>
+
+<header id="header">
+  <div class="wrap nav">
+    <a class="brand" href="index.html">
+      <div class="brand-mark"><svg viewBox="0 0 24 24"><path d="M12 2l2.4 4.8L19 8l-3.5 3.4.8 4.9L12 14l-4.3 2.3.8-4.9L5 8l4.6-1.2z"/></svg></div>
+      <div class="brand-text">FROST<b>BORNE</b><small>TECH BAY // STATION OS</small></div>
+    </a>
+    <div class="nav-right">
+      <span class="lang-switch" id="langMount"></span>
+      <a class="back-link" href="index.html">← <span>На станцию</span></a>
+    </div>
+  </div>
+</header>
+
+<div class="tech-hero">
+  <div class="wrap">
+    <div class="tech-kicker">// СЕКТОР: ТЕХНИЧЕСКИЙ ОТСЕК</div>
+    <h1>Технический <span class="ice">отсек</span></h1>
+    <p>Два бортовых инструмента выжившего: тонкая настройка запуска под твоё железо и глубокая диагностика любых вылетов — не только этой сборки.</p>
+    <div class="tool-tabs">
+      <button class="tool-tab active" data-tool="ram"><span class="ic">🧮</span> Калькулятор ОЗУ</button>
+      <button class="tool-tab" data-tool="crash"><span class="ic">🩺</span> Техно-доктор</button>
+    </div>
+  </div>
+</div>
+
+<main>
+<!-- ============ RAM CALCULATOR ============ -->
+<section class="tool active" id="tool-ram">
+  <div class="wrap">
+    <div class="tool-head">
+      <h2>Веб-оптимизатор <span class="ice">Java</span></h2>
+      <p>Укажи железо — получи идеальное выделение памяти, рекомендации по дистанции прорисовки, выбор сборщика мусора и готовую строку аргументов под твой лаунчер.</p>
+    </div>
+    <div class="ram-grid">
+      <div class="panel ram-col">
+        <button class="autodetect" id="autodetect">⚡ Определить моё железо автоматически</button>
+        <div class="ram-row">
+          <span class="ram-label">Всего ОЗУ на ПК</span>
+          <div class="ram-big"><span id="ramTotalVal">16</span> <small>ГБ</small></div>
+          <input type="range" id="ramTotal" min="4" max="64" step="2" value="16">
+        </div>
+        <div class="ram-row">
+          <span class="ram-label">Ядра процессора</span>
+          <div class="ram-big" style="font-size:1.8rem"><span id="coresVal">6</span> <small>потоков</small></div>
+          <input type="range" id="cores" min="2" max="32" step="1" value="6">
+        </div>
+        <div class="ram-row">
+          <span class="ram-label">Видеокарта</span>
+          <div class="seg" id="gpuSeg">
+            <button data-gpu="weak">Встройка / GTX 10</button>
+            <button data-gpu="mid" class="active">RTX 30 / RX 6000</button>
+            <button data-gpu="strong">RTX 40+</button>
+          </div>
+        </div>
+        <div class="ram-row" style="margin-bottom:8px">
+          <span class="ram-label">Профиль настройки</span>
+          <div class="preset-row" id="presetRow">
+            <button class="preset" data-preset="potato">🥔 Слабый ПК</button>
+            <button class="preset active" data-preset="balanced">⚖ Баланс</button>
+            <button class="preset" data-preset="quality">✨ Качество</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="panel ram-col">
+        <div class="out-cards">
+          <div class="out-card"><div class="v" id="allocVal">10</div><div class="l">ГБ под игру</div></div>
+          <div class="out-card"><div class="v" id="allocMbCard">10240</div><div class="l">мегабайт (Xmx)</div></div>
+        </div>
+        <div class="rec-line"><span class="k">☕ Версия Java</span><span class="v ice" id="recJava">Java 17 (64-bit)</span></div>
+        <div class="rec-line"><span class="k">♻ Сборщик мусора</span><span class="v ice" id="recGC">G1GC (Aikar)</span></div>
+        <div class="rec-line"><span class="k">👁 Дистанция прорисовки</span><span class="v" id="recRender">12 чанков</span></div>
+        <div class="rec-line"><span class="k">⚙ Дистанция симуляции</span><span class="v" id="recSim">8 чанков</span></div>
+        <div class="rec-line"><span class="k">🌑 Профиль шейдеров</span><span class="v" id="recShader">Medium / High</span></div>
+        <div class="rec-line"><span class="k">📈 Ожидаемый FPS</span><span class="v" id="recFps">60–90</span></div>
+        <div class="alloc-note" id="allocNote"></div>
+        <div class="launcher-tabs" id="launcherTabs">
+          <button class="active" data-launcher="prism">Prism</button>
+          <button data-launcher="curse">CurseForge</button>
+          <button data-launcher="at">ATLauncher</button>
+          <button data-launcher="multimc">MultiMC</button>
+        </div>
+        <div class="args-label"><span id="argsHint">JVM аргументы</span><button class="copy-btn" id="copyArgs">⧉ Копировать</button></div>
+        <div class="args-code" id="argsCode"></div>
+        <details class="why">
+          <summary>Почему именно эти флаги?</summary>
+          <div class="why-body">
+            <p><code>-Xms</code> и <code>-Xmx</code> равны — память выделяется сразу, без рывков при расширении кучи.</p>
+            <p><code>G1GC</code> с флагами Aikar — лучший сборщик мусора для Minecraft: короткие паузы, плавный FPS. Это стандарт серверов и тяжёлых сборок.</p>
+            <p><code>+AlwaysPreTouch</code> резервирует память у ОС заранее — меньше микрофризов в игре.</p>
+            <p>Параметры <code>G1NewSizePercent</code> и <code>MaxGCPauseMillis</code> заставляют сборщик работать чаще, но короче — игра не «подвисает» на полсекунды во время чистки памяти.</p>
+            <p>Выделять <b>больше 12 ГБ вредно</b>: куча становится огромной, и когда сборщик мусора всё-таки запускается, пауза длиннее. Для 1.20.1 сладкая точка — 8–10 ГБ.</p>
+          </div>
+        </details>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ============ CRASH ANALYZER ============ -->
+<section class="tool" id="tool-crash">
+  <div class="wrap">
+    <div class="tool-head">
+      <h2>Техно-<span class="ice">доктор</span></h2>
+      <p>Глубокий разбор краш-логов <b>любой</b> сборки Minecraft. Определяет загрузчик, версию, Java, память, виновный мод и причину вылета. Файл никуда не отправляется — весь анализ в браузере.</p>
+    </div>
+    <div class="crash-wrap">
+      <div class="dropzone" id="dropzone">
+        <div class="dz-ic">🩺</div>
+        <h3>Диагностика терминала</h3>
+        <p>Перетащи <code style="font-family:'Share Tech Mono',monospace;color:var(--ice-bright)">crash-report.txt</code>, <code style="font-family:'Share Tech Mono',monospace;color:var(--ice-bright)">latest.log</code> или <code style="font-family:'Share Tech Mono',monospace;color:var(--ice-bright)">debug.log</code></p>
+        <input type="file" id="fileInput" accept=".txt,.log" hidden>
+        <div class="paste-area">
+          <textarea id="pasteArea" placeholder="…или вставь текст лога сюда (Ctrl+V)"></textarea>
+          <div class="analyze-row">
+            <button class="btn btn-primary" id="analyzeBtn">🔬 Анализировать</button>
+            <button class="btn btn-ghost" id="browseBtn">📂 Выбрать файл</button>
+            <button class="btn btn-ghost" id="clearBtn">✕ Очистить</button>
+          </div>
+        </div>
+      </div>
+      <div class="crash-result" id="crashResult"></div>
+    </div>
+  </div>
+</section>
+</main>
+
+<footer class="footer">
+  <div class="wrap">
+    <p>Технический отсек · Frostborne Deadlands</p>
+    <p class="mono">STATION OS · Created by Firilare · © 2026</p>
+  </div>
+</footer>
+
+<script src="sfx.js"></script>
+<script src="i18n.js"></script>
+<script src="frostextras.js"></script>
+<script>
+(function(){
+  'use strict';
+  const $=(s,p=document)=>p.querySelector(s), $$=(s,p=document)=>Array.from(p.querySelectorAll(s));
+  const esc=s=>String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;');
+  if(window.I18N) I18N.buildSwitcher('#langMount');
+  document.addEventListener('click',()=>{ if(window.FrostSFX) FrostSFX.unlock(); },{once:true});
+  document.addEventListener('click',e=>{ if(window.FrostSFX&&e.target.closest('.btn,.tool-tab,.seg button,.preset,.copy-btn,.autodetect,.launcher-tabs button')) FrostSFX.play('click'); },{passive:true});
+  addEventListener('scroll',()=>$('#header').classList.toggle('scrolled',scrollY>20),{passive:true});
+
+  $$('.tool-tab').forEach(tab=>tab.addEventListener('click',()=>{
+    $$('.tool-tab').forEach(t=>t.classList.remove('active')); tab.classList.add('active');
+    $$('section.tool').forEach(s=>s.classList.remove('active'));
+    $('#tool-'+tab.dataset.tool).classList.add('active');
+    if(window.FrostSFX) FrostSFX.play('tab');
+  }));
+
+  /* ================= RAM CALCULATOR ================= */
+  const R={ total:16, cores:6, gpu:'mid', preset:'balanced', launcher:'prism' };
+  function baseAlloc(t){ if(t<=4)return 3; if(t<=6)return 4; if(t<=8)return 6; if(t<=12)return 8; if(t<=16)return 10; if(t<=24)return 11; return 12; }
+  function calc(){
+    let a=baseAlloc(R.total);
+    if(R.preset==='potato') a=Math.max(3,Math.min(a,6));
+    if(R.preset==='quality') a=Math.min(12,a+1);
+    if(R.gpu==='weak'&&a>8) a=8;
+    return a;
+  }
+  function flags(mb){
+    return `-Xms${mb}M -Xmx${mb}M -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -Dusing.aikars.flags=https://mcflags.emc.gs -Daikars.new.flags=true`;
+  }
+  function render(){
+    const a=calc(), mb=a*1024;
+    $('#ramTotalVal').textContent=R.total; $('#coresVal').textContent=R.cores;
+    const av=$('#allocVal'); av.textContent=a; av.className='v'+(a<=4?' warn':a>=10?' good':'');
+    $('#allocMbCard').textContent=mb;
+    let rd = R.gpu==='strong'?(R.preset==='quality'?20:16):R.gpu==='mid'?(R.preset==='potato'?10:14):(R.preset==='potato'?8:10);
+    let sd = Math.max(6, Math.min(rd-2, R.cores>=8?12:R.cores>=6?10:8));
+    $('#recRender').textContent=rd+' чанков';
+    $('#recSim').textContent=sd+' чанков';
+    $('#recShader').textContent = R.gpu==='strong'?'High / Extreme':R.gpu==='mid'?(R.preset==='potato'?'Low / Medium':'Medium / High'):'Potato / Low';
+    $('#recFps').textContent = R.gpu==='strong'?'80–120':R.gpu==='mid'?'60–90':'40–60';
+    $('#recGC').textContent='G1GC (Aikar)'; $('#recJava').textContent='Java 17 (64-bit)';
+    let note,warn=false;
+    if(R.total<=6){ note='⚠ <b>Минимум.</b> 230+ модов на 6 ГБ запустятся, но при ордах и Create возможны просадки. Закрой браузер и фоновые программы перед игрой.'; warn=true; }
+    else if(R.total<=8){ note='✅ <b>Рабочий минимум.</b> 6 ГБ под игру + запас ОС. Снизь дистанцию прорисовки до '+rd+' чанков для стабильности.'; }
+    else if(R.total<=16){ note='✅ <b>Оптимальная зона.</b> '+a+' ГБ под игру — хватит на орды, технику Create и шейдеры без пауз сборщика мусора.'; }
+    else { note='✅ <b>С запасом.</b> Не выделяй больше 12 ГБ под Minecraft: куча станет огромной, а паузы сборщика — длиннее. Лишнее оставь системе и другим программам.'; }
+    const nb=$('#allocNote'); nb.innerHTML=note; nb.className='alloc-note'+(warn?' warn':'');
+    const f=flags(mb); let hint='';
+    if(R.launcher==='prism') hint='Prism: Edit Instance → Settings → Java → JVM arguments';
+    else if(R.launcher==='curse') hint='CurseForge: Settings → Minecraft → Additional Arguments';
+    else if(R.launcher==='at') hint='ATLauncher: Settings → Java → JVM Parameters';
+    else hint='MultiMC: Edit Instance → Settings → Java → JVM arguments';
+    $('#argsHint').textContent=hint; $('#argsCode').textContent=f;
+  }
+  $('#ramTotal').addEventListener('input',e=>{ R.total=+e.target.value; render(); });
+  $('#cores').addEventListener('input',e=>{ R.cores=+e.target.value; render(); });
+  $$('#gpuSeg button').forEach(b=>b.addEventListener('click',()=>{ $$('#gpuSeg button').forEach(x=>x.classList.remove('active')); b.classList.add('active'); R.gpu=b.dataset.gpu; render(); }));
+  $$('#presetRow .preset').forEach(b=>b.addEventListener('click',()=>{ $$('#presetRow .preset').forEach(x=>x.classList.remove('active')); b.classList.add('active'); R.preset=b.dataset.preset; render(); }));
+  $$('#launcherTabs button').forEach(b=>b.addEventListener('click',()=>{ $$('#launcherTabs button').forEach(x=>x.classList.remove('active')); b.classList.add('active'); R.launcher=b.dataset.launcher; render(); }));
+  $('#autodetect').addEventListener('click',()=>{
+    const mem=navigator.deviceMemory, cores=navigator.hardwareConcurrency; let msg=[];
+    if(cores){ R.cores=Math.max(2,Math.min(32,cores)); $('#cores').value=R.cores; msg.push(cores+' потоков'); }
+    if(mem){ const guess=mem>=8?16:mem*2; R.total=guess; $('#ramTotal').value=guess; msg.push('~'+guess+' ГБ ОЗУ (прибл.)'); }
+    render();
+    if(window.FrostExtras) FrostExtras.toast('АВТО-СКАН', msg.length?('Определено: '+msg.join(', ')+'. Браузер округляет значения — проверь и поправь вручную.'):'Браузер не отдаёт характеристики. Укажи вручную.');
+  });
+  $('#copyArgs').addEventListener('click',()=>{
+    navigator.clipboard?.writeText($('#argsCode').textContent).then(()=>{
+      const b=$('#copyArgs'),o=b.textContent; b.textContent='✓ Скопировано'; setTimeout(()=>b.textContent=o,1500);
+      if(window.FrostExtras) FrostExtras.toast('JVM АРГУМЕНТЫ','Строка скопирована в буфер обмена.');
+    });
+  });
+  render();
+
+  /* ================= CRASH ANALYZER ================= */
+  const MODSIG=[
+    [/com\.simibubi\.create|create[._]/i,'Create'],
+    [/tacz|mod\.tac/i,'TACZ (оружие)'],
+    [/securitycraft/i,'SecurityCraft'],
+    [/sodium|embeddium|rubidium/i,'Sodium/Embeddium/Rubidium'],
+    [/oculus|net\.irisshaders|iris/i,'Oculus/Iris (шейдеры)'],
+    [/optifine/i,'OptiFine'],
+    [/journeymap|xaero/i,'Карта (JourneyMap/Xaero)'],
+    [/mezz\.jei|\bjei\b/i,'JEI'],
+    [/curios|theillusivec4/i,'Curios'],
+    [/farmersdelight|vectorwing/i,"Farmer's Delight"],
+    [/twilightforest/i,'Twilight Forest'],
+    [/ars_nouveau|alexsmobs|alexmobs/i,"Ars Nouveau / Alex's Mobs"],
+    [/cofh|thermal/i,'CoFH/Thermal'],
+    [/mekanism/i,'Mekanism'],
+    [/blusunrize|immersiveengineering/i,'Immersive Engineering'],
+    [/appeng|\bae2\b/i,'Applied Energistics 2'],
+    [/vazkii\.botania|botania/i,'Botania'],
+    [/mehvahdjukaar|supplementaries/i,'Supplementaries'],
+    [/ichun|firstaid/i,'First Aid'],
+    [/epicfight/i,'Epic Fight'],
+    [/jozufozu|flywheel/i,'Flywheel (Create)'],
+    [/ferritecore|modernfix|memoryleakfix/i,'Оптимизатор (FerriteCore/ModernFix)'],
+  ];
+  function findCulprit(text){
+    const frames=[...text.matchAll(/\bat\s+([a-z0-9_]+(?:\.[a-z0-9_]+){2,})/gi)].map(m=>m[1]).slice(0,500);
+    for(const fr of frames){ for(const [re,name] of MODSIG){ if(re.test(fr)) return {name, frame:fr}; } }
+    const mf=text.match(/Mod File:\s*(.+)/i); if(mf) return {name:mf[1].trim().split(/[\/\\]/).pop()};
+    return null;
+  }
+  function pick(re,text,g=1){ const m=text.match(re); return m?m[g]:null; }
+  function detectEnv(t){
+    const env={};
+    env.mc = pick(/Minecraft Version:\s*([\w.\-]+)/i,t) || pick(/'version',\s*'([\w.\-]+)'/i,t) || pick(/\b(1\.(?:1[0-9]|2[0-9])(?:\.\d+)?)\b/,t);
+    if(/neoforge|net\.neoforged/i.test(t)) env.loader='NeoForge';
+    else if(/fabricloader|net\.fabricmc|Fabric Loader/i.test(t)) env.loader='Fabric';
+    else if(/org\.quiltmc|quilt/i.test(t)) env.loader='Quilt';
+    else if(/minecraftforge|\bFML\b|forge/i.test(t)) env.loader='Forge';
+    else env.loader=null;
+    env.loaderVer = pick(/Forge(?:\sversion)?:?\s*([\d.]+)/i,t) || pick(/Fabric Loader[:\s]+([\d.]+)/i,t) || pick(/neoforge[:\s]+([\d.]+)/i,t);
+    env.java = pick(/Java Version:\s*([\w.\-+]+)/i,t) || pick(/java\.version[",\s:]+([\w.\-+]+)/i,t) || pick(/JRE version:[^(]*\(([\d._]+)/i,t);
+    let xnum = pick(/-Xmx(\d+)([gGmM])/,t), xunit = pick(/-Xmx\d+([gGmM])/,t);
+    if(xnum) env.mem = xnum+(/g/i.test(xunit||'')?' ГБ':' МБ');
+    env.os = pick(/Operating System:\s*([^\n]+)/i,t) || pick(/os\.name[",\s:]+([^\n",]+)/i,t);
+    env.desc = pick(/Description:\s*([^\n]+)/i,t);
+    const causes=[...t.matchAll(/Caused by:\s*([^\n]+)/gi)].map(m=>m[1].trim());
+    env.cause = causes.length?causes[causes.length-1]:(pick(/((?:java|net|org|com)\.[\w.$]+(?:Exception|Error)[^\n]*)/i,t));
+    return env;
+  }
+
+  const RULES=[
+    { re:/OutOfMemoryError|Could not reserve enough space|requested \d+ bytes for|GC overhead limit exceeded|Java heap space|unable to create new native thread|Metaspace/i, sev:'crit', icon:'🧠', title:'Нехватка оперативной памяти',
+      body:'Игре не хватило выделенной памяти. Открой вкладку «Калькулятор ОЗУ» — выдели 6–10 ГБ под игру и вставь готовые Java-аргументы. Если памяти всего 8 ГБ — закрой браузер и фоновые программы перед запуском.' },
+    { re:/Mixin apply failed|Mixin transformation|InvalidMixinException|InjectionError|CrashReportExtender|mixin\.injection|MixinApplyError/i, sev:'crit', icon:'🧩', title:'Ошибка Mixin (конфликт модов)',
+      body:'Один из модов не смог внедрить свои изменения — почти всегда это конфликт двух модов или несовместимая версия. Убери моды, добавленные вручную поверх сборки. Имя проблемного миксина указано в логе.', mixin:true },
+    { re:/Missing or unsupported mandatory dependencies|requires .+ but|Mod .+ requires|missing dependenc|Unsatisfied dependency|requires a mod/i, sev:'warn', icon:'🔗', title:'Отсутствует зависимость',
+      body:'Какому-то моду не хватает библиотеки-зависимости. Сборка установлена не полностью или удалён нужный мод-библиотека. Переустанови её целиком, не удаляя «лишние» на вид моды — многие из них библиотеки.', deps:true },
+    { re:/DuplicateModsFoundException|Found a duplicate mod|duplicate mods|installed twice|ModId .+ is provided by/i, sev:'warn', icon:'👯', title:'Дубликаты модов',
+      body:'В папке mods лежат две версии одного мода. Открой папку <code>mods</code> и удали старую копию — должна остаться одна версия каждого мода.' },
+    { re:/UnsupportedClassVersionError|class file version|compiled by a more recent version|major\.minor version|requires Java/i, sev:'crit', icon:'☕', title:'Неверная версия Java',
+      body:'Сборке нужна другая версия Java. Для 1.20.1 это <code>Java 17 (64-bit)</code>. В лаунчере выбери Java 17. На Java 8 или 21 многие моды не запустятся.' },
+    { re:/NoSuchMethodError|NoClassDefFoundError|ClassNotFoundException|NoSuchFieldError|IncompatibleClassChangeError|AbstractMethodError/i, sev:'crit', icon:'⚙', title:'Несовместимость версий модов',
+      body:'Версии модов не совпадают между собой или с загрузчиком. Убедись, что все моды — для одной версии Minecraft и Forge/Fabric, и что сборка не смешана с модами от другой версии.' },
+    { re:/EXCEPTION_ACCESS_VIOLATION|A fatal error has been detected|SIGSEGV|# C \[|hs_err_pid|Problematic frame/i, sev:'crit', icon:'💥', title:'Нативный краш (драйвер / железо)',
+      body:'Игра упала на нативном уровне — чаще всего это драйвер видеокарты. Обнови драйверы (GeForce/Adrenalin), запусти на дискретной видеокарте. Если есть OptiFine + шейдеры — попробуй без них.' },
+    { re:/Pixel format not accelerated|Failed to create window|GLFW error|EXT_framebuffer|GL_INVALID|set pixel format|No OpenGL context|Couldn.t set pixel/i, sev:'warn', icon:'🖥', title:'Проблема OpenGL / видеодрайвера',
+      body:'Сбой графики при запуске окна. Обнови драйверы видеокарты, убедись что игра использует дискретную карту, а не встройку. Старым картам может не хватать поддержки OpenGL 4.x.' },
+    { re:/\boptifine\b|OptiFine/i, sev:'info', icon:'🌫', title:'Обнаружен OptiFine',
+      body:'OptiFine часто конфликтует с модами на Forge 1.20.1. Если краш связан с рендером — удали OptiFine и используй Rubidium/Embeddium + Oculus вместо него.' },
+    { re:/Flywheel backend|irisflw|Depth formats do not match/i, sev:'info', icon:'🔧', title:'Предупреждения рендера (Create / шейдеры)',
+      body:'Известные не-критичные предупреждения связки Create + шейдеры. На стабильность не влияют. При просадках FPS снизь профиль шейдера или отключи Flywheel backend в настройках Create.' },
+    { re:/Exception ticking|ticking entity|ticking block entity|ticking world|Ticking screen|while ticking/i, sev:'crit', icon:'🌍', title:'Краш при обработке мира (тикование)',
+      body:'Игра упала во время обработки сущности, блока или мира — обычно виноват конкретный мод (см. «виновник» выше). Если краш повторяется при входе в мир — мир может быть повреждён около проблемного объекта.' },
+    { re:/Missing registry|Unknown registry|registry entry|Forge registry|Registry remap|Unknown modificationId|fixerUpper/i, sev:'warn', icon:'📋', title:'Ошибка реестра / пропал контент',
+      body:'Из мира пропал блок/предмет/моб от мода, который удалили или обновили. Не удаляй и не обновляй моды на уже созданном мире. Верни удалённый мод или начни новый мир.' },
+    { re:/JsonSyntaxException|MalformedJson|Failed to load config|com\.electronwill|TomlParseException|\.toml|config.+invalid/i, sev:'warn', icon:'📄', title:'Ошибка конфигурации мода',
+      body:'Повреждён или неверно отредактирован конфиг мода. Удали проблемный файл из папки <code>config</code> — мод пересоздаст его с настройками по умолчанию.' },
+    { re:/Connection (timed out|refused)|Read timed out|UnknownHostException|SocketException|ConnectException/i, sev:'info', icon:'📡', title:'Сетевая ошибка (не критично)',
+      body:'Мод не смог проверить обновление в сети при запуске. На игру не влияет — это просто таймаут соединения.' },
+    { re:/world.+corrupt|ChunkLoadingError|Failed to check session|SessionLockException|region file|level\.dat.+(error|corrupt)/i, sev:'crit', icon:'🗃', title:'Повреждение мира / сохранения',
+      body:'Повреждён файл мира или конфликт доступа. Сделай резервную копию папки saves. SessionLock — игра уже запущена в другом окне; закрой лишние процессы Minecraft.' },
+  ];
+
+  function analyze(text){
+    const env=detectEnv(text);
+    const found=RULES.filter(r=>r.re.test(text));
+    const culprit=findCulprit(text);
+    const box=$('#crashResult');
+    const lines=text.split('\n').length, kb=(text.length/1024).toFixed(0);
+
+    let vClass='ok', vIcon='✅', vTitle='Явных ошибок не найдено', vText='Скрипт не обнаружил известных критических сигнатур. Если игра всё же вылетает — пришли лог на форум «Эфира» (Костёр → Технический отсек), разберём вручную.';
+    const hasCrit=found.some(f=>f.sev==='crit'), hasWarn=found.some(f=>f.sev==='warn');
+    if(hasCrit){ vClass='crit'; vIcon='🚨'; vTitle='Найдена критическая ошибка'; vText='Ниже — причина вылета и шаги решения. Начни с первого пункта, он самый вероятный.'; }
+    else if(hasWarn){ vClass='warn'; vIcon='⚠'; vTitle='Найдены предупреждения'; vText='Критического вылета не видно, но есть проблемы, которые стоит устранить.'; }
+
+    const envCards=[];
+    function ec(label,val,cls){ if(val) envCards.push(`<div class="env-card"><div class="el">${label}</div><div class="ev ${cls||''}">${esc(String(val))}</div></div>`); }
+    ec('Загрузчик', env.loader?(env.loader+(env.loaderVer?' '+env.loaderVer:'')):'не определён', env.loader?'':'dim');
+    ec('Minecraft', env.mc||'—', env.mc?'':'dim');
+    ec('Java', env.java||'—', env.java && /^(?:1\.8|8|9|10|11|21|22)/.test(env.java)?'warn':(env.java?'good':'dim'));
+    ec('Память (Xmx)', env.mem||'—', env.mem?'':'dim');
+    if(env.os) ec('Система', env.os, 'dim');
+
+    let causeHtml='';
+    if(env.cause||env.desc){
+      causeHtml=`<div class="diag info"><div class="di">📋</div><div><h4>Что произошло</h4>
+        ${env.desc?`<p><b>Описание:</b> <code>${esc(env.desc)}</code></p>`:''}
+        ${env.cause?`<p style="margin-top:6px"><b>Первопричина:</b> <code>${esc(env.cause.slice(0,200))}</code></p>`:''}
+        ${culprit?`<div class="culprit">⚠ Вероятный виновник: <b>${esc(culprit.name)}</b>${culprit.frame?` &nbsp;<span style="color:var(--muted-2)">(${esc(culprit.frame.slice(0,60))})</span>`:''}</div>`:''}
+        </div></div>`;
+    } else if(culprit){
+      causeHtml=`<div class="diag info"><div class="di">🧷</div><div><h4>Вероятный источник</h4><div class="culprit">⚠ Скорее всего проблема в моде: <b>${esc(culprit.name)}</b></div></div></div>`;
+    }
+
+    const seen=new Set();
+    const diagHtml=found.filter(r=>{ if(seen.has(r.title))return false; seen.add(r.title); return true; })
+      .sort((a,b)=>({crit:0,warn:1,info:2}[a.sev]-{crit:0,warn:1,info:2}[b.sev]))
+      .map(r=>{
+        let extra='';
+        if(r.mixin){ const mx=pick(/([\w]+\.mixins?\.[\w.]*json)/i,text)||pick(/Mixin\s+\[?([\w.$/]+)/i,text); if(mx) extra=`<div class="culprit">Миксин: <code>${esc(mx)}</code></div>`; }
+        if(r.deps){ const dep=pick(/requires ['"]?([\w\s.\-]+?)['"]? (?:but|version|to be|loaded)/i,text); if(dep) extra=`<div class="culprit">Не хватает: <code>${esc(dep.trim())}</code></div>`; }
+        return `<div class="diag ${r.sev}"><div class="di">${r.icon}</div><div><h4>${r.title}</h4><p>${r.body}</p>${extra}</div></div>`;
+      }).join('');
+
+    box.innerHTML=`
+      <div class="verdict ${vClass}"><div class="vi">${vIcon}</div><h3>${vTitle}</h3><p>${vText}</p></div>
+      ${envCards.length?`<div class="env-grid">${envCards.join('')}</div>`:''}
+      <div class="diag-list">${causeHtml}${diagHtml}</div>
+      <div class="crash-meta">Проанализировано ${lines.toLocaleString('ru')} строк · ${kb} КБ · сигнатур найдено: ${found.length}${env.loader?' · '+env.loader:''}</div>
+      <div class="forum-cta"><a href="aether.html" class="btn btn-ghost">📡 Не помогло? Спроси на форуме «Эфира»</a></div>
+    `;
+    box.classList.add('show');
+    if(hasCrit){ document.body.classList.add('crash-flash'); setTimeout(()=>document.body.classList.remove('crash-flash'),1000); if(window.FrostSFX) FrostSFX.play('error'); }
+    else if(window.FrostSFX) FrostSFX.play('beep');
+    box.scrollIntoView({behavior:'smooth',block:'nearest'});
+  }
+
+  const dz=$('#dropzone'), fi=$('#fileInput'), pa=$('#pasteArea');
+  function readFile(f){ if(!f) return; const r=new FileReader(); r.onload=e=>{ const txt=String(e.target.result||''); pa.value=txt.slice(0,4000); analyze(txt); }; r.readAsText(f.slice(0,5000000)); }
+  $('#browseBtn').addEventListener('click',e=>{ e.stopPropagation(); fi.click(); });
+  $('#analyzeBtn').addEventListener('click',e=>{ e.stopPropagation(); const t=pa.value.trim(); if(t.length<20){ if(window.FrostExtras) FrostExtras.toast('ПУСТО','Вставь текст лога или выбери файл.'); return; } analyze(t); });
+  $('#clearBtn').addEventListener('click',e=>{ e.stopPropagation(); pa.value=''; $('#crashResult').classList.remove('show'); $('#crashResult').innerHTML=''; });
+  fi.addEventListener('change',e=>readFile(e.target.files[0]));
+  pa.addEventListener('click',e=>e.stopPropagation());
+  ['dragenter','dragover'].forEach(ev=>dz.addEventListener(ev,e=>{ e.preventDefault(); dz.classList.add('drag'); }));
+  ['dragleave','drop'].forEach(ev=>dz.addEventListener(ev,e=>{ e.preventDefault(); dz.classList.remove('drag'); }));
+  dz.addEventListener('drop',e=>{ readFile(e.dataTransfer.files[0]); });
+})();
+</script>
+</body>
+</html>

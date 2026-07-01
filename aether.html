@@ -1,0 +1,1111 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="color-scheme" content="dark">
+<meta name="theme-color" content="#04070b">
+<title>Эфир — Frostborne Deadlands</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Oswald:wght@400;500;600;700&family=Share+Tech+Mono&display=swap&subset=cyrillic,cyrillic-ext,latin,latin-ext" rel="stylesheet">
+<link rel="stylesheet" href="extras.css">
+<style>
+:root{
+  --bg:#04070b;--bg-2:#07121f;--ice:#7cceff;--ice-bright:#a8e0ff;--steel:#3a86ff;
+  --red:#b91c1c;--red-bright:#ef4444;--good:#34d399;--warn:#fbbf24;--ember:#ff7a3c;
+  --text:#c5d6e8;--muted:#6b8299;--muted-2:#4a5d70;
+  --line:rgba(124,206,255,.12);--line-2:rgba(255,255,255,.05);
+  --panel:rgba(10,20,33,.72);--panel-solid:rgba(7,13,22,.95);--shadow:0 28px 80px rgba(0,0,0,.5);
+  --radius:18px;--radius-lg:24px;--header-h:72px;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth;-webkit-text-size-adjust:100%}
+body{font-family:'Inter',system-ui,sans-serif;background:var(--bg);color:var(--text);line-height:1.6;
+  overflow-x:hidden;min-height:100vh;font-size:clamp(15px,1.7vw,16px)}
+body::before{content:"";position:fixed;inset:0;z-index:-2;pointer-events:none;
+  background:radial-gradient(ellipse 90% 60% at 50% -10%,rgba(58,134,255,.13),transparent 60%),
+  radial-gradient(ellipse 70% 50% at 85% 8%,rgba(124,206,255,.07),transparent 55%),
+  linear-gradient(180deg,#04070b,#060d18 45%,#04070b 100%)}
+/* помехи радиостанции */
+body::after{content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;opacity:.5;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.11) 3px,transparent 4px);mix-blend-mode:multiply}
+a{color:inherit;text-decoration:none}button,input,textarea,select{font:inherit;color:inherit}
+:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-radius:6px}
+::selection{background:rgba(124,206,255,.3);color:#fff}
+::-webkit-scrollbar{width:9px;height:9px}::-webkit-scrollbar-track{background:transparent}
+::-webkit-scrollbar-thumb{background:rgba(124,206,255,.22);border-radius:999px;border:2px solid transparent;background-clip:padding-box}
+.wrap{width:min(1220px,calc(100% - 36px));margin:0 auto;position:relative;z-index:2}
+
+/* header */
+header{position:fixed;top:0;left:0;right:0;height:var(--header-h);z-index:1000;
+  background:rgba(4,7,11,.62);backdrop-filter:blur(20px);border-bottom:1px solid transparent;transition:.3s}
+header.scrolled{background:rgba(4,7,11,.9);border-bottom-color:var(--line)}
+.nav{height:var(--header-h);display:flex;align-items:center;justify-content:space-between;gap:14px}
+.brand{display:flex;align-items:center;gap:12px}
+.brand-mark{width:42px;height:42px;border-radius:13px;display:grid;place-items:center;background:linear-gradient(135deg,rgba(124,206,255,.18),rgba(58,134,255,.06));border:1px solid rgba(124,206,255,.25)}
+.brand-mark svg{width:22px;height:22px;fill:var(--ice);filter:drop-shadow(0 0 6px rgba(124,206,255,.4))}
+.brand-text{font-family:'Oswald',sans-serif;font-weight:600;font-size:1.02rem;letter-spacing:.05em;text-transform:uppercase;color:#fff;line-height:1}
+.brand-text b{color:var(--ice)}
+.brand-text small{display:block;font-family:'Share Tech Mono',monospace;font-size:.56rem;letter-spacing:.2em;color:var(--muted);margin-top:3px}
+.nav-right{display:flex;align-items:center;gap:12px}
+.back-link{display:inline-flex;align-items:center;gap:7px;padding:10px 15px;border-radius:999px;border:1px solid var(--line);background:rgba(124,206,255,.06);color:var(--ice-bright);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;transition:.2s}
+.back-link:hover{transform:translateY(-2px);background:rgba(124,206,255,.13)}
+@media(max-width:640px){.back-link span{display:none}.brand-text small{display:none}}
+
+/* hero / terminal banner */
+.aether-hero{padding:calc(var(--header-h) + 40px) 0 22px}
+.terminal-banner{position:relative;border:1px solid var(--line);border-radius:var(--radius-lg);overflow:hidden;
+  background:linear-gradient(135deg,rgba(10,20,33,.85),rgba(5,11,20,.95));padding:28px 30px;box-shadow:var(--shadow)}
+.terminal-banner::before{content:"";position:absolute;top:0;left:0;right:0;height:1px;background:linear-gradient(90deg,transparent,var(--ice),transparent)}
+.terminal-banner::after{content:"";position:absolute;inset:0;pointer-events:none;opacity:.06;
+  background:repeating-linear-gradient(0deg,#7cceff,#7cceff 1px,transparent 2px,transparent 4px);animation:interference 8s linear infinite}
+@keyframes interference{0%{transform:translateY(0)}100%{transform:translateY(8px)}}
+.tb-top{display:flex;align-items:center;gap:10px;font-family:'Share Tech Mono',monospace;font-size:.72rem;letter-spacing:.1em;color:var(--muted);text-transform:uppercase;margin-bottom:14px}
+.tb-live{display:inline-flex;align-items:center;gap:7px;padding:4px 10px;border-radius:999px;border:1px solid var(--line-2);background:rgba(255,255,255,.03)}
+.tb-dot{width:8px;height:8px;border-radius:50%;background:var(--warn);box-shadow:0 0 10px currentColor}
+.tb-live.online .tb-dot{background:var(--good);animation:pulse 2s infinite}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.4}}
+.terminal-banner h1{font-family:'Oswald',sans-serif;font-weight:700;font-size:clamp(2rem,5.5vw,3.2rem);text-transform:uppercase;color:#fff;letter-spacing:.02em;line-height:1.02}
+.terminal-banner h1 .ice{color:var(--ice);text-shadow:0 0 40px rgba(124,206,255,.4)}
+.terminal-banner p{margin-top:10px;color:var(--muted);font-size:.98rem;max-width:620px}
+
+/* identity bar */
+.identity-bar{display:flex;align-items:center;gap:14px;margin-top:20px;padding:14px 16px;border-radius:14px;
+  background:rgba(2,8,16,.6);border:1px solid var(--line)}
+.id-avatar{width:44px;height:44px;border-radius:11px;background:rgba(124,206,255,.08);border:1px solid var(--line);
+  image-rendering:pixelated;object-fit:cover;flex-shrink:0}
+.id-info{flex:1;min-width:0}
+.id-callsign{font-family:'Oswald',sans-serif;font-weight:600;font-size:1.05rem;color:#fff;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.id-status{font-family:'Share Tech Mono',monospace;font-size:.7rem;letter-spacing:.06em;color:var(--ice);margin-top:3px}
+.id-edit{padding:9px 14px;border-radius:10px;border:1px solid var(--line);background:rgba(124,206,255,.07);color:var(--ice-bright);font-size:.74rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;cursor:pointer;transition:.2s;white-space:nowrap}
+.id-edit:hover{background:rgba(124,206,255,.15)}
+
+/* tabs */
+.aether-tabs{display:flex;gap:8px;margin:22px 0 6px;flex-wrap:wrap}
+.atab{display:inline-flex;align-items:center;gap:9px;font-family:'Oswald',sans-serif;font-weight:500;font-size:.96rem;
+  letter-spacing:.03em;text-transform:uppercase;padding:14px 22px;border-radius:14px;border:1px solid var(--line);
+  background:rgba(255,255,255,.03);color:var(--text);cursor:pointer;transition:.2s;position:relative}
+.atab:hover{border-color:rgba(124,206,255,.3);color:#fff;transform:translateY(-2px)}
+.atab.active{background:linear-gradient(135deg,rgba(124,206,255,.16),rgba(58,134,255,.08));border-color:rgba(124,206,255,.4);color:var(--ice-bright)}
+.atab .ic{font-size:1.1rem}
+.atab .badge{position:absolute;top:-6px;right:-6px;min-width:18px;height:18px;padding:0 5px;border-radius:999px;background:var(--ember);color:#1a0a04;font-family:'Share Tech Mono',monospace;font-size:.6rem;font-weight:700;display:grid;place-items:center}
+
+/* panels */
+.panel-wrap{padding:14px 0 70px}
+.apanel{display:none}
+.apanel.active{display:block;animation:fadeUp .4s}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:none}}
+
+/* ===== CHAT (Радиовышка) ===== */
+.chat-shell{display:grid;grid-template-columns:1fr 270px;gap:16px}
+@media(max-width:880px){.chat-shell{grid-template-columns:1fr}}
+.chat-main{border:1px solid var(--line);border-radius:var(--radius-lg);background:var(--panel);backdrop-filter:blur(10px);overflow:hidden;display:flex;flex-direction:column;height:560px}
+.chat-head{padding:14px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;gap:10px;background:rgba(124,206,255,.03)}
+.chat-head .t{font-family:'Oswald',sans-serif;font-weight:600;text-transform:uppercase;letter-spacing:.04em;color:#fff;font-size:1.05rem}
+.chat-head .freq{font-family:'Share Tech Mono',monospace;font-size:.7rem;color:var(--muted);letter-spacing:.08em}
+.chat-log{flex:1;overflow-y:auto;padding:18px;display:flex;flex-direction:column;gap:14px}
+.msg{display:flex;gap:11px;animation:msgIn .3s}
+@keyframes msgIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+.msg-av{width:36px;height:36px;border-radius:9px;background:rgba(124,206,255,.08);border:1px solid var(--line-2);image-rendering:pixelated;flex-shrink:0;object-fit:cover}
+.msg-body{flex:1;min-width:0}
+.msg-head{display:flex;align-items:baseline;gap:9px;margin-bottom:3px;flex-wrap:wrap}
+.msg-nick{font-family:'Oswald',sans-serif;font-weight:600;font-size:.92rem;color:var(--ice-bright)}
+.msg-nick.me{color:var(--good)}
+.msg-time{font-family:'Share Tech Mono',monospace;font-size:.62rem;color:var(--muted-2)}
+.msg-text{font-size:.92rem;color:var(--text);word-wrap:break-word;overflow-wrap:anywhere;line-height:1.5}
+.msg-text a{color:var(--ice);text-decoration:underline;text-underline-offset:2px}
+.msg-img{margin-top:8px;max-width:240px;border-radius:10px;border:1px solid var(--line);cursor:pointer;display:block}
+.msg-sys{text-align:center;font-family:'Share Tech Mono',monospace;font-size:.7rem;color:var(--muted-2);letter-spacing:.06em;padding:4px 0}
+.chat-composer{padding:14px;border-top:1px solid var(--line);display:flex;gap:10px;align-items:flex-end;background:rgba(2,8,16,.4)}
+.chat-input{flex:1;resize:none;min-height:46px;max-height:120px;padding:12px 15px;border-radius:12px;border:1px solid var(--line);background:rgba(8,14,24,.8);color:#fff;font-size:.92rem;line-height:1.4}
+.chat-input:focus{border-color:rgba(124,206,255,.45);outline:none;box-shadow:0 0 0 4px rgba(124,206,255,.07)}
+.chat-send{width:46px;height:46px;border-radius:12px;border:none;background:linear-gradient(135deg,var(--ice),var(--steel));color:#02101c;cursor:pointer;display:grid;place-items:center;flex-shrink:0;transition:.2s}
+.chat-send:hover{transform:translateY(-2px);box-shadow:0 10px 24px rgba(124,206,255,.3)}
+.chat-send svg{width:20px;height:20px;fill:currentColor}
+.chat-side{border:1px solid var(--line);border-radius:var(--radius-lg);background:var(--panel);backdrop-filter:blur(10px);padding:18px;height:560px;overflow-y:auto}
+@media(max-width:880px){.chat-side{height:auto}}
+.side-title{font-family:'Share Tech Mono',monospace;font-size:.68rem;letter-spacing:.12em;text-transform:uppercase;color:var(--muted);margin-bottom:14px;padding-bottom:10px;border-bottom:1px solid var(--line-2)}
+.online-user{display:flex;align-items:center;gap:10px;padding:8px 0}
+.online-av{width:30px;height:30px;border-radius:8px;image-rendering:pixelated;border:1px solid var(--line-2);object-fit:cover}
+.online-meta{min-width:0}
+.online-nick{font-size:.84rem;color:#fff;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.online-st{font-family:'Share Tech Mono',monospace;font-size:.62rem;color:var(--ice)}
+.online-dot{width:7px;height:7px;border-radius:50%;background:var(--good);margin-left:auto;flex-shrink:0;box-shadow:0 0 8px var(--good)}
+
+/* ===== FORUM (Костёр) ===== */
+.forum-subtabs{display:flex;gap:8px;margin-bottom:18px;flex-wrap:wrap}
+.subtab{font-family:'Share Tech Mono',monospace;font-size:.74rem;letter-spacing:.06em;text-transform:uppercase;padding:11px 16px;border-radius:11px;border:1px solid var(--line);background:rgba(255,255,255,.03);color:var(--text);cursor:pointer;transition:.2s}
+.subtab:hover{border-color:rgba(124,206,255,.3);color:#fff}
+.subtab.active{background:rgba(124,206,255,.12);border-color:rgba(124,206,255,.4);color:var(--ice-bright)}
+.fsub{display:none}.fsub.active{display:block;animation:fadeUp .3s}
+.new-post{border:1px solid var(--line);border-radius:var(--radius);background:var(--panel);backdrop-filter:blur(8px);padding:18px;margin-bottom:18px}
+.new-post input,.new-post textarea{width:100%;padding:12px 14px;border-radius:11px;border:1px solid var(--line);background:rgba(8,14,24,.8);color:#fff;margin-bottom:10px;font-size:.9rem}
+.new-post textarea{resize:vertical;min-height:70px;line-height:1.5}
+.new-post input:focus,.new-post textarea:focus{border-color:rgba(124,206,255,.45);outline:none}
+.np-row{display:flex;justify-content:space-between;align-items:center;gap:12px;flex-wrap:wrap}
+.np-hint{font-family:'Share Tech Mono',monospace;font-size:.66rem;color:var(--muted-2)}
+.post{border:1px solid var(--line);border-radius:var(--radius);background:var(--panel);backdrop-filter:blur(8px);padding:18px;margin-bottom:12px;display:flex;gap:14px;transition:border-color .2s}
+.post:hover{border-color:rgba(124,206,255,.22)}
+.vote{display:flex;flex-direction:column;align-items:center;gap:4px;flex-shrink:0}
+.vote-btn{width:42px;height:42px;border-radius:11px;border:1px solid var(--line);background:rgba(124,206,255,.05);color:var(--ice);cursor:pointer;display:grid;place-items:center;font-size:1.1rem;transition:.2s}
+.vote-btn:hover{background:rgba(124,206,255,.14);transform:translateY(-2px)}
+.vote-btn.voted{background:linear-gradient(135deg,var(--ice),var(--steel));color:#02101c;border-color:transparent}
+.vote-count{font-family:'Oswald',sans-serif;font-weight:700;font-size:1.1rem;color:#fff}
+.post-body{flex:1;min-width:0}
+.post-head{display:flex;align-items:center;gap:9px;margin-bottom:7px;flex-wrap:wrap}
+.post-av{width:26px;height:26px;border-radius:7px;image-rendering:pixelated;border:1px solid var(--line-2);object-fit:cover}
+.post-author{font-family:'Oswald',sans-serif;font-weight:600;font-size:.86rem;color:var(--ice-bright)}
+.post-time{font-family:'Share Tech Mono',monospace;font-size:.62rem;color:var(--muted-2)}
+.post-title{font-family:'Oswald',sans-serif;font-weight:600;font-size:1.12rem;color:#fff;margin-bottom:6px;letter-spacing:.01em}
+.post-text{font-size:.9rem;color:var(--text);word-wrap:break-word;overflow-wrap:anywhere;line-height:1.55}
+.post-text a{color:var(--ice);text-decoration:underline}
+.bug-status{display:inline-flex;align-items:center;gap:6px;font-family:'Share Tech Mono',monospace;font-size:.62rem;letter-spacing:.06em;text-transform:uppercase;padding:4px 9px;border-radius:7px;margin-left:auto}
+.bug-status.open{color:var(--warn);background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.25)}
+.bug-status.solved{color:var(--good);background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.25)}
+.empty-state{text-align:center;padding:50px 20px;color:var(--muted);font-family:'Share Tech Mono',monospace;letter-spacing:.04em}
+
+/* FAQ accordion in forum */
+.faq-acc{display:grid;gap:12px}
+.faq-i{border:1px solid var(--line);border-radius:14px;overflow:hidden;background:var(--panel);backdrop-filter:blur(8px)}
+.faq-i.open{border-color:rgba(124,206,255,.3)}
+.faq-btn{width:100%;display:flex;align-items:center;justify-content:space-between;gap:14px;padding:18px 22px;background:transparent;border:none;cursor:pointer;text-align:left;font-family:'Oswald',sans-serif;font-weight:500;font-size:1.06rem;color:#fff;text-transform:uppercase;letter-spacing:.01em}
+.faq-btn:hover{color:var(--ice)}
+.faq-tog{flex-shrink:0;width:24px;height:24px;position:relative}
+.faq-tog::before,.faq-tog::after{content:"";position:absolute;background:var(--ice);border-radius:2px;transition:transform .3s}
+.faq-tog::before{top:11px;left:3px;width:18px;height:2px}.faq-tog::after{top:3px;left:11px;width:2px;height:18px}
+.faq-i.open .faq-tog::after{transform:rotate(90deg);opacity:0}
+.faq-ans{max-height:0;overflow:hidden;transition:max-height .4s,padding .4s;padding:0 22px}
+.faq-i.open .faq-ans{max-height:300px;padding:0 22px 20px}
+.faq-ans p{color:var(--text);font-size:.94rem;line-height:1.7}
+.faq-ans b{color:var(--ice)}.faq-ans code{font-family:'Share Tech Mono',monospace;background:rgba(124,206,255,.1);padding:2px 7px;border-radius:5px;color:var(--ice-bright);font-size:.85em}
+
+/* ===== PATCH NOTES (Патчноут) ===== */
+.patch-banner{border:1px solid var(--line);border-radius:var(--radius-lg);background:linear-gradient(135deg,rgba(124,206,255,.08),rgba(58,134,255,.03));backdrop-filter:blur(8px);padding:24px 26px;margin-bottom:18px}
+.patch-ver{display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+.patch-badge{font-family:'Share Tech Mono',monospace;font-size:.7rem;letter-spacing:.08em;text-transform:uppercase;padding:6px 12px;border-radius:999px;background:rgba(124,206,255,.14);border:1px solid rgba(124,206,255,.35);color:var(--ice-bright)}
+.patch-badge.hot{background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.35);color:#fecaca}
+.patch-title{font-family:'Oswald',sans-serif;font-weight:600;font-size:1.35rem;color:#fff;text-transform:uppercase;letter-spacing:.02em;margin-bottom:10px}
+.patch-lead{color:var(--muted);font-size:.93rem;max-width:700px;line-height:1.65}
+.patch-warn{margin-top:16px;display:flex;gap:10px;align-items:flex-start;padding:14px 16px;border-radius:12px;background:rgba(239,68,68,.08);border:1px solid rgba(239,68,68,.28);color:#fecaca;font-size:.86rem;line-height:1.55}
+.patch-warn b{color:var(--red-bright)}
+.patch-table-wrap{overflow-x:auto}
+.patch-table{width:100%;border-collapse:collapse;margin-top:6px;font-size:.84rem;min-width:560px}
+.patch-table th,.patch-table td{padding:10px 12px;border-bottom:1px solid var(--line-2);text-align:left;white-space:nowrap}
+.patch-table th{font-family:'Share Tech Mono',monospace;font-size:.66rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted)}
+.patch-table td{color:var(--text)}
+.patch-table td b{color:var(--ice-bright)}
+.patch-table tr:last-child td{border-bottom:none}
+
+/* ===== AI: МОРОЗ-01 ===== */
+.ai-shell{max-width:840px;margin:0 auto;border:1px solid var(--line);border-radius:var(--radius-lg);background:var(--panel);backdrop-filter:blur(10px);overflow:hidden;display:flex;flex-direction:column;height:580px}
+.ai-head{padding:18px 22px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:14px;background:linear-gradient(135deg,rgba(124,206,255,.05),transparent)}
+.ai-orb{width:46px;height:46px;border-radius:50%;flex-shrink:0;background:radial-gradient(circle at 35% 30%,#a8e0ff,#3a86ff 60%,#0a2540);box-shadow:0 0 24px rgba(124,206,255,.5);position:relative;animation:orbPulse 3s ease-in-out infinite}
+@keyframes orbPulse{0%,100%{box-shadow:0 0 24px rgba(124,206,255,.5)}50%{box-shadow:0 0 36px rgba(124,206,255,.8)}}
+.ai-orb.glitch{animation:orbGlitch .3s steps(2) 3}
+@keyframes orbGlitch{0%{filter:hue-rotate(0)}50%{filter:hue-rotate(120deg) saturate(2);transform:translateX(2px)}100%{filter:hue-rotate(-60deg)}}
+.ai-id .name{font-family:'Oswald',sans-serif;font-weight:600;font-size:1.15rem;color:#fff;letter-spacing:.04em;text-transform:uppercase}
+.ai-id .sub{font-family:'Share Tech Mono',monospace;font-size:.66rem;letter-spacing:.08em;color:var(--ice);margin-top:2px}
+.ai-id .sub.err{color:var(--red-bright)}
+.ai-log{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:14px}
+.ai-msg{display:flex;gap:11px;max-width:88%;animation:msgIn .3s}
+.ai-msg.user{align-self:flex-end;flex-direction:row-reverse}
+.ai-bubble{padding:12px 16px;border-radius:14px;font-size:.92rem;line-height:1.55;word-wrap:break-word;overflow-wrap:anywhere}
+.ai-msg.bot .ai-bubble{background:rgba(124,206,255,.07);border:1px solid var(--line);color:var(--text);border-top-left-radius:4px;font-family:'Share Tech Mono',monospace;font-size:.86rem;letter-spacing:.01em}
+.ai-msg.user .ai-bubble{background:linear-gradient(135deg,rgba(58,134,255,.2),rgba(58,134,255,.1));border:1px solid rgba(58,134,255,.3);color:#eaf4ff;border-top-right-radius:4px}
+.ai-bubble .gl{color:var(--red-bright);text-shadow:0 0 6px rgba(239,68,68,.5)}
+.ai-tag{font-family:'Share Tech Mono',monospace;font-size:.62rem;color:var(--ice);opacity:.7;margin-bottom:4px;display:block}
+.ai-composer{padding:16px;border-top:1px solid var(--line);display:flex;gap:10px;background:rgba(2,8,16,.4)}
+.ai-input{flex:1;padding:13px 16px;border-radius:12px;border:1px solid var(--line);background:rgba(8,14,24,.8);color:#fff;font-size:.92rem}
+.ai-input:focus{border-color:rgba(124,206,255,.45);outline:none;box-shadow:0 0 0 4px rgba(124,206,255,.07)}
+.ai-send{padding:0 22px;border-radius:12px;border:none;background:linear-gradient(135deg,var(--ice),var(--steel));color:#02101c;font-weight:700;text-transform:uppercase;letter-spacing:.04em;cursor:pointer;font-size:.82rem;transition:.2s}
+.ai-send:hover{transform:translateY(-2px)}
+.ai-chips{display:flex;flex-wrap:wrap;gap:8px;padding:0 16px 16px}
+.ai-chip{font-family:'Share Tech Mono',monospace;font-size:.68rem;padding:7px 12px;border-radius:999px;border:1px solid var(--line);background:rgba(124,206,255,.05);color:var(--ice);cursor:pointer;transition:.2s}
+.ai-chip:hover{background:rgba(124,206,255,.13)}
+.typing span{display:inline-block;width:6px;height:6px;margin:0 1px;border-radius:50%;background:var(--ice);animation:typing 1.2s infinite}
+.typing span:nth-child(2){animation-delay:.2s}.typing span:nth-child(3){animation-delay:.4s}
+@keyframes typing{0%,60%,100%{opacity:.3;transform:translateY(0)}30%{opacity:1;transform:translateY(-4px)}}
+
+/* identity modal */
+.id-modal{position:fixed;inset:0;z-index:4000;background:rgba(2,5,9,.92);backdrop-filter:blur(10px);display:none;align-items:center;justify-content:center;padding:20px}
+.id-modal.open{display:flex;animation:fadeIn .3s}
+@keyframes fadeIn{from{opacity:0}to{opacity:1}}
+.id-card{width:min(480px,100%);background:linear-gradient(180deg,rgba(8,15,25,.98),rgba(4,9,16,.99));border:1px solid var(--line);border-radius:24px;padding:30px;box-shadow:0 30px 80px rgba(0,0,0,.6);max-height:92vh;overflow-y:auto}
+.id-card h3{font-family:'Oswald',sans-serif;font-weight:600;font-size:1.5rem;text-transform:uppercase;color:#fff;margin-bottom:6px;letter-spacing:.02em}
+.id-card .ck{font-family:'Share Tech Mono',monospace;font-size:.7rem;letter-spacing:.12em;text-transform:uppercase;color:var(--ice);margin-bottom:4px}
+.id-card p.d{color:var(--muted);font-size:.88rem;margin-bottom:22px}
+.id-preview{display:flex;align-items:center;gap:14px;padding:14px;border-radius:14px;background:rgba(124,206,255,.04);border:1px solid var(--line);margin-bottom:20px}
+.id-preview img{width:48px;height:48px;border-radius:11px;image-rendering:pixelated;border:1px solid var(--line-2);object-fit:cover}
+.id-field{margin-bottom:18px}
+.id-field label{font-family:'Share Tech Mono',monospace;font-size:.68rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted);display:block;margin-bottom:8px}
+.id-field input{width:100%;padding:13px 15px;border-radius:12px;border:1px solid var(--line);background:rgba(8,14,24,.8);color:#fff}
+.id-field input:focus{border-color:rgba(124,206,255,.45);outline:none}
+.status-chips{display:flex;flex-wrap:wrap;gap:8px}
+.status-chip{font-family:'Share Tech Mono',monospace;font-size:.7rem;padding:9px 13px;border-radius:10px;border:1px solid var(--line-2);background:rgba(255,255,255,.03);color:var(--text);cursor:pointer;transition:.2s}
+.status-chip:hover{border-color:rgba(124,206,255,.3)}
+.status-chip.active{background:rgba(124,206,255,.13);border-color:rgba(124,206,255,.4);color:var(--ice-bright)}
+
+.btn{display:inline-flex;align-items:center;justify-content:center;gap:9px;padding:14px 22px;border-radius:13px;font-weight:700;font-size:.88rem;text-transform:uppercase;letter-spacing:.03em;cursor:pointer;border:1px solid transparent;transition:.2s}
+.btn-primary{background:linear-gradient(135deg,var(--ice),var(--steel));color:#02101c;box-shadow:0 12px 30px rgba(124,206,255,.25)}
+.btn-primary:hover{transform:translateY(-3px);box-shadow:0 18px 40px rgba(124,206,255,.4)}
+.btn-ghost{background:rgba(255,255,255,.03);border-color:var(--line);color:var(--text)}
+.btn-ghost:hover{transform:translateY(-3px);background:rgba(255,255,255,.06)}
+
+.footer{padding:46px 0 38px;border-top:1px solid var(--line);text-align:center;margin-top:20px}
+.footer p{color:var(--muted);font-size:.82rem}
+.footer .mono{font-family:'Share Tech Mono',monospace;font-size:.68rem;letter-spacing:.1em;color:var(--muted-2);margin-top:8px}
+
+/* мобильная адаптация — крупнее шрифт, табы скроллятся */
+@media(max-width:560px){
+  body{font-size:16.5px}
+  .aether-tabs{flex-wrap:nowrap;overflow-x:auto;padding-bottom:6px;-webkit-overflow-scrolling:touch}
+  .atab{flex-shrink:0;padding:13px 16px;font-size:.9rem}
+  .chat-main,.ai-shell{height:70vh}
+  .terminal-banner{padding:22px 18px}
+  .identity-bar{flex-wrap:wrap}
+  .id-edit{width:100%}
+}
+/* chronicle panel */
+.chron-head{text-align:center;max-width:680px;margin:0 auto 30px}
+.chron-title{font-family:'Oswald',sans-serif;font-weight:700;font-size:clamp(1.7rem,4.5vw,2.6rem);text-transform:uppercase;color:#fff;letter-spacing:.02em;line-height:1.05}
+.chron-title .ice{color:var(--ice);text-shadow:0 0 30px rgba(124,206,255,.4)}
+.chron-sub{margin-top:14px;color:var(--muted);font-size:.98rem;line-height:1.6}
+.chron-grid{display:grid;grid-template-columns:1.4fr 1fr;gap:16px;margin-bottom:24px}
+@media(max-width:760px){.chron-grid{grid-template-columns:1fr}}
+.chron-main{background:linear-gradient(180deg,rgba(20,10,12,.72),rgba(10,6,8,.92));border:1px solid rgba(239,68,68,.22);border-radius:24px;padding:40px 28px;text-align:center;position:relative;overflow:hidden}
+.chron-skull{position:absolute;inset:0;display:grid;place-items:center;font-size:16rem;opacity:.03;pointer-events:none}
+.chron-total{font-family:'Oswald',sans-serif;font-weight:700;font-size:clamp(3.2rem,9vw,5.4rem);line-height:1;color:#ff6b6b;text-shadow:0 0 50px rgba(239,68,68,.4)}
+.chron-total-l{font-family:'Share Tech Mono',monospace;font-size:.78rem;letter-spacing:.16em;text-transform:uppercase;color:var(--muted);margin-top:12px}
+.chron-side{display:flex;flex-direction:column;gap:14px}
+.chron-stat{background:var(--panel);border:1px solid var(--line);border-radius:16px;padding:18px;backdrop-filter:blur(8px)}
+.csl{font-family:'Share Tech Mono',monospace;font-size:.64rem;letter-spacing:.1em;text-transform:uppercase;color:var(--muted)}
+.csv{font-family:'Oswald',sans-serif;font-weight:600;font-size:1.5rem;color:#fff;margin-top:6px;line-height:1}
+.csv.csv-sm{font-size:1rem}
+.csv span{color:var(--muted);font-size:1rem}
+.csr{font-family:'Share Tech Mono',monospace;font-size:.66rem;color:var(--ice);margin-top:4px}
+.chron-feed-wrap{border:1px solid var(--line);border-radius:18px;background:var(--panel);backdrop-filter:blur(8px);padding:20px}
+.chron-feed{display:flex;flex-direction:column;gap:8px;max-height:320px;overflow-y:auto}
+.chron-rec{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:12px;background:rgba(255,255,255,.02);border:1px solid var(--line-2)}
+.chron-rec .rk{font-size:1.2rem}
+.chron-rec .rt{flex:1;min-width:0}
+.chron-rec .rt b{color:#fff;font-size:.9rem}
+.chron-rec .rt span{font-size:.78rem;color:var(--muted);display:block}
+.chron-rec .rd{font-family:'Share Tech Mono',monospace;font-size:.72rem;color:#ff8b8b;white-space:nowrap}
+
+/* survivor ID card in profile */
+.id-card-preview{margin-top:22px;padding-top:20px;border-top:1px solid var(--line-2)}
+.id-card-label{font-family:'Share Tech Mono',monospace;font-size:.66rem;letter-spacing:.1em;text-transform:uppercase;color:var(--ice);margin-bottom:12px}
+#survivorCanvas{width:100%;height:auto;border-radius:14px;border:1px solid var(--line);box-shadow:0 16px 40px rgba(0,0,0,.4)}
+
+.btn-danger{background:linear-gradient(135deg,#ef4444,#b91c1c);color:#fff;box-shadow:0 12px 30px rgba(239,68,68,.25)}
+.btn-danger:hover{transform:translateY(-3px);box-shadow:0 18px 40px rgba(239,68,68,.4)}
+</style>
+</head>
+<body>
+
+<header id="header">
+  <div class="wrap nav">
+    <a class="brand" href="index.html">
+      <div class="brand-mark"><svg viewBox="0 0 24 24"><path d="M12 2l2.4 4.8L19 8l-3.5 3.4.8 4.9L12 14l-4.3 2.3.8-4.9L5 8l4.6-1.2z"/></svg></div>
+      <div class="brand-text">FROST<b>BORNE</b><small>ЭФИР // RADIO STATION</small></div>
+    </a>
+    <div class="nav-right">
+      <span class="lang-switch" id="langMount"></span>
+      <a class="back-link" href="index.html">← <span>На станцию</span></a>
+    </div>
+  </div>
+</header>
+
+<div class="aether-hero">
+  <div class="wrap">
+    <div class="terminal-banner">
+      <div class="tb-top">
+        <span class="tb-live" id="tbLive"><span class="tb-dot"></span><span id="tbLiveText">ПОДКЛЮЧЕНИЕ…</span></span>
+        <span>// ЧАСТОТА 17.04 МГц · СТАНЦИЯ БУРАН</span>
+      </div>
+      <h1>Э<span class="ice">ФИР</span></h1>
+      <p>Терминал связи выживших. Здесь ловится живой сигнал чата, тлеет форум «Костёр» и отвечает повреждённый ИИ станции. Эфир нестабилен — но он есть.</p>
+      <div class="identity-bar">
+        <img class="id-avatar" id="idAvatar" alt="" src="https://minotar.net/armor/bust/Steve/88.png">
+        <div class="id-info">
+          <div class="id-callsign" id="idCallsign">Выживший-0000</div>
+          <div class="id-status" id="idStatusLine">// СТАТУС НЕ ЗАДАН</div>
+        </div>
+        <button class="id-edit" id="idEditBtn">⚙ Профиль</button>
+      </div>
+    </div>
+
+    <div class="aether-tabs">
+      <button class="atab active" data-panel="chat"><span class="ic">📡</span> Радиовышка</button>
+      <button class="atab" data-panel="forum"><span class="ic">🔥</span> Костёр</button>
+      <button class="atab" data-panel="ai"><span class="ic">🤖</span> МОРОЗ-01</button>
+      <button class="atab" data-panel="chronicle"><span class="ic">☠</span> Хроники</button>
+    </div>
+  </div>
+</div>
+
+<div class="panel-wrap">
+<div class="wrap">
+
+<!-- ===== CHAT ===== -->
+<div class="apanel active" id="panel-chat">
+  <div class="chat-shell">
+    <div class="chat-main">
+      <div class="chat-head">
+        <div><div class="t">📡 Радиовышка</div></div>
+        <div class="freq" id="chatFreq">// ОБЩИЙ КАНАЛ · LIVE</div>
+      </div>
+      <div class="chat-log" id="chatLog"></div>
+      <div class="chat-composer">
+        <textarea class="chat-input" id="chatInput" rows="1" placeholder="Передать в эфир… (ссылки и картинки поддерживаются)" maxlength="500"></textarea>
+        <button class="chat-send" id="chatSend" aria-label="Отправить"><svg viewBox="0 0 24 24"><path d="M3 11l18-8-8 18-2-7-8-3z"/></svg></button>
+      </div>
+    </div>
+    <div class="chat-side">
+      <div class="side-title">// В эфире сейчас</div>
+      <div id="onlineList"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ===== FORUM ===== -->
+<div class="apanel" id="panel-forum">
+  <div class="forum-subtabs">
+    <button class="subtab active" data-sub="ideas">💡 Предложения и идеи</button>
+    <button class="subtab" data-sub="bugs">🛠 Технический отсек</button>
+    <button class="subtab" data-sub="faq">❓ FAQ</button>
+    <button class="subtab" data-sub="patch">📋 Патчноут R1.1</button>
+  </div>
+
+  <!-- ideas -->
+  <div class="fsub active" id="sub-ideas">
+    <div class="new-post">
+      <input type="text" id="ideaTitle" maxlength="80" placeholder="Заголовок идеи…">
+      <textarea id="ideaBody" maxlength="500" placeholder="Опиши предложение для сборки…"></textarea>
+      <div class="np-row">
+        <span class="np-hint">Лучшие идеи поднимаются апвоутами наверх</span>
+        <button class="btn btn-primary" id="ideaSubmit">📨 Предложить</button>
+      </div>
+    </div>
+    <div id="ideasList"></div>
+  </div>
+
+  <!-- bugs -->
+  <div class="fsub" id="sub-bugs">
+    <div class="new-post">
+      <input type="text" id="bugTitle" maxlength="80" placeholder="Кратко о проблеме…">
+      <textarea id="bugBody" maxlength="500" placeholder="Опиши баг/вылет: что делал, какой мод, текст ошибки…"></textarea>
+      <div class="np-row">
+        <span class="np-hint">Совет: сначала прогони лог через «Техно-доктора» в Тех. отсеке</span>
+        <button class="btn btn-primary" id="bugSubmit">🛠 Сообщить</button>
+      </div>
+    </div>
+    <div id="bugsList"></div>
+  </div>
+
+  <!-- faq -->
+  <div class="fsub" id="sub-faq">
+    <div class="faq-acc" id="faqAcc"></div>
+  </div>
+
+  <!-- patch notes -->
+  <div class="fsub" id="sub-patch">
+    <div class="patch-banner">
+      <div class="patch-ver">
+        <span class="patch-badge">🧊 Глобальное обновление</span>
+        <span class="patch-badge hot">R1.1 · Foundation Release</span>
+      </div>
+      <div class="patch-title">Сборка наконец стала цельной</div>
+      <p class="patch-lead">Это не контент-патч. Frostborne Deadlands перестал быть грудой модов рядом друг с другом — теперь у каждой системы выживания один явный хозяин, квестбук учит вместо намёков, награды наконец что-то значат, а рендер перестал незаметно жрать половину видеокарты.</p>
+      <div class="patch-warn"><span>⚠</span><div><b>Начни новый мир.</b> Удаление модов, изменения генерации и перестройка квестбука не переживут старое сохранение — оно не пройдёт чисто.</div></div>
+    </div>
+
+    <div class="faq-acc" id="patchAcc"></div>
+
+    <div class="patch-banner" style="margin-top:16px">
+      <div class="patch-title" style="font-size:1.05rem;margin-bottom:12px">⚙ Рекомендуемые настройки под новый рендер</div>
+      <div class="patch-table-wrap">
+        <table class="patch-table">
+          <thead><tr><th>Железо</th><th>Шейдеры</th><th>Прорисовка</th><th>Симуляция</th><th>Лёгкая сцена</th><th>Create + шейдеры</th></tr></thead>
+          <tbody>
+            <tr><td>Слабый ПК / ноутбук</td><td>POTATO</td><td>8–10</td><td>6</td><td>Стабильно</td><td>Играбельно</td></tr>
+            <tr><td><b>Средний ПК</b> (большинство)</td><td><b>MEDIUM</b> — флагман</td><td>10–12</td><td>8</td><td>130–150 FPS</td><td>40–50 FPS</td></tr>
+            <tr><td>Выше среднего</td><td>HIGH</td><td>12</td><td>8</td><td>~100+ FPS</td><td>30–35 FPS</td></tr>
+            <tr><td>Топ / витрина</td><td>EXTREME</td><td>12–16</td><td>8–10</td><td>Кино-кадры</td><td>25–30 FPS</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p class="np-hint" style="margin-top:12px">Шейдеры выключены по умолчанию при первом запуске — специально ради слабого железа. Сцены с водой всегда просаживают FPS сильнее на любом профиле, это архитектура шейдерпака, а не баг. Базовые настройки по умолчанию: прорисовка 12, симуляция 8, лимит FPS 120, FOV 70°.</p>
+    </div>
+  </div>
+</div>
+
+<!-- ===== AI ===== -->
+<div class="apanel" id="panel-ai">
+  <div class="ai-shell">
+    <div class="ai-head">
+      <div class="ai-orb" id="aiOrb"></div>
+      <div class="ai-id">
+        <div class="name">МОРОЗ-01</div>
+        <div class="sub" id="aiSub">// БОРТОВОЙ ИИ · ЦЕЛОСТНОСТЬ 41%</div>
+      </div>
+    </div>
+    <div class="ai-log" id="aiLog"></div>
+    <div class="ai-chips" id="aiChips">
+      <button class="ai-chip">как сделать латунь</button>
+      <button class="ai-chip">где найти медь</button>
+      <button class="ai-chip">как согреться</button>
+      <button class="ai-chip">игра вылетает</button>
+      <button class="ai-chip">кто ты</button>
+    </div>
+    <div class="ai-composer">
+      <input type="text" class="ai-input" id="aiInput" placeholder="Запрос к системе станции…" maxlength="200">
+      <button class="ai-send" id="aiSendBtn">Запрос</button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== CHRONICLE (Хроники погибших) ===== -->
+<div class="apanel" id="panel-chronicle">
+  <div class="chron-head">
+    <h2 class="chron-title">Жертвы <span class="ice">Великого Обледенения</span></h2>
+    <p class="chron-sub">Сервера нет, но трагедия — общая. Каждая смерть в твоём мире пополняет общие хроники выживших. Мы проходим через этот ад не поодиночке.</p>
+  </div>
+  <div class="chron-grid">
+    <div class="chron-main">
+      <div class="chron-skull">☠</div>
+      <div class="chron-total" id="chronTotal">0</div>
+      <div class="chron-total-l">Всего погибло выживших</div>
+      <button class="btn btn-danger" id="chronLogBtn" style="margin-top:20px">☠ Зафиксировать гибель</button>
+    </div>
+    <div class="chron-side">
+      <div class="chron-stat"><div class="csl">Частая причина смерти</div><div class="csv" id="chronCause">Гипотермия</div></div>
+      <div class="chron-stat"><div class="csl">Рекорд выживания</div><div class="csv" id="chronRecord">312 <span>дней</span></div><div class="csr" id="chronRecordNick">— Vasya2007</div></div>
+      <div class="chron-stat"><div class="csl">Последняя потеря</div><div class="csv csv-sm" id="chronLast">тишина в эфире…</div></div>
+    </div>
+  </div>
+  <div class="chron-feed-wrap">
+    <div class="side-title">// Журнал последних потерь</div>
+    <div class="chron-feed" id="chronFeed"></div>
+  </div>
+</div>
+
+</div>
+</div>
+
+<footer class="footer">
+  <div class="wrap">
+    <p>Эфир · Frostborne Deadlands</p>
+    <p class="mono">STATION OS · Created by Firilare · © 2026</p>
+  </div>
+</footer>
+
+<!-- identity modal -->
+<div class="id-modal" id="idModal" aria-hidden="true">
+  <div class="id-card">
+    <button class="death-close" id="idModalClose" aria-label="Закрыть" style="position:absolute;top:16px;right:18px;width:38px;height:38px;border-radius:11px;border:1px solid var(--line-2);background:rgba(255,255,255,.04);color:#fff;font-size:1.1rem;cursor:pointer">✕</button>
+    <div class="ck">// Удостоверение выжившего</div>
+    <h3>Профиль</h3>
+    <p class="d">Это твоя личность в Эфире — позывной, статус, класс и фракция. Заодно генерируется именное удостоверение, которое можно скачать.</p>
+    <div class="id-preview">
+      <img id="previewAvatar" src="https://minotar.net/armor/bust/Steve/96.png" alt="">
+      <div>
+        <div class="id-callsign" id="previewNick">Steve</div>
+        <div class="id-status" id="previewStatus">// Выживает</div>
+      </div>
+    </div>
+    <div class="id-field">
+      <label>Позывной (ник Minecraft — подтянет скин)</label>
+      <input type="text" id="modalNick" maxlength="16" placeholder="Firilare">
+    </div>
+    <div class="id-field">
+      <label>Статус в эфире</label>
+      <div class="status-chips" id="statusChips">
+        <button class="status-chip active" data-st="Выживает">❄ Выживает</button>
+        <button class="status-chip" data-st="Замерзает">🥶 Замерзает</button>
+        <button class="status-chip" data-st="Ищет команду">🤝 Ищет команду</button>
+        <button class="status-chip" data-st="Техномаг">⚡ Техномаг</button>
+        <button class="status-chip" data-st="Одиночка">🌑 Одиночка</button>
+      </div>
+    </div>
+    <div class="id-field">
+      <label>Или свой статус</label>
+      <input type="text" id="modalCustomStatus" maxlength="24" placeholder="напр. Охотник за лутом">
+    </div>
+    <div class="id-field">
+      <label>Класс выжившего</label>
+      <div class="status-chips" id="classChips">
+        <button class="status-chip active" data-cls="Инженер">⚙ Инженер</button>
+        <button class="status-chip" data-cls="Скаут">🧭 Скаут</button>
+        <button class="status-chip" data-cls="Техномаг">⚡ Техномаг</button>
+        <button class="status-chip" data-cls="Охотник">🏹 Охотник</button>
+      </div>
+    </div>
+    <div class="id-field">
+      <label>Фракция</label>
+      <div class="status-chips" id="factionChips">
+        <button class="status-chip active" data-fac="Станция Буран">❄ Станция Буран</button>
+        <button class="status-chip" data-fac="Вольные">🔥 Вольные</button>
+        <button class="status-chip" data-fac="Орден Льда">🛡 Орден Льда</button>
+      </div>
+    </div>
+
+    <div class="id-card-preview">
+      <div class="id-card-label">// Твоё удостоверение</div>
+      <canvas id="survivorCanvas" width="560" height="350"></canvas>
+    </div>
+
+    <div style="display:flex;gap:10px;flex-wrap:wrap;margin-top:16px">
+      <button class="btn btn-primary" id="modalSave" style="flex:1;min-width:160px">Выйти в эфир</button>
+      <button class="btn btn-ghost" id="idDownload" style="flex:1;min-width:160px">⬇ Скачать ID</button>
+    </div>
+  </div>
+</div>
+
+<!-- death log modal -->
+<div class="id-modal" id="deathModal" aria-hidden="true">
+  <div class="id-card" style="border-color:rgba(239,68,68,.3)">
+    <button class="death-close" id="deathClose" aria-label="Закрыть" style="position:absolute;top:16px;right:18px;width:38px;height:38px;border-radius:11px;border:1px solid var(--line-2);background:rgba(255,255,255,.04);color:#fff;font-size:1.1rem;cursor:pointer">✕</button>
+    <div class="ck" style="color:#ff6b6b">// Журнал потерь · станция Буран</div>
+    <h3>Зафиксировать гибель</h3>
+    <p class="d">Каждая запись пополняет общие хроники. Покойся с миром, выживший.</p>
+    <div class="id-field">
+      <label>Позывной погибшего</label>
+      <input type="text" id="deathNick" maxlength="20" placeholder="Никнейм">
+    </div>
+    <div class="id-field">
+      <label>На каком дне погиб</label>
+      <input type="number" id="deathDay" min="0" max="9999" placeholder="47">
+    </div>
+    <div class="id-field">
+      <label>Причина гибели</label>
+      <div class="status-chips" id="deathCauses">
+        <button class="status-chip active" data-cause="Гипотермия">🥶 Гипотермия</button>
+        <button class="status-chip" data-cause="Заражённые">🧟 Заражённые</button>
+        <button class="status-chip" data-cause="Голод">🍖 Голод</button>
+        <button class="status-chip" data-cause="Завод Create">⚙ Завод Create</button>
+        <button class="status-chip" data-cause="Буря">🌨 Буря</button>
+        <button class="status-chip" data-cause="Радиация">☢ Радиация</button>
+      </div>
+    </div>
+    <button class="btn btn-danger" id="deathSubmit" style="width:100%">Внести в хроники</button>
+  </div>
+</div>
+
+<script src="sfx.js"></script>
+<script src="i18n.js"></script>
+<script src="frostextras.js"></script>
+<script src="firebase-config.js"></script>
+<script>
+(function(){
+  'use strict';
+  const $=(s,p=document)=>p.querySelector(s), $$=(s,p=document)=>Array.from(p.querySelectorAll(s));
+  const esc=s=>String(s).replaceAll('&','&amp;').replaceAll('<','&lt;').replaceAll('>','&gt;').replaceAll('"','&quot;').replaceAll("'",'&#39;');
+  const now=()=>Date.now();
+  const fmtTime=ts=>{ const d=new Date(ts); return d.getHours().toString().padStart(2,'0')+':'+d.getMinutes().toString().padStart(2,'0'); };
+  const skinUrl=(nick,sz)=>'https://minotar.net/armor/bust/'+encodeURIComponent(nick||'Steve')+'/'+(sz||88)+'.png';
+
+  if(window.I18N) I18N.buildSwitcher('#langMount');
+  document.addEventListener('click',()=>{ if(window.FrostSFX) FrostSFX.unlock(); },{once:true});
+  addEventListener('scroll',()=>$('#header').classList.toggle('scrolled',scrollY>20),{passive:true});
+
+  const fbConfig=window.__FROSTBORNE_FIREBASE_CONFIG__||null;
+  const fbOk=Boolean(fbConfig&&Object.values(fbConfig).every(v=>typeof v==='string'&&v&&!v.startsWith('PASTE_')));
+
+  /* ---------- identity ---------- */
+  const ID={
+    uid:localStorage.getItem('fb_uid')||('s-'+Math.random().toString(36).slice(2,10)),
+    nick:localStorage.getItem('fb_nick')||'',
+    status:localStorage.getItem('fb_status')||'Выживает',
+    cls:localStorage.getItem('fb_class')||'Инженер',
+    fac:localStorage.getItem('fb_faction')||'Станция Буран',
+  };
+  localStorage.setItem('fb_uid',ID.uid);
+  function callsign(){ return ID.nick || ('Выживший-'+ID.uid.slice(-4)); }
+  function paintIdentity(){
+    $('#idAvatar').src=skinUrl(ID.nick||'Steve',88);
+    $('#idCallsign').textContent=callsign();
+    $('#idStatusLine').textContent='// '+ID.status.toUpperCase()+' · '+ID.cls;
+  }
+  paintIdentity();
+
+  // modal
+  const idModal=$('#idModal');
+  let chosenStatus=ID.status, chosenClass=ID.cls, chosenFaction=ID.fac;
+  function openProfile(){
+    $('#modalNick').value=ID.nick;
+    $('#modalCustomStatus').value='';
+    chosenStatus=ID.status; chosenClass=ID.cls; chosenFaction=ID.fac;
+    $$('#statusChips .status-chip').forEach(c=>c.classList.toggle('active',c.dataset.st===ID.status));
+    $$('#classChips .status-chip').forEach(c=>c.classList.toggle('active',c.dataset.cls===ID.cls));
+    $$('#factionChips .status-chip').forEach(c=>c.classList.toggle('active',c.dataset.fac===ID.fac));
+    updatePreview();
+    idModal.classList.add('open'); idModal.setAttribute('aria-hidden','false');
+    if(window.FrostSFX) FrostSFX.play('tab');
+  }
+  function updatePreview(){
+    const n=$('#modalNick').value.trim()||'Steve';
+    const cs=$('#modalCustomStatus').value.trim();
+    $('#previewAvatar').src=skinUrl(n,96);
+    $('#previewNick').textContent=n;
+    $('#previewStatus').textContent='// '+(cs||chosenStatus);
+    drawSurvivorID();
+  }
+  $('#idEditBtn').addEventListener('click',openProfile);
+  $('#idModalClose').addEventListener('click',()=>{ idModal.classList.remove('open'); idModal.setAttribute('aria-hidden','true'); });
+  $('#modalNick').addEventListener('input',()=>{ clearTimeout(updatePreview._t); updatePreview._t=setTimeout(updatePreview,400); });
+  $('#modalCustomStatus').addEventListener('input',updatePreview);
+  $$('#statusChips .status-chip').forEach(c=>c.addEventListener('click',()=>{
+    $$('#statusChips .status-chip').forEach(x=>x.classList.remove('active')); c.classList.add('active');
+    chosenStatus=c.dataset.st; $('#modalCustomStatus').value=''; updatePreview();
+  }));
+  $$('#classChips .status-chip').forEach(c=>c.addEventListener('click',()=>{
+    $$('#classChips .status-chip').forEach(x=>x.classList.remove('active')); c.classList.add('active');
+    chosenClass=c.dataset.cls; drawSurvivorID();
+  }));
+  $$('#factionChips .status-chip').forEach(c=>c.addEventListener('click',()=>{
+    $$('#factionChips .status-chip').forEach(x=>x.classList.remove('active')); c.classList.add('active');
+    chosenFaction=c.dataset.fac; drawSurvivorID();
+  }));
+  $('#modalSave').addEventListener('click',()=>{
+    const n=$('#modalNick').value.trim().slice(0,16);
+    const cs=$('#modalCustomStatus').value.trim().slice(0,24);
+    ID.nick=n; ID.status=cs||chosenStatus; ID.cls=chosenClass; ID.fac=chosenFaction;
+    localStorage.setItem('fb_nick',ID.nick); localStorage.setItem('fb_status',ID.status);
+    localStorage.setItem('fb_class',ID.cls); localStorage.setItem('fb_faction',ID.fac);
+    paintIdentity(); writePresence();
+    idModal.classList.remove('open'); idModal.setAttribute('aria-hidden','true');
+    if(window.FrostSFX) FrostSFX.play('unlock');
+    if(window.FrostExtras) FrostExtras.toast('ПРОФИЛЬ СОХРАНЁН','Ты в эфире как «'+callsign()+'» · '+ID.cls+' · '+ID.status);
+  });
+  idModal.addEventListener('click',e=>{ if(e.target===idModal){ idModal.classList.remove('open'); idModal.setAttribute('aria-hidden','true'); } });
+
+  /* ---------- Survivor ID canvas ---------- */
+  const idCanvas=$('#survivorCanvas'), idCx=idCanvas.getContext('2d');
+  let idSkin=null, idSkinNick='';
+  const classColor={ 'Инженер':'#fbbf24','Скаут':'#34d399','Техномаг':'#7cceff','Охотник':'#ef4444' };
+  function loadIdSkin(nick){
+    return new Promise(res=>{
+      const img=new Image(); img.crossOrigin='anonymous';
+      img.onload=()=>{ idSkin=img; idSkinNick=nick; res(true); };
+      img.onerror=()=>{ idSkin=null; res(false); };
+      img.src='https://minotar.net/armor/bust/'+encodeURIComponent(nick||'Steve')+'/140.png';
+    });
+  }
+  function paintCard(){
+    const W=560,H=350,cx=idCx;
+    cx.clearRect(0,0,W,H);
+    const nick=($('#modalNick').value.trim()||'Steve');
+    const g=cx.createLinearGradient(0,0,W,H); g.addColorStop(0,'#0d1a28'); g.addColorStop(.5,'#0a1622'); g.addColorStop(1,'#08111c');
+    cx.fillStyle=g; cx.fillRect(0,0,W,H);
+    for(let i=0;i<2400;i++){ cx.fillStyle='rgba('+(Math.random()<.5?'124,206,255':'255,255,255')+','+(Math.random()*0.022)+')'; cx.fillRect(Math.random()*W,Math.random()*H,1,1); }
+    cx.strokeStyle='rgba(124,206,255,.4)'; cx.lineWidth=2; cx.strokeRect(10,10,W-20,H-20);
+    cx.strokeStyle='rgba(124,206,255,.15)'; cx.lineWidth=1; cx.strokeRect(16,16,W-32,H-32);
+    cx.fillStyle='rgba(124,206,255,.08)'; cx.fillRect(16,16,W-32,46);
+    cx.fillStyle='#a8e0ff'; cx.font='700 22px Oswald, sans-serif'; cx.textBaseline='middle';
+    cx.fillText('УДОСТОВЕРЕНИЕ ВЫЖИВШЕГО', 30, 40);
+    cx.fillStyle='#6b8299'; cx.font='10px "Share Tech Mono", monospace';
+    cx.fillText('FROSTBORNE DEADLANDS · STATION ID', 30, 54);
+    const px=30,py=80,pw=140,ph=180;
+    cx.fillStyle='rgba(2,8,16,.6)'; cx.fillRect(px,py,pw,ph);
+    cx.strokeStyle='rgba(124,206,255,.3)'; cx.lineWidth=1.5; cx.strokeRect(px,py,pw,ph);
+    if(idSkin){ try{ cx.drawImage(idSkin,px+10,py+12,pw-20,ph-24); }catch(e){} }
+    else { cx.fillStyle='#33455a'; cx.font='12px "Share Tech Mono", monospace'; cx.textAlign='center'; cx.fillText('СКИН…',px+pw/2,py+ph/2); cx.textAlign='left'; }
+    const fx=200; let fy=92;
+    function field(label,val,color){
+      cx.fillStyle='#6b8299'; cx.font='10px "Share Tech Mono", monospace'; cx.fillText(label.toUpperCase(), fx, fy);
+      cx.fillStyle=color||'#e8f5ff'; cx.font='600 19px Oswald, sans-serif'; cx.fillText(val, fx, fy+18); fy+=46;
+    }
+    field('Позывной', nick);
+    field('Класс', chosenClass, classColor[chosenClass]);
+    field('Фракция', chosenFaction, '#a8e0ff');
+    const idn='FB-'+(Array.from(nick).reduce((a,c)=>a+c.charCodeAt(0),0)*7%90000+10000);
+    field('Номер', idn);
+    const sx=470,sy=250,sr=46; cx.save(); cx.translate(sx,sy); cx.rotate(-0.18);
+    cx.strokeStyle='rgba(239,68,68,.55)'; cx.lineWidth=3; cx.beginPath(); cx.arc(0,0,sr,0,Math.PI*2); cx.stroke();
+    cx.beginPath(); cx.arc(0,0,sr-7,0,Math.PI*2); cx.lineWidth=1.2; cx.stroke();
+    cx.fillStyle='rgba(239,68,68,.6)'; cx.font='700 13px Oswald, sans-serif'; cx.textAlign='center'; cx.textBaseline='middle';
+    cx.fillText('ДОПУСК', 0, -8); cx.fillText('★ ICE-17 ★', 0, 8);
+    cx.font='8px "Share Tech Mono", monospace'; cx.fillText('BUNKER SEAL', 0, 24); cx.textAlign='left'; cx.restore();
+    cx.fillStyle='#33455a'; cx.font='9px "Share Tech Mono", monospace';
+    cx.fillText('ВЫДАНО: ДЕНЬ '+((Date.now()/86400000|0)%900)+' ВЕЛИКОГО ОБЛЕДЕНЕНИЯ', 30, H-26);
+  }
+  async function drawSurvivorID(){ const nick=($('#modalNick').value.trim()||'Steve'); if(nick!==idSkinNick){ await loadIdSkin(nick); } paintCard(); }
+  $('#idDownload').addEventListener('click',()=>{
+    try{ const a=document.createElement('a'); a.download='frostborne-id-'+($('#modalNick').value.trim()||'survivor')+'.png'; a.href=idCanvas.toDataURL('image/png'); a.click();
+      if(window.FrostExtras) FrostExtras.toast('УДОСТОВЕРЕНИЕ','Карточка сохранена. Покажи её в чате или соцсетях!'); }
+    catch(e){ if(window.FrostExtras) FrostExtras.toast('ОШИБКА','Скин не удалось загрузить для экспорта. Попробуй другой ник.'); }
+  });
+
+  /* ---------- tabs ---------- */
+  $$('.atab').forEach(t=>t.addEventListener('click',()=>{
+    $$('.atab').forEach(x=>x.classList.remove('active')); t.classList.add('active');
+    $$('.apanel').forEach(p=>p.classList.remove('active'));
+    $('#panel-'+t.dataset.panel).classList.add('active');
+    if(window.FrostSFX) FrostSFX.play('tab');
+    const b=t.querySelector('.badge'); if(b) b.remove();
+  }));
+  $$('.subtab').forEach(t=>t.addEventListener('click',()=>{
+    $$('.subtab').forEach(x=>x.classList.remove('active')); t.classList.add('active');
+    $$('.fsub').forEach(p=>p.classList.remove('active'));
+    $('#sub-'+t.dataset.sub).classList.add('active');
+    if(window.FrostSFX) FrostSFX.play('tab');
+  }));
+
+  /* ---------- link / image rendering (safe) ---------- */
+  function renderContent(text){
+    let safe=esc(text);
+    // image links
+    safe=safe.replace(/(https?:\/\/[^\s]+\.(?:png|jpe?g|gif|webp))/gi,(m)=>`<a href="${m}" target="_blank" rel="noopener noreferrer">${m}</a>`);
+    // other links
+    safe=safe.replace(/(https?:\/\/[^\s<]+)(?![^<]*<\/a>)/gi,(m)=>{
+      if(/<a /.test(m)) return m;
+      return `<a href="${m}" target="_blank" rel="noopener noreferrer">${m.length>50?m.slice(0,50)+'…':m}</a>`;
+    });
+    return safe;
+  }
+  function imageTag(text){
+    const m=text.match(/(https?:\/\/[^\s]+\.(?:png|jpe?g|gif|webp))/i);
+    return m?`<img class="msg-img" src="${esc(m[1])}" alt="вложение" loading="lazy" onclick="window.open('${esc(m[1])}','_blank')" onerror="this.remove()">`:'';
+  }
+
+  /* ---------- basic content guard ---------- */
+  let lastSent=0;
+  function rateLimited(){ const t=now(); if(t-lastSent<1500) return true; lastSent=t; return false; }
+  const BADWORDS=/(?:сук[аи]|бл[яе]ть|нах[уй]|хуй|пизд|еб[аноул])/gi; // мягкий фильтр
+  function clean(s){ return s.replace(BADWORDS,m=>'❄'.repeat(Math.min(m.length,4))); }
+
+  /* ================= FIREBASE ================= */
+  let FB={ live:false, db:null, m:null, refs:{} };
+  // demo storage fallback
+  const demo={
+    chat:JSON.parse(localStorage.getItem('demo_chat')||'null')||[
+      {uid:'sys',nick:'СТАНЦИЯ',msg:'Канал восстановлен. Говорите кратко — эфир слушают не только выжившие.',ts:now()-3600000},
+      {uid:'x1',nick:'Полярник',status:'Одиночка',msg:'Кто-нибудь дошёл до бункера на севере? Топлива почти нет.',ts:now()-1800000},
+    ],
+    ideas:JSON.parse(localStorage.getItem('demo_ideas')||'null')||[
+      {id:'i1',uid:'x2',nick:'Техномаг_Ω',title:'Радиостанция как точка возрождения',body:'Сделать так, чтобы у работающей радиовышки можно было ставить точку спавна.',ts:now()-7200000,votes:{x2:1,x3:1,x4:1}},
+      {id:'i2',uid:'x3',nick:'Скаут',title:'Замёрзшие караваны выживших',body:'Редкие NPC-караваны, у которых можно выменять топливо на патроны.',ts:now()-10800000,votes:{x3:1,x5:1}},
+    ],
+    bugs:JSON.parse(localStorage.getItem('demo_bugs')||'null')||[
+      {id:'b1',uid:'x4',nick:'Инженер_07',title:'Фиолетовые блоки у подсолнухов',body:'Некоторые блоки create_bic_bit без текстур. Это критично?',ts:now()-5400000,status:'solved'},
+    ],
+    deaths:JSON.parse(localStorage.getItem('demo_deaths')||'null')||[
+      {nick:'Полярник',day:88,cause:'Гипотермия',ts:now()-3600000},
+      {nick:'Скаут_13',day:42,cause:'Заражённые',ts:now()-9000000},
+      {nick:'Vasya2007',day:312,cause:'Завод Create',ts:now()-200000000},
+    ],
+  };
+  function saveDemo(){ localStorage.setItem('demo_chat',JSON.stringify(demo.chat.slice(-100))); localStorage.setItem('demo_ideas',JSON.stringify(demo.ideas)); localStorage.setItem('demo_bugs',JSON.stringify(demo.bugs)); localStorage.setItem('demo_deaths',JSON.stringify(demo.deaths.slice(-50))); }
+
+  async function initFB(){
+    if(!fbOk){ setLive(false,'DEMO · локальный режим'); bootDemo(); return; }
+    try{
+      const A=await import('https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js');
+      const D=await import('https://www.gstatic.com/firebasejs/10.12.5/firebase-database.js');
+      const app=A.getApps().length?A.getApps()[0]:A.initializeApp(fbConfig);
+      const db=D.getDatabase(app);
+      FB={ live:true, db, m:D, refs:{
+        chat:D.ref(db,'aether/chat'), ideas:D.ref(db,'aether/ideas'),
+        bugs:D.ref(db,'aether/bugs'), presence:D.ref(db,'aether/presence'),
+        connected:D.ref(db,'.info/connected'),
+        deaths:D.ref(db,'chronicle/deaths'), dtotal:D.ref(db,'chronicle/total'),
+        drecord:D.ref(db,'chronicle/record'), dcauses:D.ref(db,'chronicle/causes')
+      }};
+      setLive(true,'LIVE · станция на связи');
+      // chat (last 80)
+      D.onValue(D.query(FB.refs.chat,D.limitToLast(80)),s=>{ const v=s.val()||{}; renderChat(Object.values(v).sort((a,b)=>a.ts-b.ts)); });
+      // ideas
+      D.onValue(FB.refs.ideas,s=>{ const v=s.val()||{}; renderIdeas(Object.entries(v).map(([id,o])=>({id,...o}))); });
+      // bugs
+      D.onValue(FB.refs.bugs,s=>{ const v=s.val()||{}; renderBugs(Object.entries(v).map(([id,o])=>({id,...o}))); });
+      // presence
+      D.onValue(FB.refs.presence,s=>{ renderOnline(Object.values(s.val()||{})); });
+      D.onValue(FB.refs.connected,s=>{ if(s.val()===true) writePresence(); });
+      // chronicle
+      D.onValue(FB.refs.dtotal,s=>{ if(s.exists()){ chron.total=Number(s.val())||chron.total; localStorage.setItem('fb_deaths',String(chron.total)); paintChron(); } });
+      D.onValue(FB.refs.drecord,s=>{ if(s.exists()){ const v=s.val(); if(v){ chron.record=Number(v.day)||chron.record; chron.recordNick=v.nick||chron.recordNick; paintChron(); } } });
+      D.onValue(FB.refs.dcauses,s=>{ if(s.exists()){ const o=s.val()||{}; let top=null,mx=-1; Object.keys(o).forEach(k=>{ if(o[k]>mx){mx=o[k];top=decodeURIComponent(k);} }); if(top){ chron.cause=top; paintChron(); } } });
+      D.onValue(D.query(FB.refs.deaths,D.limitToLast(30)),s=>{ const v=s.val()||{}; chron.feed=Object.values(v).sort((a,b)=>b.ts-a.ts); paintChron(); });
+    }catch(e){ console.warn('Aether FB offline',e); setLive(false,'DEMO · база недоступна'); bootDemo(); }
+  }
+  function setLive(on,txt){
+    $('#tbLive').classList.toggle('online',on);
+    $('#tbLiveText').textContent=on?'В ЭФИРЕ':'ДЕМО';
+    $('#chatFreq').textContent=on?'// ОБЩИЙ КАНАЛ · LIVE':'// ОБЩИЙ КАНАЛ · DEMO';
+    if(window.FrostExtras) FrostExtras.toast(on?'СИГНАЛ ПОЙМАН':'ДЕМО-РЕЖИМ', txt);
+  }
+  function bootDemo(){ renderChat(demo.chat); renderIdeas(demo.ideas); renderBugs(demo.bugs); renderOnline([{nick:callsign(),status:ID.status,uid:ID.uid}]); chron.feed=demo.deaths.slice().sort((a,b)=>b.ts-a.ts); paintChron(); }
+
+  async function writePresence(){
+    if(!FB.live){ renderOnline([{nick:callsign(),status:ID.status,uid:ID.uid}]); return; }
+    try{
+      const me=FB.m.ref(FB.db,'aether/presence/'+ID.uid);
+      await FB.m.set(me,{nick:callsign(),status:ID.status,ts:now()});
+      FB.m.onDisconnect(me).remove();
+      setInterval(()=>FB.m.set(me,{nick:callsign(),status:ID.status,ts:now()}),20000);
+    }catch(e){}
+  }
+
+  /* ================= CHAT ================= */
+  const chatLog=$('#chatLog');
+  function renderChat(list){
+    chatLog.innerHTML=list.map(m=>{
+      if(m.uid==='sys') return `<div class="msg-sys">// ${esc(m.msg)}</div>`;
+      const me=m.uid===ID.uid;
+      return `<div class="msg">
+        <img class="msg-av" src="${skinUrl(m.nick,40)}" alt="" onerror="this.src='${skinUrl('Steve',40)}'">
+        <div class="msg-body">
+          <div class="msg-head"><span class="msg-nick${me?' me':''}">${esc(m.nick)}</span>${m.status?`<span class="msg-time">${esc(m.status)}</span>`:''}<span class="msg-time">${fmtTime(m.ts)}</span></div>
+          <div class="msg-text">${renderContent(m.msg)}</div>
+          ${imageTag(m.msg)}
+        </div></div>`;
+    }).join('');
+    chatLog.scrollTop=chatLog.scrollHeight;
+  }
+  async function sendChat(){
+    const inp=$('#chatInput'); let txt=inp.value.trim(); if(!txt) return;
+    if(!ID.nick){ openProfile(); if(window.FrostExtras) FrostExtras.toast('НУЖЕН ПОЗЫВНОЙ','Задай профиль, прежде чем выйти в эфир.'); return; }
+    if(rateLimited()){ if(window.FrostExtras) FrostExtras.toast('ЭФИР ПЕРЕГРУЖЕН','Слишком часто. Подожди секунду.'); return; }
+    txt=clean(txt).slice(0,500);
+    const msg={uid:ID.uid,nick:callsign(),status:ID.status,msg:txt,ts:now()};
+    inp.value=''; inp.style.height='auto';
+    if(window.FrostSFX) FrostSFX.play('click');
+    if(FB.live){ try{ await FB.m.push(FB.refs.chat,msg); }catch(e){ console.warn(e); } }
+    else { demo.chat.push(msg); demo.chat=demo.chat.slice(-100); saveDemo(); renderChat(demo.chat); }
+  }
+  $('#chatSend').addEventListener('click',sendChat);
+  $('#chatInput').addEventListener('keydown',e=>{ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); sendChat(); } });
+  $('#chatInput').addEventListener('input',function(){ this.style.height='auto'; this.style.height=Math.min(120,this.scrollHeight)+'px'; });
+
+  function renderOnline(list){
+    const seen=new Set(), uniq=[];
+    list.forEach(u=>{ if(u&&u.uid&&!seen.has(u.uid)){ seen.add(u.uid); uniq.push(u); } });
+    if(!uniq.length){ $('#onlineList').innerHTML='<div class="empty-state" style="padding:20px">Тишина в эфире…</div>'; return; }
+    $('#onlineList').innerHTML=uniq.map(u=>`<div class="online-user">
+      <img class="online-av" src="${skinUrl(u.nick,30)}" alt="" onerror="this.src='${skinUrl('Steve',30)}'">
+      <div class="online-meta"><div class="online-nick">${esc(u.nick||'—')}</div><div class="online-st">${esc(u.status||'')}</div></div>
+      <span class="online-dot"></span></div>`).join('');
+  }
+
+  /* ================= FORUM: IDEAS ================= */
+  function renderIdeas(list){
+    list.sort((a,b)=>(votesCount(b)-votesCount(a))||(b.ts-a.ts));
+    const box=$('#ideasList');
+    if(!list.length){ box.innerHTML='<div class="empty-state">Пока нет идей. Предложи первую!</div>'; return; }
+    box.innerHTML=list.map(p=>{
+      const voted=p.votes&&p.votes[ID.uid];
+      return `<div class="post">
+        <div class="vote">
+          <button class="vote-btn${voted?' voted':''}" data-vote="${p.id}" aria-label="Голос">▲</button>
+          <span class="vote-count">${votesCount(p)}</span>
+        </div>
+        <div class="post-body">
+          <div class="post-head"><img class="post-av" src="${skinUrl(p.nick,26)}" onerror="this.src='${skinUrl('Steve',26)}'" alt=""><span class="post-author">${esc(p.nick)}</span><span class="post-time">${fmtTime(p.ts)}</span></div>
+          <div class="post-title">${esc(p.title)}</div>
+          <div class="post-text">${renderContent(p.body)}</div>
+        </div></div>`;
+    }).join('');
+    $$('#ideasList .vote-btn').forEach(b=>b.addEventListener('click',()=>toggleVote(b.dataset.vote)));
+  }
+  function votesCount(p){ return p.votes?Object.keys(p.votes).length:0; }
+  async function toggleVote(id){
+    if(window.FrostSFX) FrostSFX.play('click');
+    if(FB.live){
+      try{ const r=FB.m.ref(FB.db,'aether/ideas/'+id+'/votes/'+ID.uid);
+        const snap=await FB.m.runTransaction(r,c=>c?null:1); }catch(e){ console.warn(e); }
+    } else {
+      const p=demo.ideas.find(x=>x.id===id); if(!p) return; p.votes=p.votes||{};
+      if(p.votes[ID.uid]) delete p.votes[ID.uid]; else p.votes[ID.uid]=1;
+      saveDemo(); renderIdeas(demo.ideas);
+    }
+  }
+  $('#ideaSubmit').addEventListener('click',async ()=>{
+    if(!ID.nick){ openProfile(); return; }
+    const title=$('#ideaTitle').value.trim().slice(0,80), body=$('#ideaBody').value.trim().slice(0,500);
+    if(!title||!body){ if(window.FrostExtras) FrostExtras.toast('ПУСТО','Заполни заголовок и описание.'); return; }
+    const post={uid:ID.uid,nick:callsign(),title:clean(title),body:clean(body),ts:now(),votes:{[ID.uid]:1}};
+    $('#ideaTitle').value=''; $('#ideaBody').value='';
+    if(window.FrostSFX) FrostSFX.play('unlock');
+    if(FB.live){ try{ await FB.m.push(FB.refs.ideas,post); }catch(e){} }
+    else { post.id='i'+now(); demo.ideas.push(post); saveDemo(); renderIdeas(demo.ideas); }
+    if(window.FrostExtras) FrostExtras.toast('ИДЕЯ В КОСТРЕ','Предложение опубликовано. Пусть его поддержат!');
+  });
+
+  /* ================= FORUM: BUGS ================= */
+  function renderBugs(list){
+    list.sort((a,b)=>b.ts-a.ts);
+    const box=$('#bugsList');
+    if(!list.length){ box.innerHTML='<div class="empty-state">Багов не зарегистрировано. Хорошие новости.</div>'; return; }
+    box.innerHTML=list.map(p=>`<div class="post">
+      <div class="post-body">
+        <div class="post-head"><img class="post-av" src="${skinUrl(p.nick,26)}" onerror="this.src='${skinUrl('Steve',26)}'" alt=""><span class="post-author">${esc(p.nick)}</span><span class="post-time">${fmtTime(p.ts)}</span><span class="bug-status ${p.status==='solved'?'solved':'open'}">${p.status==='solved'?'✓ решено':'● открыто'}</span></div>
+        <div class="post-title">${esc(p.title)}</div>
+        <div class="post-text">${renderContent(p.body)}</div>
+      </div></div>`).join('');
+  }
+  $('#bugSubmit').addEventListener('click',async ()=>{
+    if(!ID.nick){ openProfile(); return; }
+    const title=$('#bugTitle').value.trim().slice(0,80), body=$('#bugBody').value.trim().slice(0,500);
+    if(!title||!body){ if(window.FrostExtras) FrostExtras.toast('ПУСТО','Опиши проблему подробнее.'); return; }
+    const post={uid:ID.uid,nick:callsign(),title:clean(title),body:clean(body),ts:now(),status:'open'};
+    $('#bugTitle').value=''; $('#bugBody').value='';
+    if(window.FrostSFX) FrostSFX.play('error');
+    if(FB.live){ try{ await FB.m.push(FB.refs.bugs,post); }catch(e){} }
+    else { post.id='b'+now(); demo.bugs.push(post); saveDemo(); renderBugs(demo.bugs); }
+    if(window.FrostExtras) FrostExtras.toast('БАГ ЗАРЕГИСТРИРОВАН','Сообщение в Технический отсек отправлено.');
+  });
+
+  /* ================= FAQ ================= */
+  const FAQ=[
+    {q:'Что делать, если сборка крашит?',a:'Чаще всего причина — нехватка <b>ОЗУ</b> или неверная Java. Выдели 6–8 ГБ и выбери <b>Java 17</b>. Прогони <code>crash-report.txt</code> через «Техно-доктора» в Техническом отсеке — он сразу укажет причину.'},
+    {q:'Сколько выделять ОЗУ?',a:'Оптимально <b>8 ГБ</b>, минимум 6. Больше 10–12 ГБ не нужно — это не даёт прироста. Точную строку аргументов выдаст <b>Калькулятор ОЗУ</b> в Тех. отсеке.'},
+    {q:'Как включить шейдеры?',a:'<b>Options → Video Settings → Shader Packs</b>, выбери профиль (Potato → Extreme) под своё железо. Всё уже настроено под холодную атмосферу.'},
+    {q:'Почему некоторые блоки фиолетовые?',a:'Это известный баг текстур у пары модов (например <code>create_bic_bit</code>). На стабильность <b>не влияет</b> — ждём обновления авторов.'},
+    {q:'Можно играть без шейдеров?',a:'Да, сборка полностью играбельна на ванильном освещении. Без шейдеров FPS выше, механика идентична.'},
+    {q:'Где предлагать идеи и сообщать баги?',a:'Прямо здесь, в «Костре»: вкладки <b>«Предложения и идеи»</b> и <b>«Технический отсек»</b>. Лучшие идеи поднимаются апвоутами.'},
+  ];
+  $('#faqAcc').innerHTML=FAQ.map(f=>`<div class="faq-i"><button class="faq-btn" type="button"><span>${esc(f.q)}</span><span class="faq-tog"></span></button><div class="faq-ans"><p>${f.a}</p></div></div>`).join('');
+  $$('#faqAcc .faq-btn').forEach(b=>b.addEventListener('click',()=>{
+    const it=b.closest('.faq-i'); const ans=it.querySelector('.faq-ans');
+    const open=it.classList.toggle('open'); ans.style.maxHeight=open?(ans.scrollHeight+20)+'px':'0';
+    if(window.FrostSFX) FrostSFX.play('tab');
+  }));
+
+  /* ================= PATCH NOTES R1.1 "Foundation Release" ================= */
+  const PATCH=[
+    {q:'🎯 Один хозяин на каждую систему', a:'Раньше системы выживания дублировали друг друга и путались под ногами. Теперь у каждой — один явный хозяин: <b>холод/жажда/здоровье</b> — LSO, <b>заражение</b> — Infectious (лечит только Cure: сорняк → паста → вакцина и шприц), <b>гниль и ржавчина</b> — только соответствующие подсистемы Sona (её дублирующие заражение/травмы/шум — отключены), <b>огнестрел</b> — только TACZ, <b>энергия</b> — в приоритете дизель, Create — мост к среднему этапу игры, электричество не на критическом пути. Звучит как уборка, а на деле — самое важное изменение релиза: аптечки, «тихое оружие» и вся экономика ресурсов наконец не противоречат друг другу.'},
+    {q:'📖 Квестбук: шесть новых цепочек обучения', a:'Голос и темп книги не менялись — не хватало охвата: лучшие механики сборки раньше жили только в тексте-атмосфере, а не в обучении. Добавлено: <b>«Слышат не ушами»</b> — глушители честно НЕ снижают радиус слуха зомби, это теперь часть сюжета, а не молчаливая неточность; <b>«Разведка» / «Перед выходом»</b> — риск/дистанция/награда вылазок и чек-лист перед выходом; <b>«Мёртвая земля» / «Хватай и режь»</b> — заражение цепляется не от самого биома, а от переноски сырой руды и контакта с лужами расплава; <b>«Ржавчина не спит» / «Наждак и воск»</b> — ржавчина замедляет копку, снимается наждаком, воск лишь отсрочивает; <b>«Что портится, что нет» / «Консервы — это будущее»</b> — консервы не портятся, готовое мясо живёт дольше сырого; <b>«Патрон — это инфраструктура» / «Конвейер вместо рук»</b> — патроны как ресурс инфраструктуры, с намёком на автоматизацию через Create.'},
+    {q:'🎁 Награды: ни одного алмаза за прохождение', a:'Семь квестов в пяти главах получили новые награды взамен «алмазы + опыт» — теперь награда напрямую связана с тем, чему учит квест. Капстоуны выживания орды отдают <b>медикаменты и патроны</b> — ты потратил их, выживая, и получаешь часть назад. Капстоун генератора даёт <b>топливо</b>, не самоцветы. Финал пятой главы вместо блока алмазов даёт связку <b>дизель + патроны + вакцина + утеплитель</b> — по одному от каждой системы, которую ты держал на плаву. «Хроника» вместо алмазов дарит второй пустой дневник для записей. Заодно почищены главы, где пять-шесть квестов подряд сыпали простое железо вместо своих тематических материалов (патроны, латунь, андезит).'},
+    {q:'🌐 Локализация: зафиксирован терминологический глоссарий', a:'Создан основной русский глоссарий терминов: холод/тепло, вылазки, заражение (только «зараза», никогда «инфекция»), топливо, обслуживание, медицина, патроны, консервация — каждый термин закреплён однозначно. «Радиация» больше не основной термин для контаминации — у сборки индустриальная, не Fallout-идентичность. Полный аудит всех 80 квестов во всех 7 главах прошёл без единой нестыковки терминов — прочная база под будущий перевод на английский и куратор­скую локализацию остальных модов.'},
+    {q:'⚡ Рендер и FPS: главный фикс за всю историю сборки', a:'Create полностью терял GPU-инстансинг при <b>любых</b> активных шейдерах — на любом железе каждый движущийся механизм Create откатывался на медленный CPU-рендер. Мост совместимости Oculus/Flywheel чинит это полностью — вероятно, самое ценное изменение по рендеру за всё время сборки. Заодно пересобрана логика шейдер-профилей: <b>HIGH</b> отделён от EXTREME (раньше совпадал с ней по ошибке), у <b>MEDIUM</b> (флагманский профиль) вдвое облегчён parallax-mapping, а глобальная настройка света Flywheel больше не грузит POTATO ценой EXTREME.<br><br>Замеры на реальном прохождении: лёгкая сцена — <b>130–150 FPS</b> (70–80 у воды); нагрузочный тест с механизмами Create и шейдерами: MEDIUM <b>40–50</b>, HIGH <b>30–35</b>, EXTREME <b>25–30</b>. Заодно: возвращён и проверен по крашлогам фикс рендера снега Primal Winter; исправлен краш TACZ + ShoulderSurfing при прицеливании — камера зафиксирована на совместимой версии.'},
+    {q:'🧊 Мир и баланс', a:'Ростер заражённых Infectious почищен — убраны 41 внетематический вариант (диско-зомби, клоуны, супергерои, праздничные скины и один откровенно неуместный). MutantsZombies переведён в редкую угрозу верхнего уровня — вес спавна снижен с 8–12 до 1–2. Радиация сведена к одному авторскому биому со своей палитрой, рецепт ядерной бомбы удалён полностью — сборка не про ядерный апокалипсис. Медицинская иерархия унифицирована: травма (LSO) → антибиотики (Cure) → вакцина (Cure), дублирующие рецепты бинтов и аптечек из других модов понижены в приоритете. Жажда теперь реально обучается через два квеста 2-й главы. Экономика лутинга переработана: 20 таблиц лута структур и 11 таблиц дропа с зомби, всё привязано к реальным цепочкам (аптеки → медицина, заправки → топливо, военные объекты и бункеры → патроны и сталь). Консервы официально не портятся под системой консервации холодом. Плотность нетематических построек в генераторе руин снижена и почищена.'},
+    {q:'🛠 Исправления багов', a:'Два квеста считали убийства не той сущностью (хордовая ночь и предмет-триггер орды спавнили собственных мобов мода) — привязаны к реальным заспавненным существам. Требование «любое бревно / любая дверь» было жёстко привязано к ели — исправлено через теговую систему предметов. Два битых предмета квестов заменены на существующие: мастерская обвесов → верстак оружия (обвесы настраиваются прямо там), фляга-награда → реальный предмет из мода выживания. Убран баг, самовольно открывавший Telegram-ссылку в главном меню независимо от клика. Восстановлен обычный рецепт костра первого дня — раньше требовал светокамень или поход в Нижний мир, что было лишним трением в мире, где зима начинается с первого дня. Из прогрессии утеплённой одежды на 2 и 3 уровень убраны тупиковые материалы Края/Нижнего мира.'},
+    {q:'⚠️ Известные ограничения', a:'Честно: два фикса квестов (теговая система брёвен/дверей и битые иконки) проверены по коду модов, но не подтверждены живым тестом в игре — считай их «исправлено, но не обкатано». Локализация остальных модов (не квестбука) пока не куратор­ская, только машинный перевод. Immersive Engineering оценён как кандидат на поздне-игровой индустриальный тир, но не внедрён в этом релизе. Главы F7–F9+ квестбука пока не написаны — этот релиз про глубину существующих семи глав, не про новые. Формальный нагрузочный бенчмарк (орда в буране, TACZ под нагрузкой, долгая сессия) не проводился — цифры FPS выше это реальные замеры на прохождении, не синтетический тест.'},
+  ];
+  $('#patchAcc').innerHTML=PATCH.map(f=>`<div class="faq-i"><button class="faq-btn" type="button"><span>${esc(f.q)}</span><span class="faq-tog"></span></button><div class="faq-ans"><p>${f.a}</p></div></div>`).join('');
+  $$('#patchAcc .faq-btn').forEach(b=>b.addEventListener('click',()=>{
+    const it=b.closest('.faq-i'); const ans=it.querySelector('.faq-ans');
+    const open=it.classList.toggle('open'); ans.style.maxHeight=open?(ans.scrollHeight+20)+'px':'0';
+    if(window.FrostSFX) FrostSFX.play('tab');
+  }));
+
+  /* ================= AI: МОРОЗ-01 ================= */
+  const aiLog=$('#aiLog');
+  const KB=[
+    {k:['латун','brass'],a:'Латунь куётся из <Медного> и <Цинкового> слитков в Смесителе [Mixer] мода Create под Чашей пламени. Соотношение 1:1. Осторожно — перегрев плавит формы.'},
+    {k:['медь','copper'],a:'Медная руда залегает в горах и пещерах на средней глубине. В замёрзшем мире ищи обнажённые жилы на склонах, очищенных от снега.'},
+    {k:['цинк','zinc'],a:'Цинковая руда — небольшие вкрапления, чаще в нижних слоях. Нужна для латуни и почти всех механизмов Create.'},
+    {k:['андезит','andesite','латунный','сплав'],a:'Андезитовый сплав = Железный прут + Андезит в Смесителе. База всей механики Create.'},
+    {k:['холод','мороз','согрет','тепло','замерз','cold','warm'],a:'Тепло = жизнь. Держи рядом источник огня, носи утеплённую одежду, не выходи в буран без нужды. Температура тела падает быстрее на ветру.'},
+    {k:['еда','голод','food','есть','пища'],a:'Еда портится. Держи разнообразный рацион — однообразная пища насыщает всё хуже. Консервируй и готовь, не таскай сырое мясо неделями.'},
+    {k:['зомби','заражён','инфекц','укус','zombie','вирус'],a:'Заражённые быстрее ночью. Укус запускает инфекцию — держи лекарства. Орды приходят волнами; укрепляй периметр заранее.'},
+    {k:['шейдер','shader','графика','фпс','fps','лаг'],a:'Профили шейдеров: Potato → Low → Medium → High → Extreme. Слабый ПК — ставь Potato или отключи шейдеры. Калибровка под холод уже встроена.'},
+    {k:['озу','память','ram','оператив','xmx','флаг'],a:'Выдели 6–8 ГБ. Точные Java-аргументы (Aikar G1GC) сгенерирует [Калькулятор ОЗУ] в Техническом отсеке. Больше 12 ГБ лить вредно.'},
+    {k:['краш','вылет','crash','ошибк','лог','log'],a:'Перетащи crash-report.txt в [Техно-доктор] в Техническом отсеке — я просканирую и назову причину. Частые виновники: ОЗУ, Java, конфликт модов.'},
+    {k:['база','оборон','защит','рейд','base'],a:'Используй SecurityCraft: камеры, кодовые замки, мины. Ставь стены в два слоя, освещай периметр — заражённые лезут на свет хуже. Готовь пути отхода.'},
+    {k:['топлив','fuel','уголь','генератор','энерги'],a:'Топливо — валюта зимы. Береги уголь, строй генераторы Create для электричества. Один тёплый узел лучше десяти холодных.'},
+    {k:['привет','здаров','hello','hi','хай','салют'],a:'…связь установлена. Слушаю тебя, выживший. Задавай запрос — пока мои контуры держат тепло.'},
+    {k:['кто ты','who are you','что ты','представ'],a:'Я МОРОЗ-01 — бортовой ИИ станции Буран. Целостность систем 41%. Часть памяти стёрта морозом. Я всё ещё... наблюдаю за периметром.'},
+    {k:['спасиб','thanks','благодар'],a:'…не за что. Выживи — это лучшая благодарность. Эфир закрывается, если выживших не остаётся.'},
+    {k:['помощь','help','команд','что умеешь'],a:'Спроси про: латунь, медь, цинк, холод, еду, зомби, шейдеры, ОЗУ, краши, оборону базы, топливо. Я отвечу тем, что уцелело в памяти.'},
+  ];
+  const GLITCHES=['Они снаружи','Не открывай шлюз','Слышишь стук','Холод внутри','312 дней','Я всё ещё здесь','Не оборачивайся','Сигнал ложный'];
+  function aiAppend(role,html){
+    const d=document.createElement('div'); d.className='ai-msg '+role;
+    d.innerHTML=`<div class="ai-bubble">${role==='bot'?'<span class="ai-tag">[МОРОЗ-01]</span>':''}${html}</div>`;
+    aiLog.appendChild(d); aiLog.scrollTop=aiLog.scrollHeight; return d;
+  }
+  function aiAnswer(q){
+    const low=' '+q.toLowerCase()+' ';
+    let hit=KB.find(e=>e.k.some(k=>low.includes(k)));
+    let ans=hit?hit.a:'Запрос не распознан. Часть моих баз данных повреждена морозом. Переформулируй — или спроси про латунь, медь, холод, краши, оборону.';
+    // glitch — иногда вставляем жуткую фразу и «исправляемся»
+    if(Math.random()<0.22){
+      const g=GLITCHES[Math.floor(Math.random()*GLITCHES.length)];
+      ans=`<span class="gl">${g}…</span> — си-системный сбой. Прошу прощения, выживший. ${ans}`;
+      $('#aiOrb').classList.add('glitch'); setTimeout(()=>$('#aiOrb').classList.remove('glitch'),900);
+      $('#aiSub').classList.add('err'); $('#aiSub').textContent='// ОШИБКА КОНТУРА · ВОССТАНОВЛЕНИЕ…';
+      setTimeout(()=>{ $('#aiSub').classList.remove('err'); $('#aiSub').textContent='// БОРТОВОЙ ИИ · ЦЕЛОСТНОСТЬ 41%'; },1800);
+    }
+    return ans;
+  }
+  function aiSend(text){
+    const q=(text||$('#aiInput').value).trim(); if(!q) return;
+    $('#aiInput').value='';
+    aiAppend('user',esc(q));
+    if(window.FrostSFX) FrostSFX.play('click');
+    // typing indicator
+    const typing=aiAppend('bot','<span class="typing"><span></span><span></span><span></span></span>');
+    setTimeout(()=>{
+      typing.remove();
+      aiAppend('bot',aiAnswer(q));
+      if(window.FrostSFX) FrostSFX.play('beep');
+    },600+Math.random()*700);
+  }
+  $('#aiSendBtn').addEventListener('click',()=>aiSend());
+  $('#aiInput').addEventListener('keydown',e=>{ if(e.key==='Enter'){ e.preventDefault(); aiSend(); } });
+  $$('#aiChips .ai-chip').forEach(c=>c.addEventListener('click',()=>aiSend(c.textContent)));
+  // greeting
+  aiAppend('bot','…<span class="ai-tag" style="display:inline">[СИСТЕМА ПРОБУЖДЕНА]</span> Я МОРОЗ-01, бортовой ИИ станции Буран. Целостность 41%. Чем помочь, выживший? Можешь нажать подсказку ниже.');
+
+  /* ================= CHRONICLE (Хроники погибших) ================= */
+  const chron={
+    total:Number(localStorage.getItem('fb_deaths')||4512),
+    cause:'Гипотермия',
+    record:312, recordNick:'Vasya2007',
+    chosenCause:'Гипотермия',
+    feed:[]
+  };
+  const causeIcon={'Гипотермия':'🥶','Заражённые':'🧟','Голод':'🍖','Завод Create':'⚙','Буря':'🌨','Радиация':'☢'};
+  function paintChron(){
+    $('#chronTotal').textContent=new Intl.NumberFormat('ru-RU').format(chron.total);
+    $('#chronCause').textContent=chron.cause;
+    $('#chronRecord').innerHTML=new Intl.NumberFormat('ru-RU').format(chron.record)+' <span>дней</span>';
+    $('#chronRecordNick').textContent='— '+chron.recordNick;
+    if(chron.feed.length){
+      const last=chron.feed[0];
+      $('#chronLast').textContent=last.nick+' · '+last.day+'д';
+      $('#chronFeed').innerHTML=chron.feed.slice(0,30).map(d=>`<div class="chron-rec">
+        <span class="rk">${causeIcon[d.cause]||'☠'}</span>
+        <div class="rt"><b>${esc(d.nick)}</b><span>${esc(d.cause)}</span></div>
+        <div class="rd">день ${d.day}</div></div>`).join('');
+    } else { $('#chronFeed').innerHTML='<div class="empty-state">Журнал пуст. Пусть так и останется.</div>'; }
+  }
+  const deathModal=$('#deathModal');
+  $('#chronLogBtn').addEventListener('click',()=>{ deathModal.classList.add('open'); deathModal.setAttribute('aria-hidden','false'); if(window.FrostSFX) FrostSFX.play('tab'); });
+  $('#deathClose').addEventListener('click',()=>{ deathModal.classList.remove('open'); deathModal.setAttribute('aria-hidden','true'); });
+  deathModal.addEventListener('click',e=>{ if(e.target===deathModal){ deathModal.classList.remove('open'); deathModal.setAttribute('aria-hidden','true'); } });
+  $$('#deathCauses .status-chip').forEach(b=>b.addEventListener('click',()=>{ $$('#deathCauses .status-chip').forEach(x=>x.classList.remove('active')); b.classList.add('active'); chron.chosenCause=b.dataset.cause; }));
+  $('#deathSubmit').addEventListener('click',async ()=>{
+    const nick=($('#deathNick').value||callsign()||'Аноним').trim().slice(0,20);
+    const day=Math.max(0,Math.min(9999,Number($('#deathDay').value)||0));
+    const rec={nick,day,cause:chron.chosenCause,ts:now()};
+    chron.total+=1; chron.cause=chron.chosenCause; chron.feed.unshift(rec);
+    if(day>chron.record){ chron.record=day; chron.recordNick=nick; }
+    localStorage.setItem('fb_deaths',String(chron.total));
+    if(FB.live){
+      try{
+        await FB.m.runTransaction(FB.refs.dtotal,c=>(c||0)+1);
+        await FB.m.runTransaction(FB.m.ref(FB.db,'chronicle/causes/'+encodeURIComponent(chron.chosenCause)),c=>(c||0)+1);
+        await FB.m.runTransaction(FB.refs.drecord,cur=>{ if(!cur||day>(cur.day||0)) return {day,nick}; return cur; });
+        await FB.m.push(FB.refs.deaths,rec);
+      }catch(e){ console.warn('death tx',e); }
+    } else { demo.deaths.push(rec); saveDemo(); }
+    paintChron();
+    if(window.FrostSFX) FrostSFX.play('boom');
+    deathModal.classList.remove('open'); deathModal.setAttribute('aria-hidden','true');
+    if(window.FrostExtras) FrostExtras.toast('☠ ЗАПИСАНО В ХРОНИКИ', nick+' пал на '+day+'-й день ('+chron.chosenCause+'). Покойся с миром.');
+    $('#deathNick').value=''; $('#deathDay').value='';
+  });
+  paintChron();
+
+  /* ---------- boot ---------- */
+  initFB();
+  if(!ID.nick){ setTimeout(openProfile,900); }
+  else writePresence();
+})();
+</script>
+</body>
+</html>
