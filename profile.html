@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Личное дело — Frostborne Deadlands</title>
+<meta name="description" content="Личное дело выжившего станции Буран: дни, класс, фракция и прогресс по Кодексу.">
+<meta name="robots" content="noindex">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&family=Inter:wght@400;500;600&family=Share+Tech+Mono&display=swap&subset=cyrillic,cyrillic-ext,latin,latin-ext">
+<link rel="stylesheet" href="extras.css?v=2.29">
+
+<style>
+  :root{
+    --bg:#04070b; --panel:rgba(10,20,33,.72); --panel-2:#0d1a2a;
+    --ice:#7cceff; --ice-bright:#a8e0ff; --steel:#3a86ff;
+    --text:#c5d6e8; --muted:#6b8299; --muted-2:#4a5d70;
+    --line:rgba(124,206,255,.12); --line-2:rgba(124,206,255,.22);
+    --good:#34d399; --warn:#fbbf24; --red:#ef4444;
+    --mono:'Share Tech Mono',ui-monospace,monospace;
+    --disp:'Oswald','Arial Narrow',system-ui,sans-serif;
+    --body:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+    --ease:cubic-bezier(.22,1,.36,1);
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:var(--body);
+    font-size:16px;line-height:1.6;-webkit-font-smoothing:antialiased;min-height:100vh}
+  body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:
+      radial-gradient(1100px 520px at 18% -8%,rgba(58,134,255,.13),transparent 62%),
+      radial-gradient(900px 460px at 88% 4%,rgba(124,206,255,.08),transparent 60%)}
+  body::after{content:"";position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.35;
+    background:repeating-linear-gradient(0deg,rgba(0,0,0,.28) 0 1px,transparent 1px 3px)}
+
+  .wrap{position:relative;z-index:2;max-width:900px;margin:0 auto;padding:26px 20px 80px}
+
+  /* шапка */
+  .top{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-bottom:34px}
+  .back{font-family:var(--mono);font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:9px;
+    padding:8px 12px;transition:.2s}
+  .back:hover{color:var(--ice-bright);border-color:var(--line-2)}
+  .top .sp{flex:1}
+
+  .kicker{font-family:var(--mono);font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--muted-2);margin:0 0 12px}
+
+  /* карточка */
+  .card{border:1px solid var(--line);border-radius:18px;background:var(--panel);
+    backdrop-filter:blur(10px);padding:26px;margin-bottom:18px}
+  .who{display:flex;gap:20px;align-items:flex-start;flex-wrap:wrap}
+  .ava{width:96px;height:96px;border-radius:14px;border:1px solid var(--line-2);
+    background:rgba(2,8,16,.6);image-rendering:pixelated;flex:none;object-fit:cover}
+  .who-tx{flex:1;min-width:200px}
+  .nick{font-family:var(--disp);font-weight:600;font-size:clamp(1.6rem,4vw,2.3rem);
+    color:#fff;line-height:1.1;margin:0 0 8px;word-break:break-word}
+  .sub{font-family:var(--mono);font-size:.72rem;letter-spacing:.06em;color:var(--ice);margin-bottom:12px}
+  .tags{display:flex;gap:8px;flex-wrap:wrap}
+  .tag{font-family:var(--mono);font-size:.6rem;letter-spacing:.08em;text-transform:uppercase;
+    border:1px solid var(--line-2);border-radius:999px;padding:4px 10px;color:var(--ice-bright)}
+  .tag.on{color:var(--good);border-color:rgba(52,211,153,.4);background:rgba(52,211,153,.08)}
+  .tag.off{color:var(--muted-2)}
+  .mute-btn{margin-top:16px;font-family:var(--mono);font-size:.62rem;letter-spacing:.07em;
+    text-transform:uppercase;color:var(--muted);background:none;border:1px solid var(--line);
+    border-radius:9px;padding:8px 12px;cursor:pointer;transition:.2s}
+  .mute-btn:hover{color:#fff;border-color:var(--line-2)}
+  .mute-btn.on{color:#ff9f9f;border-color:rgba(239,68,68,.35);background:rgba(239,68,68,.08)}
+  .hid{font-family:var(--mono);font-size:.62rem;letter-spacing:.06em;color:var(--muted-2)}
+  .rank{display:inline-flex;align-items:center;gap:7px;margin-top:9px;
+    font-family:var(--mono);font-size:.6rem;letter-spacing:.09em;text-transform:uppercase}
+  .rank i{width:9px;height:9px;border-radius:50%;display:block}
+  .also{margin-top:7px;font-family:var(--mono);font-size:.62rem;letter-spacing:.05em;color:var(--muted-2)}
+  .also b{color:var(--muted);font-weight:400}
+  .act-t{margin:22px 0 10px;font-family:var(--mono);font-size:.6rem;letter-spacing:.13em;
+    text-transform:uppercase;color:var(--muted-2)}
+  /* Линии — обводкой ячеек, а не фоном контейнера: ячеек бывает нечётное
+     число, и пустое место в сетке светилось бы чужим прямоугольником. */
+  .act{display:grid;grid-template-columns:repeat(auto-fit,minmax(92px,1fr));
+    background:#070c14;border:1px solid var(--line);border-radius:12px;overflow:hidden}
+  .act>div{background:#070c14;padding:12px 8px;text-align:center;outline:1px solid var(--line)}
+  .act .n{font-family:var(--head);font-size:1.2rem;color:var(--ice-bright);line-height:1}
+  .act .l{margin-top:5px;font-family:var(--mono);font-size:.55rem;letter-spacing:.06em;
+    text-transform:uppercase;color:var(--muted-2)}
+  .since{margin-top:9px;font-family:var(--mono);font-size:.6rem;letter-spacing:.05em;color:var(--muted-2)}
+
+  /* цифры */
+  .stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(140px,1fr));
+    background:#070c14;border:1px solid var(--line);border-radius:14px;overflow:hidden;margin-top:22px}
+  .st{background:rgba(10,20,33,.9);padding:16px 18px;outline:1px solid var(--line)}
+  .st .n{font-family:var(--mono);font-size:1.6rem;color:var(--ice-bright);line-height:1.1;
+    font-variant-numeric:tabular-nums}
+  .st .l{font-family:var(--mono);font-size:.6rem;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--muted-2);margin-top:6px}
+
+  /* прогресс */
+  .bar-l{font-family:var(--mono);font-size:.62rem;letter-spacing:.12em;text-transform:uppercase;
+    color:var(--muted-2);margin:22px 0 8px}
+  .bar{height:8px;border-radius:999px;background:rgba(255,255,255,.05);overflow:hidden}
+  .bar i{display:block;height:100%;border-radius:999px;width:0;
+    background:linear-gradient(90deg,var(--ice),var(--steel));transition:width .6s var(--ease)}
+
+  /* состояния */
+  .state{border:1px dashed var(--line-2);border-radius:14px;background:rgba(10,20,33,.5);
+    padding:30px 24px;text-align:center}
+  .state h2{font-family:var(--disp);font-weight:500;font-size:1.2rem;text-transform:uppercase;
+    letter-spacing:.03em;color:#fff;margin:0 0 10px}
+  .state p{margin:0 auto;max-width:46ch;color:var(--muted);font-size:.93rem}
+  .state .go{display:inline-block;margin-top:18px;font-family:var(--mono);font-size:.66rem;
+    letter-spacing:.08em;text-transform:uppercase;color:var(--ice-bright);text-decoration:none;
+    border:1px solid var(--line-2);border-radius:10px;padding:10px 16px;transition:.2s}
+  .state .go:hover{background:rgba(124,206,255,.12)}
+
+  .foot{margin-top:30px;font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--muted-2);text-align:center}
+
+  @media (max-width:560px){
+    .wrap{padding:20px 14px 60px}
+    .card{padding:20px}
+    .ava{width:76px;height:76px}
+  }
+  @media (prefers-reduced-motion:reduce){
+    .bar i{transition:none}
+  }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="top">
+    <a class="back" href="aether.html">← <span data-i18n="pr.back">В эфир</span></a>
+    <span class="sp"></span>
+    <span id="langMount"></span>
+  </div>
+
+  <p class="kicker" data-i18n="pr.kicker">// Личное дело · станция Буран</p>
+
+  <div id="out">
+    <div class="state">
+      <h2 data-i18n="pr.loadT">Поднимаю дело из архива…</h2>
+      <p data-i18n="pr.loadB">Станция ищет запись по позывному.</p>
+    </div>
+  </div>
+
+  <p class="foot">FROSTBORNE DEADLANDS · <span data-ver="siteFull">STATION OS</span></p>
+</div>
+
+<script src="version.js?v=2.29"></script>
+<script src="frostauth.js?v=2.29"></script>
+<script src="i18n.js?v=2.29"></script>
+<script src="frostextras.js?v=2.29"></script>
+<script src="firebase-config.js?v=2.29"></script>
+<script>
+(function(){
+  'use strict';
+  var $=function(s,p){ return (p||document).querySelector(s); };
+  var esc=function(s){ return String(s==null?'':s).replace(/&/g,'&amp;').replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;').replace(/"/g,'&quot;').replace(/'/g,'&#39;'); };
+
+  if(window.I18N) I18N.buildSwitcher('#langMount');
+
+  var nick = new URLSearchParams(location.search).get('u') || '';
+  var fbConfig = window.__FROSTBORNE_FIREBASE_CONFIG__ || null;
+  var FB_NEED=['apiKey','authDomain','databaseURL','projectId','storageBucket','messagingSenderId','appId'];
+  var fbOk = Boolean(fbConfig && FB_NEED.every(function(k){
+    var v=fbConfig[k]; return typeof v==='string' && v && !v.startsWith('PASTE_');
+  }));
+
+  var STATUS_KEYS={'Выживает':'ae.stAlive','Замерзает':'ae.stFreezing','Ищет команду':'ae.stLooking','Техномаг':'ae.stTechno','Одиночка':'ae.stLoner'};
+  var CLASS_KEYS={'Инженер':'ae.clsEngineer','Скаут':'ae.clsScout','Техномаг':'ae.clsTechno','Охотник':'ae.clsHunter'};
+  var FACTION_KEYS={'Станция Буран':'ae.facStation','Вольные':'ae.facFree','Орден Льда':'ae.facOrder'};
+  var strip=function(s){ return String(s).replace(/^\S+\s+/,''); };
+  function disp(map,v){ var k=map[v]; if(!k||!window.I18N) return v||''; var t=I18N.t(k); return t===k?v:strip(t); }
+
+  /* «был в эфире» человеческим языком (A-16) */
+  function seen(ts){
+    if(!ts) return I18N.t('pr.seenNever');
+    var d=Date.now()-ts;
+    if(d < 5*60000)  return I18N.t('pr.seenNow');
+    if(d < 3600000)  return I18N.t('pr.seenMin').replace('{n}', Math.max(1,Math.round(d/60000)));
+    if(d < 86400000) return I18N.t('pr.seenHour').replace('{n}', Math.round(d/3600000));
+    return I18N.t('pr.seenDay').replace('{n}', Math.round(d/86400000));
+  }
+
+  var repaint=null;   // как перерисовать то, что сейчас на экране (для смены языка)
+
+  function state(titleKey, bodyKey, extra){
+    repaint=function(){ state(titleKey, bodyKey, extra); };
+    $('#out').innerHTML = '<div class="state"><h2>'+esc(I18N.t(titleKey))+'</h2>'+
+      '<p>'+esc(I18N.t(bodyKey).replace('{n}', extra||''))+'</p>'+
+      '<a class="go" href="aether.html">'+esc(I18N.t('pr.toAether'))+'</a></div>';
+  }
+
+  function render(p){
+    if(!p){ state('pr.noneT','pr.noneB', nick); return; }
+    repaint=function(){ render(p); };
+
+    var online = p.ts && (Date.now()-p.ts) < 5*60000;
+    var day = Math.max(0, Number(p.day)||0);
+    var best = Math.max(0, Number(p.best)||0);
+
+    /* A-11: человек сам решает, что показывать. Скрытое не рисуем вовсе —
+       заглушка «скрыто» на каждом поле выглядела бы как упрёк. */
+    var pv = window.FrostAuth ? FrostAuth.unpackPriv(p.priv) : {day:1,best:1,cls:1,fac:1,status:1,stats:1};
+    var mine = window.FrostAuth && p.uid && FrostAuth.isMine(p.uid);
+    if(mine) pv = {day:1,best:1,cls:1,fac:1,status:1,stats:1};   // себе показываем всё
+
+    /* A-13: прошлые позывные. Показываем их не ради архива, а чтобы
+       смена имени не работала как способ начать с чистого листа. */
+    var prev = [];
+    if(p.prev) prev = Array.isArray(p.prev) ? p.prev.slice() : Object.keys(p.prev).map(function(k){return p.prev[k];});
+    prev = prev.filter(function(n){ return typeof n==='string' && n; }).slice(-5);
+
+    $('#out').innerHTML =
+      '<div class="card">'+
+        '<div class="who">'+
+          '<img class="ava" alt="" src="'+esc(window.FrostAuth ? FrostAuth.avatarUrl(p.ava, p.nick, p.uid, 96) : ('https://minotar.net/armor/bust/'+encodeURIComponent(p.nick||'Steve')+'/96.png'))+'" '+
+            'onerror="this.style.visibility=\'hidden\'">'+
+          '<div class="who-tx">'+
+            '<h1 class="nick">'+esc(p.nick||'—')+'</h1>'+
+            (pv.status && p.status ? '<div class="sub">// '+esc(disp(STATUS_KEYS,p.status).toUpperCase())+'</div>' : '')+
+            '<div class="tags">'+
+              (pv.cls && p.cls ? '<span class="tag">'+esc(disp(CLASS_KEYS,p.cls))+'</span>' : '')+
+              (pv.fac && p.fac ? '<span class="tag">'+esc(disp(FACTION_KEYS,p.fac))+'</span>' : '')+
+              '<span class="tag '+(online?'on':'off')+'">'+esc(seen(p.ts))+'</span>'+
+            '</div>'+
+            (prev.length ? '<div class="also">'+esc(I18N.t('pr.also'))+' <b>'+
+              prev.map(esc).join(', ')+'</b></div>' : '')+
+            /* A-15: ранг считается из рекорда дней. Спрятал рекорд — прячется
+               и ранг: иначе приватность обходилась бы в один шаг. */
+            ((pv.best && window.FrostAuth) ? (function(){
+              var r=FrostAuth.rank(best);
+              return '<div class="rank" style="color:'+r.color+'"><i style="background:'+r.color+'"></i>'+
+                esc(I18N.t('ae.rank_'+r.id))+'</div>';
+            })() : '')+
+          '</div>'+
+        '</div>'+
+
+        '<div class="stats">'+
+          (pv.day  ? '<div class="st"><div class="n">'+(day||'—')+'</div><div class="l">'+esc(I18N.t('pr.day'))+'</div></div>' : '')+
+          (pv.best ? '<div class="st"><div class="n">'+(best||'—')+'</div><div class="l">'+esc(I18N.t('pr.best'))+'</div></div>' : '')+
+          '<div class="st"><div class="n" id="cdxN">—</div><div class="l">'+esc(I18N.t('pr.codex'))+'</div></div>'+
+        '</div>'+
+        ((!pv.day || !pv.best || !pv.cls || !pv.fac || !pv.status || !pv.stats)
+          ? '<p class="hid">'+esc(I18N.t('pr.someHidden'))+'</p>' : '')+
+
+        (pv.stats ? '<div class="act-t">'+esc(I18N.t('pr.stTitle'))+'</div>'+
+          '<div class="act" id="actBox">'+
+            ['msgs','reacts','ideas','bugs','bp','deaths'].map(function(k){
+              return '<div><div class="n" data-st="'+k+'">·</div><div class="l">'+
+                esc(I18N.t('pr.st_'+k))+'</div></div>';
+            }).join('')+
+          '</div>'+
+          '<div class="since" id="sinceLine"></div>' : '')+
+
+        '<div class="bar-l">'+esc(I18N.t('pr.codexBar'))+'</div>'+
+        '<div class="bar"><i id="cdxBar"></i></div>'+
+        (!mine && p.uid ? '<button class="mute-btn'+(window.FrostAuth&&FrostAuth.isMuted(p.uid)?' on':'')+
+          '" id="muteBtn" type="button">'+
+          esc(I18N.t(window.FrostAuth&&FrostAuth.isMuted(p.uid)?'pr.unmute':'pr.mute'))+'</button>' : '')+
+      '</div>'+
+      '<p class="foot">'+esc(I18N.t('pr.own'))+'</p>';
+
+    var mb=$('#muteBtn');
+    if(mb) mb.addEventListener('click',function(){
+      if(!window.FrostAuth || !p.uid) return;
+      if(FrostAuth.isMuted(p.uid)) FrostAuth.unmute(p.uid); else FrostAuth.mute(p.uid);
+      render(p);
+    });
+
+    /* A-17: активность считается по базе и приезжает позже карточки —
+       ждать её ради шапки незачем. */
+    if(pv.stats && window.FrostAuth && p.uid){
+      FrostAuth.stats(p.uid, p.legacy||'', p.nick||'').then(function(st){
+        if(!st || !$('#actBox')) return;
+        Object.keys(st).forEach(function(k){
+          var el=document.querySelector('[data-st="'+k+'"]');
+          if(el) el.textContent = st[k];
+        });
+        var since = Number(p.first)||st.first||0;
+        var sl=$('#sinceLine');
+        if(sl && since){
+          var d=new Date(since);
+          var dd=('0'+d.getDate()).slice(-2)+'.'+('0'+(d.getMonth()+1)).slice(-2)+'.'+d.getFullYear();
+          sl.textContent = I18N.t('pr.since').replace('{d}', dd);
+        }
+      });
+    }
+
+    /* Прогресс Кодекса виден только у себя: он хранится в браузере,
+       а не в базе — обещать чужой прогресс было бы обманом. */
+    var raw='';
+    try{ raw = mine ? (localStorage.getItem('fb_codex_stat')||'') : ''; }catch(e){}
+    var m=/^(\d+)\/(\d+)$/.exec(raw);
+    if(m && +m[2]){
+      $('#cdxN').textContent = m[1]+'/'+m[2];
+      $('#cdxBar').style.width = Math.round(+m[1]/+m[2]*100)+'%';
+    } else {
+      $('#cdxN').textContent = '—';
+      $('#cdxBar').style.width = '0%';
+    }
+  }
+
+  async function boot(){
+    if(!nick){ state('pr.noNickT','pr.noNickB'); return; }
+    if(!fbOk){ state('pr.offT','pr.offB'); return; }
+    try{
+      var A=await import('https://www.gstatic.com/firebasejs/10.12.5/firebase-app.js');
+      var D=await import('https://www.gstatic.com/firebasejs/10.12.5/firebase-database.js');
+      var app=A.getApps().length?A.getApps()[0]:A.initializeApp(fbConfig);
+      var db=D.getDatabase(app);
+      // читать профили можно и без входа: ветка users открыта на чтение
+      if(window.FrostAuth){ FrostAuth.db=db; FrostAuth.dbMod=D; }
+      var p = await FrostAuth.profileByNick(nick);
+      render(p);
+    }catch(e){
+      console.warn('profile', e);
+      state('pr.offT','pr.offB');
+    }
+  }
+
+  document.addEventListener('i18n:changed', function(){ if(repaint) repaint(); });
+  boot();
+})();
+</script>
+</body>
+</html>
