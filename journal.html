@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&family=Inter:wght@400;500;600&family=Share+Tech+Mono&family=Literata:ital,opsz,wght@0,7..72,400;0,7..72,500;1,7..72,400&display=swap&subset=cyrillic,cyrillic-ext,latin,latin-ext">
-<link rel="stylesheet" href="extras.css?v=2.29">
+<link rel="stylesheet" href="extras.css?v=2.30">
 <style>
 :root{
   --bg:#04070b; --panel:rgba(10,20,33,.72);
@@ -102,6 +102,75 @@ h1 span{color:var(--ice)}
 .entry-b p:last-child{margin-bottom:0}
 .page-empty{display:grid;place-items:center;color:var(--ink-soft);opacity:.5;
   font-family:'Share Tech Mono',monospace;font-size:.7rem;letter-spacing:.14em;text-transform:uppercase}
+
+/* ── инструменты чтения (H-03…H-09) ── */
+.jtools{display:flex;gap:8px;flex-wrap:wrap;align-items:center;margin-bottom:16px}
+.jt{font-family:'Share Tech Mono',monospace;font-size:.62rem;letter-spacing:.07em;
+  text-transform:uppercase;color:var(--muted);background:rgba(255,255,255,.03);
+  border:1px solid var(--line);border-radius:9px;padding:9px 13px;cursor:pointer;transition:.2s}
+.jt:hover{color:#fff;border-color:rgba(124,206,255,.4)}
+.jt.on{color:#04070b;background:var(--ice);border-color:var(--ice);font-weight:600}
+.jsearch{flex:1;min-width:160px;background:rgba(255,255,255,.03);border:1px solid var(--line);
+  border-radius:9px;padding:9px 13px;color:var(--text);font-family:inherit;font-size:.88rem}
+.jsearch:focus{outline:none;border-color:rgba(124,206,255,.4)}
+
+.jres{margin-bottom:18px}
+.jres-i{display:block;width:100%;text-align:left;background:rgba(10,20,33,.5);
+  border:1px solid var(--line);border-radius:10px;padding:11px 13px;margin-bottom:7px;
+  cursor:pointer;color:var(--text);font-family:inherit;font-size:.88rem;line-height:1.45}
+.jres-i:hover{border-color:rgba(124,206,255,.35);background:rgba(14,26,42,.7)}
+.jres-i b{display:block;color:#e8f5ff;margin-bottom:3px;font-size:.8rem}
+.jres-i mark{background:rgba(124,206,255,.28);color:#fff;border-radius:2px}
+.jres-none{color:var(--muted-2);font-size:.86rem;padding:6px 0}
+
+/* режим чтения (H-03): книга шире, воздуха больше, обвязка тише */
+body.zen .toc,body.zen .note,body.zen footer,body.zen .jtools .jt:not(#jZen){opacity:.4}
+body.zen .page{font-size:1.06rem;line-height:1.85}
+body.zen .entry-b p{margin-bottom:1.1em}
+
+/* находки: понятие, о котором знает Кодекс (H-15, H-16) */
+.find{color:inherit;border-bottom:1px dashed rgba(92,82,65,.55);cursor:help;text-decoration:none}
+.find:hover{border-bottom-color:var(--ink);background:rgba(124,206,255,.12)}
+.finds{margin-top:12px;padding-top:9px;border-top:1px dashed rgba(92,82,65,.3);
+  display:flex;gap:6px;flex-wrap:wrap;align-items:center}
+.finds-l{font-family:'Share Tech Mono',monospace;font-size:.52rem;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--ink-soft);opacity:.75}
+.finds a{font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.04em;
+  color:var(--ink);border:1px solid rgba(92,82,65,.35);border-radius:999px;padding:3px 9px}
+.finds a:hover{background:rgba(92,82,65,.12)}
+
+/* заметки на полях (H-06) */
+.marg{margin-top:14px;padding-top:10px;border-top:1px dashed rgba(92,82,65,.35)}
+.marg-l{font-family:'Share Tech Mono',monospace;font-size:.55rem;letter-spacing:.1em;
+  text-transform:uppercase;color:var(--ink-soft);opacity:.7;margin-bottom:5px}
+.marg textarea{width:100%;background:rgba(255,255,255,.35);border:1px solid rgba(92,82,65,.28);
+  border-radius:7px;padding:7px 9px;color:var(--ink);font-family:inherit;font-size:.84rem;
+  line-height:1.5;resize:vertical;min-height:46px}
+.marg textarea:focus{outline:none;border-color:rgba(92,82,65,.55)}
+
+/* оглавление: прочитано и время (H-08, H-09) */
+.toc-ch .pct{display:block;height:2px;margin-top:5px;border-radius:2px;background:rgba(124,206,255,.15)}
+.toc-ch .pct i{display:block;height:100%;border-radius:2px;background:var(--ice);width:0}
+.toc-ch .tm{font-family:'Share Tech Mono',monospace;font-size:.52rem;opacity:.55;margin-left:5px}
+
+/* печатная версия (H-34): на бумаге не нужны ни кнопки, ни разворот книги —
+   только текст, подряд и читаемо. */
+#printOut{display:none}
+@media print{
+  body{background:#fff;color:#000}
+  body::before,body::after{display:none}
+  .top,.jtools,.jres,.controls,.toc,.note,footer,.book{display:none !important}
+  #printOut{display:block}
+  #printOut h2{font-family:Georgia,'Times New Roman',serif;font-size:15pt;margin:18pt 0 6pt;
+    page-break-after:avoid}
+  #printOut .pch{font-family:Georgia,serif;font-size:11pt;text-transform:uppercase;
+    letter-spacing:.08em;color:#555;margin-top:26pt;border-bottom:1px solid #bbb;
+    padding-bottom:4pt;page-break-before:always}
+  #printOut .pch:first-child{page-break-before:avoid}
+  #printOut p{font-family:Georgia,'Times New Roman',serif;font-size:11pt;line-height:1.55;
+    margin:0 0 8pt;orphans:3;widows:3}
+  #printOut .pnote{font-style:italic;color:#444;border-left:2px solid #ccc;padding-left:8pt}
+}
 
 /* ── управление ── */
 .controls{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:30px}
@@ -215,6 +284,17 @@ footer{margin-top:56px;padding:24px 0 44px;border-top:1px solid var(--line-2);
     <div class="book" id="book"></div>
   </div>
 
+  <div class="jtools">
+    <input class="jsearch" id="jSearch" type="search" maxlength="60"
+      data-i18n-attr="placeholder:jr.searchPh" placeholder="Искать по журналу…">
+    <button class="jt" id="jZen" type="button" data-i18n="jr.zen">Режим чтения</button>
+    <button class="jt" id="jAuto" type="button" data-i18n="jr.auto">Автолистание</button>
+    <button class="jt" id="jBms" type="button" data-i18n="jr.bms">Закладки</button>
+    <button class="jt" id="jPrint" type="button" data-i18n="jr.print">Печать</button>
+  </div>
+  <div class="jres" id="jRes"></div>
+  <div id="printOut" aria-hidden="true"></div>
+
   <div class="controls">
     <button class="pg" id="prev" type="button" data-i18n="jr.prev">← Назад</button>
     <div class="pg-mid">
@@ -233,12 +313,13 @@ footer{margin-top:56px;padding:24px 0 44px;border-top:1px solid var(--line-2);
   </footer>
 </main>
 
-<script src="version.js?v=2.29"></script>
-<script src="sfx.js?v=2.29"></script>
-<script src="i18n.js?v=2.29"></script>
-<script src="frostextras.js?v=2.29"></script>
-<script src="journal-data.js?v=2.29"></script>
-<script src="journal-arg.js?v=2.29"></script>
+<script src="version.js?v=2.30"></script>
+<script src="sfx.js?v=2.30"></script>
+<script src="i18n.js?v=2.30"></script>
+<script src="frostextras.js?v=2.30"></script>
+<script src="frostsearch.js?v=2.30"></script>
+<script src="journal-data.js?v=2.30"></script>
+<script src="journal-arg.js?v=2.30"></script>
 <script>
 (function(){
   'use strict';
@@ -281,8 +362,19 @@ footer{margin-top:56px;padding:24px 0 44px;border-top:1px solid var(--line-2);
 
   function applyJournalLang(pack){
     CHT = {}; trStats = { have:0, total:0 };
+    /* ⚠ Ключ «глава|заголовок» НЕ уникален: в главе «Индустриальный триумф»
+       два «Последних рассвета» с разным текстом. Поэтому сначала ищем точный
+       ключ с номером записи внутри главы («…|Заголовок#2»), и только потом
+       обычный — иначе один перевод лёг бы на обе записи. */
+    var seenInCh = {};
     FLAT.forEach(function(f){
-      var t = pack && pack.e ? pack.e[f.chRu + '|' + f.titleRu] : null;
+      var base = f.chRu + '|' + f.titleRu;
+      seenInCh[base] = (seenInCh[base] || 0) + 1;
+      var t = null;
+      if(pack && pack.e){
+        t = pack.e[base + '#' + seenInCh[base]] || null;
+        if(!t && seenInCh[base] === 1) t = pack.e[base] || null;
+      }
       f.ch    = (pack && pack.ch && pack.ch[f.chRu]) || f.chRu;
       f.title = t ? t.t : f.titleRu;
       f.text  = t ? t.x : f.textRu;
@@ -310,10 +402,124 @@ footer{margin-top:56px;padding:24px 0 44px;border-top:1px solid var(--line-2);
     document.head.appendChild(sc);
   }
 
+  /* H-15, H-16: словарь понятий Кодекса. Грузим сам файл справочника, а не
+     копию списка: копия разошлась бы с оригиналом после первой же правки.
+
+     ⚠ Загрузка необязательная. Не получилось — журнал читается ровно как
+     раньше, просто без ссылок на справочник. */
+  var CDX = [];
+  function loadCodexTerms(done){
+    if (window.FROST_CODEX) { buildTerms(); done && done(); return; }
+    var sc = document.createElement('script');
+    sc.src = 'codex-data.js?v=' + ((window.FROST_VERSION && FROST_VERSION.site) || '1');
+    sc.async = true;
+    sc.onload = function(){ buildTerms(); done && done(); };
+    sc.onerror = function(){ done && done(); };
+    document.head.appendChild(sc);
+  }
+
+  function buildTerms(){
+    var C = window.FROST_CODEX; if(!C) return;
+    var seen = {};
+    function add(word, id){
+      var w = String(word||'').trim();
+      /* Короткие слова не берём: «лом» и «сера» ловятся внутри чужих слов,
+         а подсветить пол-абзаца хуже, чем не подсветить ничего. */
+      if(w.length < 5) return;
+      var key = w.toLowerCase();
+      if(seen[key]) return;
+      seen[key] = 1;
+      CDX.push({ w: w, q: w, id: id });
+    }
+    (C.nodes||[]).forEach(function(n){ add(n.name, n.id); });
+    (C.items||[]).forEach(function(i){ add(i.name, i.node || i.id); });
+    // длинные — первыми, иначе «дизельный генератор» разорвётся на «генератор»
+    CDX.sort(function(a,b){ return b.w.length - a.w.length; });
+  }
+
+  /* Подсветка идёт по УЖЕ экранированному тексту: сначала esc(), потом
+     вставка ссылок — иначе разметка из записи попала бы в страницу. */
+  function linkTerms(escaped){
+    if(!CDX.length) return escaped;
+    var hits = [];
+    var out = escaped;
+    for(var k=0; k<CDX.length && hits.length<6; k++){
+      var t = CDX[k];
+      var re = new RegExp('(^|[^0-9A-Za-zА-Яа-яЁё>])(' +
+        t.w.replace(/[.*+?^${}()|[\]\\]/g,'\\$&') + ')(?![^<]*>)', 'i');
+      if(!re.test(out)) continue;
+      out = out.replace(re, function(m, pre, word){
+        return pre + '<a class="find" href="codex.html?find=' +
+          encodeURIComponent(t.q) + '" title="' + esc(I18N.t('jr.findTip')) + '">' + word + '</a>';
+      });
+      hits.push(t);
+    }
+    linkTerms._last = hits;
+    return out;
+  }
+
+  function findsHtml(){
+    var hits = linkTerms._last || [];
+    if(!hits.length) return '';
+    return '<div class="finds"><span class="finds-l">' + esc(I18N.t('jr.finds')) + '</span>' +
+      hits.map(function(t){
+        return '<a href="codex.html?find=' + encodeURIComponent(t.q) + '">' + esc(t.w) + '</a>';
+      }).join('') + '</div>';
+  }
+
   /* Спойлеры: первые три главы открыты, дальше — по согласию читателя.
      Журнал пересказывает всю кампанию, и открывать её целиком без спроса нечестно. */
   var OPEN_CH=3, SKEY='fb_journal_unlocked', PKEY='fb_journal_pos', BKEY='fb_journal_bm';
   var unlocked = localStorage.getItem(SKEY)==='1';
+
+  /* H-08: что уже прочитано. Хранится битовой строкой по числу страниц —
+     267 символов вместо массива индексов, и переживает пересборку данных:
+     если страниц станет больше, строка просто добьётся нулями. */
+  var RKEY='fb_journal_read', BMS='fb_journal_bms', NKEY='fb_journal_notes',
+      ZKEY='fb_journal_zen', AKEY_SP='fb_journal_speed';
+  var readBits = (localStorage.getItem(RKEY)||'');
+  function isRead(i){ return readBits.charAt(i)==='1'; }
+  function markRead(i){
+    if(i<0 || i>=FLAT.length || isRead(i)) return;
+    while(readBits.length < FLAT.length) readBits += '0';
+    readBits = readBits.substring(0,i) + '1' + readBits.substring(i+1);
+    try{ localStorage.setItem(RKEY, readBits); }catch(e){}
+  }
+  function chapterPct(ci){
+    var total=0, done=0;
+    for(var i=0;i<FLAT.length;i++){
+      if(FLAT[i].ci!==ci) continue;
+      total++; if(isRead(i)) done++;
+    }
+    return total ? Math.round(done/total*100) : 0;
+  }
+
+  /* H-09: время чтения главы. 180 слов в минуту — спокойный темп чтения
+     с листа, а не беглый просмотр. */
+  function chapterMinutes(ci){
+    var words=0;
+    for(var i=0;i<FLAT.length;i++){
+      if(FLAT[i].ci!==ci) continue;
+      (FLAT[i].text||[]).forEach(function(p){ words += String(p).split(/\s+/).length; });
+    }
+    return Math.max(1, Math.round(words/180));
+  }
+
+  /* H-05: закладок теперь несколько. Старая одиночная переезжает сюда,
+     чтобы человек не потерял место, на котором остановился. */
+  var bms=[];
+  try{ bms = JSON.parse(localStorage.getItem(BMS)||'[]'); }catch(e){ bms=[]; }
+  if(!Array.isArray(bms)) bms=[];
+  (function migrateOldBookmark(){
+    var old = parseInt(localStorage.getItem(BKEY)||'-1',10);
+    if(old>=0 && bms.indexOf(old)<0){ bms.push(old); saveBms(); }
+  })();
+  function saveBms(){ try{ localStorage.setItem(BMS, JSON.stringify(bms.slice(0,20))); }catch(e){} }
+
+  /* H-06: заметки читателя. Ключ — номер страницы, значение — текст. */
+  var notes={};
+  try{ notes = JSON.parse(localStorage.getItem(NKEY)||'{}') || {}; }catch(e){ notes={}; }
+  function saveNotes(){ try{ localStorage.setItem(NKEY, JSON.stringify(notes)); }catch(e){} }
   var pos = Math.max(0, Math.min(FLAT.length-1, parseInt(localStorage.getItem(PKEY)||'0',10)||0));
   var bm = parseInt(localStorage.getItem(BKEY)||'-1',10);
 
@@ -335,8 +541,19 @@ footer{margin-top:56px;padding:24px 0 44px;border-top:1px solid var(--line-2);
       '<span class="page-no">'+(i+1)+' / '+FLAT.length+'</span></div>'+
       '<h2 class="entry-t">'+esc(e.title)+'</h2>'+
       (e.untr?'<span class="untr">'+esc(I18N.t('jr.untr'))+'</span>':'')+
-      '<div class="entry-b">'+e.text.map(function(p){ return '<p>'+esc(p)+'</p>'; }).join('')+'</div>'+
+      '<div class="entry-b">'+e.text.map(function(p){ return '<p>'+linkTerms(esc(p))+'</p>'; }).join('')+'</div>'+
+      findsHtml()+
+      margHtml(i)+
       '</div>';
+  }
+
+  /* H-06: поле для заметки появляется только там, где страница открыта —
+     на замке и на запечатанной странице ему делать нечего. */
+  function margHtml(i){
+    return '<div class="marg">'+
+      '<div class="marg-l">'+esc(I18N.t('jr.margin'))+'</div>'+
+      '<textarea data-note="'+i+'" rows="2" placeholder="'+esc(I18N.t('jr.marginPh'))+'">'+
+        esc(notes[i]||'')+'</textarea></div>';
   }
 
   function docHtml(e, i, side){
@@ -367,6 +584,7 @@ footer{margin-top:56px;padding:24px 0 44px;border-top:1px solid var(--line-2);
       '</div></div>';
   }
 
+  var sealTries = 0;
   function bindSeal(){
     var inp=$('#sealIn'), btn=$('#sealBtn'); if(!inp||!btn) return;
     function tryCode(){
@@ -377,7 +595,14 @@ footer{margin-top:56px;padding:24px 0 44px;border-top:1px solid var(--line-2);
         if(window.FrostExtras) FrostExtras.toast(I18N.t('jr.sealOkT'), I18N.t('jr.sealOkB'));
         render();
       } else {
-        var m=$('#sealMsg'); m.textContent=I18N.t('jr.sealBad'); m.className='seal-msg bad';
+        /* H-23: подсказка приходит не сразу. Загадка, которая сдаётся с первой
+           попытки, не загадка; но и оставлять человека в тупике насовсем нельзя. */
+        sealTries++;
+        var m=$('#sealMsg');
+        m.textContent = (sealTries>=4)
+          ? I18N.t('jr.sealHelp')
+          : I18N.t('jr.sealBad');
+        m.className='seal-msg bad';
         if(window.FrostSFX) FrostSFX.play('error');
       }
     }
@@ -389,8 +614,13 @@ footer{margin-top:56px;padding:24px 0 44px;border-top:1px solid var(--line-2);
     $('#toc').innerHTML=J.chapters.map(function(ch,ci){
       var lock = (!unlocked && ci>=OPEN_CH);
       var active = FLAT[pos] && FLAT[pos].ci===ci;
+      var pct = lock ? 0 : chapterPct(ci);
       return '<button class="toc-ch'+(active?' on':'')+(lock?' locked':'')+'" type="button" data-ch="'+ci+'">'+
-        esc(CHT[ch.title] || ch.title)+'<span class="n">'+ch.entries.length+'</span></button>';
+        esc(CHT[ch.title] || ch.title)+
+        '<span class="n">'+ch.entries.length+
+          (lock?'':'<span class="tm">'+chapterMinutes(ci)+I18N.t('jr.min')+'</span>')+'</span>'+
+        (lock?'':'<span class="pct"><i style="width:'+pct+'%"></i></span>')+
+        '</button>';
     }).join('');
   }
 
@@ -416,8 +646,12 @@ footer{margin-top:56px;padding:24px 0 44px;border-top:1px solid var(--line-2);
     $('#pgFill').style.width = Math.round(shown/lim2*100)+'%';
     $('#prev').disabled = pos<=0;
     $('#next').disabled = pos>=FLAT.length-1;
-    $('#bookmark').classList.toggle('on', bm===pos);
+    $('#bookmark').classList.toggle('on', bms.indexOf(pos)>=0);
     localStorage.setItem(PKEY,String(pos));
+    /* Разворот прочитан — это две страницы, а не одна. */
+    if(allowed(pos)) markRead(pos);
+    if(pos+1<FLAT.length && allowed(pos+1)) markRead(pos+1);
+    bindNotes();
     renderToc();
   }
 
@@ -449,9 +683,160 @@ footer{margin-top:56px;padding:24px 0 44px;border-top:1px solid var(--line-2);
     if(window.FrostSFX) FrostSFX.play('click');
   });
   $('#bookmark').addEventListener('click',function(){
-    if(bm===pos){ bm=-1; localStorage.removeItem(BKEY); }
-    else { bm=pos; localStorage.setItem(BKEY,String(bm)); }
+    var k=bms.indexOf(pos);
+    if(k>=0) bms.splice(k,1); else bms.push(pos);
+    bms.sort(function(a,b){ return a-b; });
+    saveBms();
     render();
+    if(window.FrostSFX) FrostSFX.play('click');
+  });
+
+  /* H-06: заметка сохраняется по ходу письма, без кнопки «сохранить» —
+     иначе её забудут нажать и текст пропадёт при перелистывании. */
+  function bindNotes(){
+    Array.prototype.forEach.call(document.querySelectorAll('[data-note]'), function(ta){
+      ta.addEventListener('input', function(){
+        var i=ta.dataset.note, v=ta.value.trim();
+        if(v) notes[i]=v.slice(0,600); else delete notes[i];
+        clearTimeout(bindNotes._t);
+        bindNotes._t=setTimeout(saveNotes, 400);
+      });
+    });
+  }
+
+  /* H-07: поиск по журналу. Ищем по заголовку и тексту, показываем куски
+     с подсветкой. Запертые главы в выдачу не попадают — иначе поиск стал бы
+     дырой в замке спойлеров. */
+  function jsearch(q){
+    var box=$('#jRes'); if(!box) return;
+    q=String(q||'').trim().toLowerCase();
+    if(q.length<2){ box.innerHTML=''; return; }
+    var out=[], lim2 = unlocked ? FLAT.length : limit();
+    for(var i=0;i<lim2 && out.length<25;i++){
+      var e=FLAT[i];
+      if(e.sealed) continue;
+      var hay=(e.title+' '+(e.text||[]).join(' ')).toLowerCase();
+      var at=hay.indexOf(q);
+      if(at<0) continue;
+      var raw=e.title+' — '+(e.text||[]).join(' ');
+      var from=Math.max(0, at-45);
+      var frag=raw.substring(from, from+150);
+      out.push({i:i, title:e.title, ch:e.ch, frag:(from>0?'…':'')+frag+'…'});
+    }
+    if(!out.length){
+      box.innerHTML='<div class="jres-none">'+esc(I18N.t('jr.searchNone'))+'</div>';
+      return;
+    }
+    box.innerHTML=out.map(function(r){
+      var f=esc(r.frag);
+      var re=new RegExp('('+q.replace(/[.*+?^${}()|[\]\\]/g,'\\$&')+')','ig');
+      return '<button class="jres-i" type="button" data-goto="'+r.i+'">'+
+        '<b>'+esc(r.ch)+' · '+esc(r.title)+'</b>'+f.replace(re,'<mark>$1</mark>')+'</button>';
+    }).join('');
+  }
+
+  var searchInput=$('#jSearch');
+  if(searchInput) searchInput.addEventListener('input',function(){
+    clearTimeout(searchInput._t);
+    searchInput._t=setTimeout(function(){ jsearch(searchInput.value); }, 250);
+  });
+  $('#jRes').addEventListener('click',function(e){
+    var b=e.target.closest('[data-goto]'); if(!b) return;
+    pos=parseInt(b.dataset.goto,10);
+    if(pos%2) pos--;                        // страницы листаются разворотами
+    $('#jRes').innerHTML=''; if(searchInput) searchInput.value='';
+    render();
+    document.querySelector('.book').scrollIntoView({block:'start'});
+  });
+
+  /* H-03: режим чтения. Не отдельная страница, а состояние этой же —
+     переключается мгновенно и запоминается. */
+  var zen = localStorage.getItem(ZKEY)==='1';
+  function paintZen(){
+    document.body.classList.toggle('zen', zen);
+    $('#jZen').classList.toggle('on', zen);
+  }
+  $('#jZen').addEventListener('click',function(){
+    zen=!zen; try{ localStorage.setItem(ZKEY, zen?'1':'0'); }catch(e){}
+    paintZen();
+    if(window.FrostSFX) FrostSFX.play('tab');
+  });
+  paintZen();
+
+  /* H-04: автолистание. Скорость считается по объёму разворота, а не берётся
+     наугад: длинная запись должна висеть дольше короткой.
+     ⚠ Останавливается при любом действии человека — иначе страница уезжает
+     из-под рук, пока он что-то печатает. */
+  var autoTimer=null;
+  function autoDelay(){
+    var w=0;
+    [pos,pos+1].forEach(function(i){
+      if(i<FLAT.length && FLAT[i] && FLAT[i].text)
+        FLAT[i].text.forEach(function(p){ w += String(p).split(/\s+/).length; });
+    });
+    return Math.max(6000, Math.round(w/180*60000));
+  }
+  function autoStop(){
+    if(!autoTimer) return;
+    clearTimeout(autoTimer); autoTimer=null;
+    $('#jAuto').classList.remove('on');
+  }
+  function autoStep(){
+    if(pos>=FLAT.length-2){ autoStop(); return; }
+    go(2);
+    autoTimer=setTimeout(autoStep, autoDelay());
+  }
+  $('#jAuto').addEventListener('click',function(){
+    if(autoTimer){ autoStop(); return; }
+    $('#jAuto').classList.add('on');
+    autoTimer=setTimeout(autoStep, autoDelay());
+    if(window.FrostSFX) FrostSFX.play('tab');
+  });
+  ['#prev','#next','#toc','#bookmark'].forEach(function(sel){
+    var el=$(sel); if(el) el.addEventListener('click', autoStop);
+  });
+  document.addEventListener('keydown', function(e){
+    if(e.key==='ArrowLeft'||e.key==='ArrowRight'||e.key==='Escape') autoStop();
+  });
+
+  /* H-34: печать. Собираем текст только в момент нажатия — держать вторую
+     копию всех 267 страниц в разметке ради кнопки, которой пользуются раз в
+     жизни, незачем.
+
+     ⚠ Печатается ровно то, что человеку открыто: запертые главы в бумагу
+     не уходят, иначе печать стала бы обходом замка спойлеров. */
+  $('#jPrint').addEventListener('click',function(){
+    var lim2 = unlocked ? FLAT.length : limit();
+    var out=[], lastCh=null;
+    for(var i=0;i<lim2;i++){
+      var e=FLAT[i];
+      if(e.sealed) continue;
+      if(e.ch!==lastCh){ lastCh=e.ch; out.push('<div class="pch">'+esc(e.ch)+'</div>'); }
+      out.push('<h2>'+esc(e.title)+'</h2>');
+      (e.text||[]).forEach(function(p){ out.push('<p>'+esc(p)+'</p>'); });
+      if(notes[i]) out.push('<p class="pnote">'+esc(notes[i])+'</p>');
+    }
+    $('#printOut').innerHTML=out.join('');
+    autoStop();
+    setTimeout(function(){ window.print(); }, 60);
+  });
+
+  /* H-05: список закладок. Показываем как выдачу поиска — тем же местом,
+     чтобы не плодить панели. */
+  $('#jBms').addEventListener('click',function(){
+    var box=$('#jRes');
+    if(box.dataset.mode==='bms'){ box.innerHTML=''; box.dataset.mode=''; return; }
+    box.dataset.mode='bms';
+    if(!bms.length){
+      box.innerHTML='<div class="jres-none">'+esc(I18N.t('jr.bmsNone'))+'</div>';
+      return;
+    }
+    box.innerHTML=bms.map(function(i){
+      var e=FLAT[i]; if(!e) return '';
+      return '<button class="jres-i" type="button" data-goto="'+i+'">'+
+        '<b>'+esc(e.ch)+' · '+esc(e.title)+'</b>'+
+        esc(I18N.t('jr.page').replace('{n}', i+1).replace('{m}', FLAT.length))+'</button>';
+    }).join('');
     if(window.FrostSFX) FrostSFX.play('click');
   });
 
@@ -472,6 +857,7 @@ footer{margin-top:56px;padding:24px 0 44px;border-top:1px solid var(--line-2);
       : I18N.t('jr.noteFull');
   }
 
+  loadCodexTerms(function(){ if(CDX.length) render(); });
   loadJournalLang(window.I18N ? I18N.current() : 'ru', function(){ paintNote(); render(); });
   render();
 })();

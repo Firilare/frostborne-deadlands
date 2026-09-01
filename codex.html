@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&family=Inter:wght@400;500;600;700&family=Share+Tech+Mono&display=swap&subset=cyrillic,cyrillic-ext,latin,latin-ext">
-<link rel="stylesheet" href="extras.css?v=2.29">
+<link rel="stylesheet" href="extras.css?v=2.30">
 <style>
 :root{
   --bg:#04070b; --panel:rgba(10,20,33,.72); --panel-2:rgba(13,26,42,.9);
@@ -53,6 +53,33 @@ h1{font-family:Oswald,sans-serif;font-weight:600;font-size:clamp(2rem,5vw,3.1rem
   text-transform:uppercase;letter-spacing:.01em;margin:0 0 16px;color:#fff;text-wrap:balance}
 h1 span{color:var(--ice)}
 .lead{max-width:64ch;margin:0 0 26px;color:var(--text)}
+
+  /* маршрут до цели (I-05) */
+  .route{margin:0 0 22px;border:1px solid rgba(124,206,255,.28);border-radius:16px;
+    background:rgba(124,206,255,.05);padding:18px 20px}
+  .route[hidden]{display:none}
+  .route-h{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;margin-bottom:12px}
+  .route-h b{font-family:var(--disp);font-weight:600;font-size:1.1rem;color:#fff;
+    text-transform:uppercase;letter-spacing:.02em}
+  .route-h span{font-family:var(--mono);font-size:.6rem;letter-spacing:.09em;
+    text-transform:uppercase;color:var(--muted-2)}
+  .route-x{margin-left:auto;background:none;border:1px solid var(--line);border-radius:8px;
+    color:var(--muted);font-family:var(--mono);font-size:.58rem;letter-spacing:.06em;
+    text-transform:uppercase;padding:6px 10px;cursor:pointer}
+  .route-x:hover{color:#fff;border-color:var(--line-2)}
+  .steps{display:flex;flex-direction:column;gap:7px}
+  .step{display:flex;gap:11px;align-items:flex-start;padding:9px 11px;border-radius:10px;
+    background:rgba(6,12,20,.5);border:1px solid var(--line)}
+  .step.ok{opacity:.5}
+  .step.ok .step-n{background:var(--good);color:#04070b;border-color:var(--good)}
+  .step-n{flex:none;width:22px;height:22px;border-radius:50%;display:grid;place-items:center;
+    font-family:var(--mono);font-size:.6rem;color:var(--ice-bright);
+    border:1px solid rgba(124,206,255,.35);background:rgba(124,206,255,.08)}
+  .step-b{flex:1;min-width:0}
+  .step-t{color:#e8f5ff;font-size:.94rem;line-height:1.35}
+  .step-m{margin-top:3px;font-family:var(--mono);font-size:.55rem;letter-spacing:.06em;
+    text-transform:uppercase;color:var(--muted-2)}
+  .route-done{margin-top:12px;font-size:.88rem;color:var(--good)}
 
 /* ── прогресс ── */
 .progress-card{display:flex;align-items:center;gap:18px;flex-wrap:wrap;
@@ -265,6 +292,10 @@ footer{margin-top:64px;padding:26px 0 44px;border-top:1px solid var(--line-2);
     <div id="findOut"></div>
   </section>
 
+  <p class="lead" style="margin:0 0 14px;font-size:.88rem" data-i18n-html="cdx.clicks">
+    <b>Клик</b> — отметить пройденное. <b>Shift + клик</b> — подсветить путь до узла.
+    <b>Alt + клик</b> — построить маршрут: что осталось сделать до этой цели.</p>
+  <div class="route" id="route" hidden></div>
   <section id="ladder"></section>
 
   <div class="notice">
@@ -278,11 +309,12 @@ footer{margin-top:64px;padding:26px 0 44px;border-top:1px solid var(--line-2);
   </footer>
 </main>
 
-<script src="version.js?v=2.29"></script>
-<script src="sfx.js?v=2.29"></script>
-<script src="i18n.js?v=2.29"></script>
-<script src="frostextras.js?v=2.29"></script>
-<script src="codex-data.js?v=2.29"></script>
+<script src="version.js?v=2.30"></script>
+<script src="sfx.js?v=2.30"></script>
+<script src="i18n.js?v=2.30"></script>
+<script src="frostextras.js?v=2.30"></script>
+<script src="frostsearch.js?v=2.30"></script>
+<script src="codex-data.js?v=2.30"></script>
 <script>
 (function(){
   'use strict';
@@ -412,15 +444,91 @@ footer{margin-top:64px;padding:26px 0 44px;border-top:1px solid var(--line-2);
   $('#ladder').addEventListener('click',function(e){
     var card=e.target.closest('[data-node]'); if(!card) return;
     var id=card.dataset.node;
+    if(e.altKey){                         // Alt — построить маршрут до цели
+      routeGoal = (routeGoal===id) ? null : id;
+      paintRoute();
+      if(window.FrostSFX) FrostSFX.play('tab');
+      return;
+    }
     if(e.shiftKey){                       // Shift — показать путь до узла
       focus = (focus===id) ? null : id;
     } else {
       if(done[id]) delete done[id]; else done[id]=1;
       save();
+      paintRoute();                       // отметил узел — остаток пути стал короче
       if(window.FrostSFX) FrostSFX.play(done[id]?'unlock':'click');
     }
     render();
   });
+
+  /* I-05: маршрут до цели. Считаем предков узла и выкидываем то, что уже
+     отмечено (I-03) — человеку нужен остаток пути, а не полный список.
+
+     ⚠ Порядок шагов — не порядок узлов в данных, а глубина зависимостей:
+     сначала то, у чего нет невыполненных предпосылок. */
+  function routeTo(id){
+    var byId={}; (C.nodes||[]).forEach(function(n){ byId[n.id]=n; });
+    var need={}, order=[];
+    (function walk(nid){
+      var n=byId[nid]; if(!n || need[nid]) return;
+      need[nid]=1;
+      (n.needs||[]).forEach(walk);
+    })(id);
+
+    var left=Object.keys(need);
+    var guard=0;
+    while(left.length && guard++ < 200){
+      var moved=false;
+      for(var i=0;i<left.length;i++){
+        var n=byId[left[i]];
+        var ready=(n.needs||[]).every(function(p){ return order.indexOf(p)>=0 || !need[p]; });
+        if(!ready) continue;
+        order.push(left[i]); left.splice(i,1); moved=true; break;
+      }
+      if(!moved){ order=order.concat(left); break; }   // круг в данных — не зависаем
+    }
+    return order;
+  }
+
+  function paintRoute(){
+    var box=$('#route');
+    if(!box) return;
+    if(!routeGoal){ box.hidden=true; return; }
+    var byId={}; (C.nodes||[]).forEach(function(n){ byId[n.id]=n; });
+    var goal=byId[routeGoal];
+    if(!goal){ box.hidden=true; return; }
+
+    var order=routeTo(routeGoal);
+    var left=order.filter(function(nid){ return !done[nid]; });
+
+    box.hidden=false;
+    var head='<div class="route-h"><b>'+esc(tx(goal,'name'))+'</b>'+
+      '<span>'+esc(I18N.t('cdx.routeLeft').replace('{n}', left.length)
+                   .replace('{m}', order.length))+'</span>'+
+      '<button class="route-x" type="button" id="routeX">'+esc(I18N.t('cdx.routeClose'))+'</button></div>';
+
+    if(!left.length){
+      box.innerHTML=head+'<p class="route-done">'+esc(I18N.t('cdx.routeDone'))+'</p>';
+      bindRouteX(); return;
+    }
+    var n2=0;
+    box.innerHTML=head+'<div class="steps">'+order.map(function(nid){
+      var n=byId[nid], ok=!!done[nid];
+      if(!ok) n2++;
+      return '<div class="step'+(ok?' ok':'')+'" data-goto-node="'+esc(nid)+'">'+
+        '<span class="step-n">'+(ok?'✓':n2)+'</span>'+
+        '<span class="step-b"><span class="step-t">'+esc(tx(n,'name'))+'</span>'+
+        (n.recipe?'<span class="step-m">'+esc(tx(n,'recipe'))+'</span>':'')+'</span></div>';
+    }).join('')+'</div>';
+    bindRouteX();
+  }
+
+  function bindRouteX(){
+    var x=$('#routeX');
+    if(x) x.addEventListener('click',function(){ routeGoal=null; paintRoute(); });
+  }
+
+  var routeGoal=null;
 
   $('#pcReset').addEventListener('click',function(){
     done={}; save(); focus=null; render();

@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Oswald:wght@400;500;600;700&family=Share+Tech+Mono&display=swap&subset=cyrillic,cyrillic-ext,latin,latin-ext" rel="stylesheet">
-<link rel="stylesheet" href="extras.css?v=2.29">
+<link rel="stylesheet" href="extras.css?v=2.30">
 <style>
 :root{
   --bg:#04070b;--bg-2:#07121f;--ice:#7cceff;--ice-bright:#a8e0ff;--steel:#3a86ff;
@@ -153,6 +153,7 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
 .cdx-link:hover{background:rgba(124,206,255,.16)}
 .cdx-stat{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-top:14px;
   padding:13px 15px;border:1px solid var(--line);border-radius:12px;background:rgba(124,206,255,.04)}
+.cdx-stat[hidden]{display:none}
 .cdx-stat .cs-n{font-family:'Share Tech Mono',monospace;font-size:1.15rem;color:var(--ice-bright);
   font-variant-numeric:tabular-nums;flex:none}
 .cdx-stat .cs-b{flex:1;min-width:130px}
@@ -263,6 +264,7 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
 .bp-vote.on{color:var(--ice-bright);border-color:rgba(124,206,255,.42);background:rgba(124,206,255,.1)}
 .id-state{display:flex;align-items:flex-start;gap:12px;flex-wrap:wrap;margin-top:16px;
   padding:13px 15px;border-radius:12px;border:1px solid var(--line);background:rgba(8,14,24,.5)}
+.id-state[hidden]{display:none}
 .id-state .ic{font-size:1.1rem;line-height:1.2;flex:none;opacity:.9}
 .id-state .tx{flex:1;min-width:180px}
 /* span по умолчанию строчный: без display:block заголовок и пояснение
@@ -302,12 +304,48 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
 .data-actions button:hover{color:#fff;border-color:rgba(124,206,255,.35)}
 .data-actions button.danger{color:#ff8f8f;border-color:rgba(239,68,68,.3)}
 .data-actions button.danger:hover{background:rgba(239,68,68,.12);border-color:rgba(239,68,68,.55)}
+.quiet-row{display:flex;gap:14px;margin-top:10px;flex-wrap:wrap}
+.quiet-row[hidden]{display:none}
+.quiet-row label{display:inline-flex;align-items:center;gap:7px;font-size:.85rem;color:var(--muted)}
+.quiet-row input{width:64px;background:rgba(4,7,11,.6);border:1px solid var(--line);
+  border-radius:8px;padding:6px 8px;color:var(--text);font-family:inherit;font-size:.85rem}
+.quiet-row input:focus{outline:none;border-color:var(--line-2)}
 .data-note{margin:11px 0 0;font-size:.79rem;color:var(--muted-2);line-height:1.5}
 .ava-url{margin-top:9px}
 .ava-url[hidden]{display:none}
 .rank-line{display:flex;align-items:center;gap:9px;margin-top:9px;font-family:'Share Tech Mono',monospace;
   font-size:.62rem;letter-spacing:.07em;text-transform:uppercase;color:var(--muted)}
+.rank-line[hidden]{display:none}
 .rank-dot{width:9px;height:9px;border-radius:50%;flex:none}
+.agree{margin:0 0 10px;padding:12px 14px;border:1px solid rgba(124,206,255,.28);
+  border-radius:11px;background:rgba(124,206,255,.06);font-size:.87rem;line-height:1.5}
+.agree[hidden]{display:none}
+.agree a{color:var(--ice-bright)}
+.agree-row{display:flex;gap:8px;flex-wrap:wrap;margin-top:9px}
+.agree-row button{font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:.07em;
+  text-transform:uppercase;border-radius:9px;padding:8px 13px;cursor:pointer;transition:.2s}
+.agree-row .yes{color:#04070b;background:var(--ice);border:1px solid var(--ice);font-weight:600}
+.agree-row .yes:hover{background:var(--ice-bright)}
+.agree-row .no{color:var(--muted);background:none;border:1px solid var(--line)}
+.agree-row .no:hover{color:#fff}
+.ban-note{margin:0 0 10px;padding:10px 13px;border:1px solid rgba(239,68,68,.35);
+  border-radius:10px;background:rgba(239,68,68,.08);color:#ff9f9f;font-size:.85rem;line-height:1.45}
+.ban-note[hidden]{display:none}
+.rep-box{margin-top:12px;border:1px solid rgba(239,68,68,.22);border-radius:12px;
+  background:rgba(239,68,68,.05);padding:13px 15px}
+.rep-t{font-family:'Share Tech Mono',monospace;font-size:.62rem;letter-spacing:.11em;
+  text-transform:uppercase;color:#ff9f9f;margin-bottom:9px}
+.rep-i{border-top:1px solid rgba(239,68,68,.15);padding:9px 0;font-size:.85rem}
+.rep-i:first-of-type{border-top:none}
+.rep-m{font-family:'Share Tech Mono',monospace;font-size:.58rem;color:var(--muted-2);margin-bottom:4px}
+.rep-x{color:var(--text);word-break:break-word;margin-bottom:6px}
+.rep-a{display:flex;gap:6px;flex-wrap:wrap}
+.rep-a button{font-family:'Share Tech Mono',monospace;font-size:.56rem;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--muted);background:none;border:1px solid var(--line);
+  border-radius:7px;padding:5px 9px;cursor:pointer}
+.rep-a button:hover{color:#fff;border-color:var(--line-2)}
+.rep-a button.dan{color:#ff9f9f;border-color:rgba(239,68,68,.3)}
+.rep-none{font-size:.83rem;color:var(--muted-2)}
 .roles-box{margin-top:12px;border:1px solid rgba(251,191,36,.25);border-radius:12px;
   background:rgba(251,191,36,.05);padding:13px 15px}
 .roles-t{font-family:'Share Tech Mono',monospace;font-size:.62rem;letter-spacing:.11em;
@@ -516,6 +554,7 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
 .day-died:hover{background:rgba(239,68,68,.18)}
 .day-best{font-family:'Share Tech Mono',monospace;font-size:.66rem;color:var(--muted);margin-top:8px}
 .day-reset{display:flex;align-items:flex-start;gap:9px;font-family:'Share Tech Mono',monospace;font-size:.7rem;line-height:1.35;color:var(--ice);margin:-4px 0 16px;cursor:pointer}
+.day-reset[hidden]{display:none}
 .day-reset input{width:16px;height:16px;flex:0 0 auto;margin-top:1px;accent-color:#ef4444}
 .status-chips{display:flex;flex-wrap:wrap;gap:8px}
 .status-chip{font-family:'Share Tech Mono',monospace;font-size:.7rem;padding:9px 13px;border-radius:10px;border:1px solid var(--line-2);background:rgba(255,255,255,.03);color:var(--text);cursor:pointer;transition:.2s}
@@ -560,6 +599,13 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
 .csv.csv-sm{font-size:1rem}
 .csv span{color:var(--muted);font-size:1rem}
 .csr{font-family:'Share Tech Mono',monospace;font-size:.66rem;color:var(--ice);margin-top:4px}
+.crange{display:flex;gap:7px;align-items:center;flex-wrap:wrap;margin-bottom:12px}
+.crange-b{font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--muted);background:none;border:1px solid var(--line);
+  border-radius:8px;padding:6px 10px;cursor:pointer;transition:.2s}
+.crange-b:hover{color:#fff;border-color:var(--line-2)}
+.crange-b.on{color:#04070b;background:var(--ice);border-color:var(--ice);font-weight:600}
+.crange-n{font-family:'Share Tech Mono',monospace;font-size:.52rem;color:var(--muted-2)}
 .chron-feed-wrap{border:1px solid var(--line);border-radius:18px;background:var(--panel);backdrop-filter:blur(8px);padding:20px}
 .chron-feed{display:flex;flex-direction:column;gap:8px;max-height:320px;overflow-y:auto}
 .chron-rec{display:flex;align-items:center;gap:12px;padding:11px 14px;border-radius:12px;background:rgba(255,255,255,.02);border:1px solid var(--line-2)}
@@ -587,7 +633,10 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
       <div class="brand-text">FROST<b>BORNE</b><small data-i18n="ae.brandSmall">ЭФИР // RADIO STATION</small></div>
     </a>
     <div class="nav-right">
+      <span id="bellMount"></span>
       <span class="lang-switch" id="langMount"></span>
+      <a class="back-link" href="feed.html"><span data-i18n="nav.feed">Лента</span></a>
+      <a class="back-link" href="rules.html"><span data-i18n="nav.rules">Устав</span></a>
       <a class="back-link" href="index.html">← <span data-i18n="nav.toStation">На станцию</span></a>
     </div>
   </div>
@@ -654,6 +703,14 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
         <b data-i18n="ae.replyTo">Ответ:</b><span class="rc-text" id="replyChipText"></span>
         <button type="button" id="replyChipX" aria-label="Отменить ответ" data-i18n-attr="aria-label:ae.replyCancel">✕</button>
       </div>
+      <div class="agree" id="agreeBox" hidden>
+        <span data-i18n-html="ae.agreeText">Перед первым сообщением: в эфире просят уважать выживших, не спамить и не выкладывать чужие данные. Полный список — в <a href="rules.html">уставе станции</a>.</span>
+        <div class="agree-row">
+          <button class="yes" id="agreeYes" type="button" data-i18n="ae.agreeYes">Принимаю</button>
+          <a class="no" href="rules.html" style="text-decoration:none;display:inline-block" data-i18n="ae.agreeRead">Прочитать устав</a>
+        </div>
+      </div>
+      <p class="ban-note" id="banNote" hidden></p>
       <div class="chat-composer">
         <textarea class="chat-input" id="chatInput" rows="1" placeholder="Передать в эфир… (ссылки и картинки поддерживаются)" maxlength="500" data-i18n-attr="placeholder:ae.chatPlaceholder"></textarea>
         <button class="chat-send" id="chatSend" aria-label="Отправить" data-i18n-attr="aria-label:ae.sendAria"><svg viewBox="0 0 24 24"><path d="M3 11l18-8-8 18-2-7-8-3z"/></svg></button>
@@ -960,6 +1017,34 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
       <button class="id-link" id="idPullBtn" type="button" hidden data-i18n="ae.idPull">Забрать дело с узла</button>
     </div>
 
+    <div class="id-field">
+      <label data-i18n="bdg.title">Знаки станции</label>
+      <div id="bdgRow"></div>
+    </div>
+
+    <details class="data-box" id="noteBox">
+      <summary data-i18n="nt.setTitle">Сигналы</summary>
+      <div class="data-body">
+        <div class="priv-list">
+          <label><input type="checkbox" data-note="mention"><span data-i18n="nt.sMention">Когда зовут по позывному</span></label>
+          <label><input type="checkbox" data-note="reply"><span data-i18n="nt.sReply">Когда отвечают на сообщение</span></label>
+          <label><input type="checkbox" data-note="feed"><span data-i18n="nt.sFeed">События станции</span></label>
+          <label><input type="checkbox" data-note="sound"><span data-i18n="nt.sSound">Звук сигнала</span></label>
+          <label><input type="checkbox" data-note="quiet"><span data-i18n="nt.sQuiet">Тихие часы</span></label>
+        </div>
+        <div class="quiet-row" id="quietRow" hidden>
+          <label><span data-i18n="nt.qFrom">с</span>
+            <input type="number" id="qFrom" min="0" max="23"></label>
+          <label><span data-i18n="nt.qTo">до</span>
+            <input type="number" id="qTo" min="0" max="23"></label>
+        </div>
+        <p class="data-note" id="noteState"></p>
+        <div class="data-actions">
+          <button id="noteOff" type="button" data-i18n="nt.offAll">Выключить все сигналы</button>
+        </div>
+      </div>
+    </details>
+
     <details class="data-box" id="dataBox">
       <summary data-i18n="ae.dataTitle">Твои данные</summary>
       <div class="data-body">
@@ -987,6 +1072,11 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
     <div class="mod-row">
       <button class="mod-btn" id="modLogin" type="button" data-i18n="ae.modLogin">Вход для модератора</button>
       <span class="mod-state" id="modState"></span>
+    </div>
+
+    <div class="rep-box" id="repBox" hidden>
+      <div class="rep-t" data-i18n="ae.repTitle">Жалобы выживших</div>
+      <div id="repList"></div>
     </div>
 
     <div class="roles-box" id="rolesBox" hidden>
@@ -1034,12 +1124,16 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
   </div>
 </div>
 
-<script src="version.js?v=2.29"></script>
-<script src="frostauth.js?v=2.29"></script>
-<script src="sfx.js?v=2.29"></script>
-<script src="i18n.js?v=2.29"></script>
-<script src="frostextras.js?v=2.29"></script>
-<script src="firebase-config.js?v=2.29"></script>
+<script src="version.js?v=2.30"></script>
+<script src="frostauth.js?v=2.30"></script>
+<script src="frostfeed.js?v=2.30"></script>
+<script src="frostnotify.js?v=2.30"></script>
+<script src="frostbadges.js?v=2.30"></script>
+<script src="sfx.js?v=2.30"></script>
+<script src="i18n.js?v=2.30"></script>
+<script src="frostextras.js?v=2.30"></script>
+<script src="frostsearch.js?v=2.30"></script>
+<script src="firebase-config.js?v=2.30"></script>
 <script>
 (function(){
   'use strict';
@@ -1187,7 +1281,8 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
     $$('#avaChips .status-chip').forEach(c=>c.classList.toggle('active', c.dataset.ava===mode));
     $('#avaUrlBox').hidden = (mode!=='url');
     $('#avaUrlInput').value = (mode==='url') ? ID.ava : '';
-    updatePreview(); paintIdentityState(); paintPrivacy(); paintMuted();
+    updatePreview(); paintIdentityState(); paintPrivacy(); paintMuted(); paintNotes();
+    loadBadgeStats();
     idModal.classList.add('open'); idModal.setAttribute('aria-hidden','false');
     if(window.FrostSFX) FrostSFX.play('tab');
   }
@@ -1292,7 +1387,18 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
     localStorage.setItem('fb_nick',ID.nick); localStorage.setItem('fb_status',ID.status);
     localStorage.setItem('fb_class',ID.cls); localStorage.setItem('fb_faction',ID.fac);
     ID.ava=avaChoice(); localStorage.setItem('fb_ava',ID.ava);
+    var prevBest=ID.best;
     ID.day=readDay(); ID.best=Math.max(ID.best,ID.day);
+    /* Рекорд — событие громкое, но только когда он и правда новый.
+       Планка в 10 дней отсекает первые шаги: лента не должна состоять
+       из «выжил один день». */
+    if(window.FrostFeed && ID.best>prevBest && ID.best>=10){
+      FrostFeed.post('record', {
+        nick: callsign(),
+        a: I18N.t('ae.feedRecord').replace('{nick}', callsign()).replace('{n}', ID.best),
+        n: ID.best, once: false
+      });
+    }
     localStorage.setItem('fb_day',String(ID.day)); localStorage.setItem('fb_day_best',String(ID.best));
     paintIdentity(); writePresence(); saveIdentity();
     idModal.classList.remove('open'); idModal.setAttribute('aria-hidden','true');
@@ -1359,6 +1465,71 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
       if(window.FrostAuth) FrostAuth.unmute(b.dataset.unmute);
       paintMuted();
       if(lastChatList && lastChatList.length) renderChat(lastChatList);
+    });
+  })();
+
+  /* J-06: витрина знаков. Контекст собираем из браузера и из активности,
+     которую уже посчитал FrostAuth — отдельного хранилища знаков нет. */
+  var bdgStats = null;
+  function paintBadges(){
+    var box=$('#bdgRow'); if(!box || !window.FrostBadges) return;
+    var ctx = FrostBadges.ctxLocal();
+    if(bdgStats) Object.keys(bdgStats).forEach(function(k){ ctx[k]=bdgStats[k]; });
+    ctx.best = Math.max(ctx.best, ID.best, ID.day);
+    box.innerHTML = FrostBadges.html(FrostBadges.earned(ctx));
+  }
+
+  /* Активность считается один раз за открытие профиля: это чтение четырёх
+     веток, и дёргать его на каждую перерисовку незачем. */
+  function loadBadgeStats(){
+    if(bdgStats || !window.FrostAuth || FrostAuth.state()==='local') { paintBadges(); return; }
+    FrostAuth.stats(FrostAuth.uid(), FrostAuth.legacy(), callsign()).then(function(st){
+      bdgStats = st || {};
+      paintBadges();
+    }).catch(function(){ paintBadges(); });
+  }
+
+  /* E-09, E-10, E-18: настройки сигналов */
+  function paintNotes(){
+    if(!window.FrostNotify) return;
+    var st=FrostNotify.settings();
+    $$('[data-note]').forEach(function(cb){ cb.checked=!!st[cb.dataset.note]; });
+    var row=$('#quietRow'); if(row) row.hidden=!st.quiet;
+    var f=$('#qFrom'), t=$('#qTo');
+    if(f) f.value=st.from; if(t) t.value=st.to;
+
+    var el=$('#noteState');
+    if(el){
+      var p=FrostNotify.permission();
+      el.textContent = p==='granted' ? I18N.t('nt.permOn')
+        : p==='denied' ? I18N.t('nt.denied')
+        : FrostNotify.iosNeedsInstall() ? I18N.t('nt.ios')
+        : I18N.t('nt.permOff');
+    }
+  }
+
+  (function initNotes(){
+    $$('[data-note]').forEach(function(cb){
+      cb.addEventListener('change',function(){
+        var p={}; p[cb.dataset.note]=cb.checked?1:0;
+        FrostNotify.setSettings(p);
+        paintNotes();
+      });
+    });
+    ['#qFrom','#qTo'].forEach(function(sel){
+      var el=$(sel); if(!el) return;
+      el.addEventListener('change',function(){
+        var v=Math.max(0,Math.min(23,Number(el.value)||0));
+        el.value=v;
+        FrostNotify.setSettings(sel==='#qFrom'?{from:v}:{to:v});
+      });
+    });
+    var off=$('#noteOff');
+    if(off) off.addEventListener('click',function(){
+      /* E-18: отписка одним нажатием — без вопросов и уговоров. */
+      FrostNotify.setSettings({mention:0,reply:0,feed:0,sound:0});
+      paintNotes();
+      if(window.FrostExtras) FrostExtras.toast(I18N.t('nt.offT'), I18N.t('nt.offB'));
     });
   })();
 
@@ -1601,6 +1772,23 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
     cx.fillStyle='rgba(239,68,68,.6)'; cx.font='700 13px Oswald, sans-serif'; cx.textAlign='center'; cx.textBaseline='middle';
     cx.fillText(I18N.t('ae.cvClearance'), 0, -8); cx.fillText('★ ICE-17 ★', 0, 8);
     cx.font='8px "Share Tech Mono", monospace'; cx.fillText('BUNKER SEAL', 0, 24); cx.textAlign='left'; cx.restore();
+    /* J-07: знаки на удостоверении. Рисуем значками в ряд — подписи на
+       карточке не помещаются, а значок узнаётся по витрине в профиле. */
+    if(window.FrostBadges){
+      var bctx = FrostBadges.ctxLocal();
+      if(bdgStats) Object.keys(bdgStats).forEach(function(k){ bctx[k]=bdgStats[k]; });
+      bctx.best = Math.max(bctx.best, ID.best, dvBest());
+      var got = FrostBadges.earned(bctx).slice(0,7);
+      if(got.length){
+        cx.font='16px system-ui, sans-serif'; cx.textBaseline='middle';
+        got.forEach(function(b,i){
+          cx.fillStyle=b.color; cx.globalAlpha=.9;
+          cx.fillText(b.icon, 200 + i*26, H-40);
+        });
+        cx.globalAlpha=1; cx.textBaseline='alphabetic';
+      }
+    }
+
     cx.fillStyle='#33455a'; cx.font='9px "Share Tech Mono", monospace';
     cx.fillText(I18N.t('ae.cvIssued').replace('{n}',(Date.now()/86400000|0)%900), 30, H-26);
   }
@@ -1620,9 +1808,20 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
     $$('.atab').forEach(x=>x.classList.remove('active')); t.classList.add('active');
     $$('.apanel').forEach(p=>p.classList.remove('active'));
     $('#panel-'+t.dataset.panel).classList.add('active');
+    if(t.dataset.panel==='ai') loadAiCodex();     // I-22: справочник нужен только здесь
     if(window.FrostSFX) FrostSFX.play('tab');
     const b=t.querySelector('.badge'); if(b) b.remove();
   }));
+  /* Вкладка по адресу: aether.html#blueprints открывает Чертежи.
+     На это опирается витрина «чертёж недели» в ленте — без разбора хеша
+     ссылка вела бы просто наверх страницы. */
+  (function openByHash(){
+    var h=(location.hash||'').replace('#','').replace(/^panel-/,'');
+    if(!h) return;
+    var t=document.querySelector('.atab[data-panel="'+h.replace(/[^a-z]/gi,'')+'"]');
+    if(t) setTimeout(function(){ t.click(); t.scrollIntoView({block:'start'}); }, 120);
+  })();
+
   $$('.subtab').forEach(t=>t.addEventListener('click',()=>{
     $$('.subtab').forEach(x=>x.classList.remove('active')); t.classList.add('active');
     $$('.fsub').forEach(p=>p.classList.remove('active'));
@@ -1654,6 +1853,34 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
     });
     return safe;
   }
+  /* L-11: куда ведёт ссылка. Домены, которые в сборке и так везде, пропускаем
+     молча; на остальные показываем адрес и спрашиваем — фишинг живёт ровно
+     на том, что человек не смотрит в адресную строку.
+     ⚠ Сравниваем ХВОСТ домена ('.youtube.com'), а не вхождение: иначе
+     'youtube.com.zloi.ru' прошёл бы как свой. */
+  var LINK_OK = ['youtube.com','youtu.be','curseforge.com','createmod.com','github.com',
+                 'drive.google.com','imgur.com','modrinth.com','t.me','donationalerts.com'];
+  function linkHost(url){
+    try{ return new URL(url).hostname.replace(/^www\./,'').toLowerCase(); }catch(e){ return ''; }
+  }
+  function linkTrusted(host){
+    if(!host) return false;
+    return LINK_OK.some(function(d){ return host===d || host.endsWith('.'+d); });
+  }
+
+  document.addEventListener('click', function(e){
+    var a=e.target.closest('#chatLog a[href^="http"], .bp-card a[href^="http"]');
+    if(!a) return;
+    var host=linkHost(a.href);
+    if(linkTrusted(host)) return;                  // свои домены не переспрашиваем
+    if(a.dataset.okHost===host) return;            // уже подтвердили этот переход
+    e.preventDefault();
+    a.dataset.okHost=host;
+    if(window.FrostExtras) FrostExtras.toast(
+      I18N.t('ae.linkWarnT'),
+      I18N.t('ae.linkWarnB').replace('{h}', host||'—'), 6000);
+  }, true);
+
   function imageTag(text){
     const m=text.match(/(https?:\/\/[^\s]+\.(?:png|jpe?g|gif|webp))/i);
     return m?`<img class="msg-img" src="${esc(m[1])}" alt="${esc(I18N.t('ae.attachmentAlt'))}" loading="lazy" onclick="window.open('${esc(m[1])}','_blank')" onerror="this.remove()">`:'';
@@ -1664,6 +1891,69 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
   function rateLimited(){ const t=now(); if(t-lastSent<1500) return true; lastSent=t; return false; }
   const BADWORDS=/(?:сук[аи]|бл[яе]ть|нах[уй]|хуй|пизд|еб[аноул])/gi; // мягкий фильтр
   function clean(s){ return s.replace(BADWORDS,m=>'❄'.repeat(Math.min(m.length,4))); }
+
+  /* I-22: справочник как источник ответов. У МОРОЗ-01 всего 21 заготовленная
+     тема, а в Кодексе — 36 узлов и 26 предметов с проверенными данными.
+     Если словарь молчит, спрашиваем справочник.
+
+     ⚠ Кодекс грузим по первому вопросу, а не при открытии Эфира: 37 КБ ради
+     вкладки, куда заходит меньшинство, — плохой размен. */
+  var AICDX = null, aiCdxLoading = false;
+  function loadAiCodex(){
+    if(AICDX || aiCdxLoading) return;
+    if(window.FROST_CODEX){ AICDX = window.FROST_CODEX; return; }
+    aiCdxLoading = true;
+    var sc=document.createElement('script');
+    sc.src='codex-data.js?v='+((window.FROST_VERSION && FROST_VERSION.site)||'1');
+    sc.async=true;
+    sc.onload=function(){ AICDX = window.FROST_CODEX || null; aiCdxLoading=false; };
+    sc.onerror=function(){ aiCdxLoading=false; };
+    document.head.appendChild(sc);
+  }
+
+  function cdxTx(obj, field, prefix){
+    var k='cdx.'+prefix+obj.id+'.'+field;
+    if(window.I18N){ var v=I18N.t(k); if(v && v!==k) return v; }
+    return obj[field]||'';
+  }
+
+  /* Ответ из справочника. Возвращаем строку или '' — пустая строка означает
+     «Кодекс тоже не знает», и тогда МОРОЗ честно разводит руками. */
+  function codexAnswer(q){
+    var C = AICDX; if(!C) return '';
+    var found = [];
+    try{ found = C.findItems ? C.findItems(q) : []; }catch(e){ found = []; }
+
+    if(found.length){
+      var it = found[0];
+      var name = cdxTx(it,'name','item.');
+      var where = cdxTx(it,'where','item.');
+      var note = cdxTx(it,'note','item.');
+      return I18N.t('ae.aiFromCodex').replace('{n}', esc(name)) + ' ' +
+             esc(where) + (note ? ' ' + esc(note) : '');
+    }
+
+    /* Предметы не нашлись — пробуем узлы дерева: спрашивают не только
+       «где взять», но и «что нужно для стали». */
+    var low = String(q||'').toLowerCase();
+    var words = low.split(/[^0-9a-zа-яёіїєґўәғқңөұүһ]+/i).filter(function(w){ return w.length>2; });
+    var node = (C.nodes||[]).find(function(n){
+      var nm = cdxTx(n,'name','').toLowerCase();
+      return words.some(function(w){ return nm.indexOf(w)===0 || nm.split(' ').some(function(p){ return p.indexOf(w)===0; }); });
+    });
+    if(node){
+      var need=(node.needs||[]).map(function(id){
+        var p=(C.nodes||[]).find(function(x){ return x.id===id; });
+        return p ? cdxTx(p,'name','') : id;
+      });
+      var line = I18N.t('ae.aiNode').replace('{n}', esc(cdxTx(node,'name','')));
+      var rec = cdxTx(node,'recipe','');
+      if(rec) line += ' ' + esc(rec);
+      if(need.length) line += ' ' + I18N.t('ae.aiNeeds').replace('{l}', esc(need.join(', ')));
+      return line;
+    }
+    return '';
+  }
 
   /* A-34: если игрок спрашивает про предмет, уводим его в Кодекс —
      там карточка «где взять» и путь по дереву прогрессии. */
@@ -1935,6 +2225,11 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
       if(window.FrostSFX) FrostSFX.play('unlock');
       if(FB.live){
         try{ await FB.m.push(FB.refs.blueprints, rec); }catch(err){ console.warn('bp push',err); }
+        /* Чертёж на премодерации в ленту не идёт: незачем звать людей
+           смотреть то, чего они ещё не увидят. */
+        if(window.FrostFeed && !MOD_REQUIRED) FrostFeed.post('blueprint', {
+          nick: rec.nick, a: rec.title, once: false
+        });
       } else {
         rec.id='bp'+rec.ts;
         demo.blueprints=demo.blueprints||[]; demo.blueprints.unshift(rec);
@@ -1982,7 +2277,7 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
     MOD.uid = user.uid;
     var want = (fbConfig && fbConfig.adminUid) || '';
     MOD.on = hasMod(user.uid);
-    paintRoles();
+    paintRoles(); paintReports();
     if(MOD.on){
       modState(I18N.t('ae.modOk'), 'ok');
       if(window.FrostSFX) FrostSFX.play('unlock');
@@ -2081,6 +2376,115 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
     });
   })();
 
+  /* L-06: жалоба в два нажатия — кнопка и подтверждение тостом.
+     Формы с выбором причины здесь нет намеренно: чем длиннее путь,
+     тем реже люди сообщают о том, что действительно мешает. */
+  document.addEventListener('click', async function(e){
+    var b=e.target.closest('[data-rep]'); if(!b) return;
+    if(!FB.live || !window.FrostAuth || FrostAuth.state()==='local'){
+      if(window.FrostExtras) FrostExtras.toast(I18N.t('ae.repNoAuthT'), I18N.t('ae.repNoAuthB'));
+      return;
+    }
+    if(b.dataset.armed!=='1'){
+      b.dataset.armed='1';
+      var was=b.textContent;
+      b.textContent=I18N.t('ae.repSure');
+      setTimeout(function(){ b.dataset.armed=''; b.textContent=was; }, 4000);
+      return;
+    }
+    b.dataset.armed='';
+    try{
+      await FB.m.push(FB.m.ref(FB.db,'reports'), {
+        uid: ID.uid, path:'aether/chat', id: b.dataset.rep,
+        who: String(b.dataset.repwho||'').slice(0,64),
+        nick: String(b.dataset.repnick||'').slice(0,24),
+        text: String(b.dataset.reptext||'').slice(0,300),
+        ts: now()
+      });
+      b.textContent=I18N.t('ae.repDone');
+      if(window.FrostExtras) FrostExtras.toast(I18N.t('ae.repOkT'), I18N.t('ae.repOkB'));
+    }catch(err){
+      console.warn('report', err && err.code);
+      if(window.FrostExtras) FrostExtras.toast(I18N.t('ae.repFailT'), I18N.t('ae.repFailB'));
+    }
+  });
+
+  /* L-07: журнал действий смотрителя. Пишем ПОСЛЕ удаления и не мешаем ему:
+     если запись в журнал не прошла, само удаление уже состоялось. */
+  function modLog(act, path, id){
+    if(!FB.live || !MOD.on || !MOD.uid) return;
+    FB.m.push(FB.m.ref(FB.db,'modlog'), {
+      uid: MOD.uid, nick: callsign(), act: String(act).slice(0,32),
+      path: String(path||'').slice(0,64) + (id?('/'+id):''), ts: now()
+    }).catch(function(e){ console.warn('modlog', e && e.code); });
+  }
+
+  /* L-05: очередь жалоб. Читать её правила разрешают только смотрителям —
+     обычный выживший не увидит, кто на кого пожаловался. */
+  var repList=[];
+  function paintReports(){
+    var box=$('#repBox'), list=$('#repList');
+    if(!box||!list) return;
+    box.hidden = !MOD.on;
+    if(box.hidden) return;
+    if(!repList.length){
+      list.innerHTML='<div class="rep-none">'+esc(I18N.t('ae.repEmpty'))+'</div>';
+      return;
+    }
+    list.innerHTML=repList.slice(-12).reverse().map(function(r){
+      return '<div class="rep-i">'+
+        '<div class="rep-m">'+esc(r.nick||'—')+' · '+esc(fmtTime(r.ts))+'</div>'+
+        '<div class="rep-x">'+esc(String(r.text||'').slice(0,160))+'</div>'+
+        '<div class="rep-a">'+
+          '<button type="button" data-rdel="'+esc(r.id)+'" data-rkey="'+esc(r.key)+'">'+esc(I18N.t('ae.repDel'))+'</button>'+
+          '<button type="button" class="dan" data-rban="'+esc(r.who||'')+'" data-rkey="'+esc(r.key)+'">'+esc(I18N.t('ae.repMute'))+'</button>'+
+          '<button type="button" data-rskip="'+esc(r.key)+'">'+esc(I18N.t('ae.repSkip'))+'</button>'+
+        '</div></div>';
+    }).join('');
+  }
+
+  function watchReports(D, db){
+    D.onValue(D.query(D.ref(db,'reports'), D.limitToLast(40)), function(sn){
+      var v=sn.val()||{};
+      repList=Object.keys(v).map(function(k){ return Object.assign({key:k}, v[k]); })
+        .sort(function(a,b){ return (a.ts||0)-(b.ts||0); });
+      paintReports();
+    }, function(){ repList=[]; paintReports(); });
+  }
+
+  /* Действия смотрителя по жалобе */
+  document.addEventListener('click', async function(e){
+    var del=e.target.closest('[data-rdel]');
+    var ban=e.target.closest('[data-rban]');
+    var skip=e.target.closest('[data-rskip]');
+    if(!del && !ban && !skip) return;
+    if(!MOD.on || !FB.live) return;
+
+    try{
+      if(del){
+        await FB.m.remove(FB.m.ref(FB.db,'aether/chat/'+del.dataset.rdel));
+        modLog('delete','aether/chat',del.dataset.rdel);
+        await FB.m.remove(FB.m.ref(FB.db,'reports/'+del.dataset.rkey));
+      } else if(ban){
+        var who=ban.dataset.rban;
+        if(who){
+          /* L-04: заглушение на сутки, а не вечный бан. Отнять голос навсегда —
+             последняя мера, и она должна оставаться решением человека, а не кнопки. */
+          await FB.m.set(FB.m.ref(FB.db,'bans/'+who), {until: now()+86400000, by: MOD.uid});
+          modLog('mute','bans',who);
+        }
+        await FB.m.remove(FB.m.ref(FB.db,'reports/'+ban.dataset.rkey));
+      } else if(skip){
+        await FB.m.remove(FB.m.ref(FB.db,'reports/'+skip.dataset.rskip));
+        modLog('skip','reports',skip.dataset.rskip);
+      }
+      if(window.FrostSFX) FrostSFX.play('click');
+    }catch(err){
+      console.warn('mod action', err && err.code);
+      if(window.FrostExtras) FrostExtras.toast(I18N.t('ae.modDelFailT'), I18N.t('ae.modDelFailB'));
+    }
+  });
+
   function delBtn(path, id){
     if(!MOD.on) return '';
     return '<button class="del-btn" type="button" data-del="'+esc(path)+'" data-delid="'+esc(id||'')+'">'+
@@ -2094,6 +2498,7 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
     if(!confirm(I18N.t('ae.modConfirm'))) return;
     try{
       await FB.m.remove(FB.m.ref(FB.db, path + '/' + id));
+      modLog('delete', path, id);
       if(window.FrostSFX) FrostSFX.play('error');
     }catch(err){
       console.warn('delete', err);
@@ -2132,6 +2537,7 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
       const D=await import('https://www.gstatic.com/firebasejs/10.12.5/firebase-database.js');
       const app=A.getApps().length?A.getApps()[0]:A.initializeApp(fbConfig);
       const db=D.getDatabase(app);
+      if(window.FrostAuth && fbConfig.appCheckKey) FrostAuth.appCheck(app, fbConfig.appCheckKey);
 
       /* A-02: анонимный вход. Если он выключен в консоли Firebase, модуль молча
          остаётся на локальном uid и узел работает как прежде. */
@@ -2148,6 +2554,9 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
           }
         }
       }catch(err){ console.warn('auth init', err && err.code); }
+      if(window.FrostFeed) FrostFeed.attach(db, D);
+      if(window.FrostAuth) FrostAuth.ready(function(){ watchBan(D, db); });
+      watchReports(D, db);
       FB={ live:true, db, m:D, refs:{
         chat:D.ref(db,'aether/chat'), ideas:D.ref(db,'aether/ideas'),
         bugs:D.ref(db,'aether/bugs'), presence:D.ref(db,'aether/presence'),
@@ -2259,16 +2668,59 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
           <div class="msg-acts">
             <button class="msg-act react${votedByMe(m.r)?' on':''}" type="button" data-react="${esc(m.id||'')}">❄ <span>${m.r?Object.keys(m.r).length:0}</span></button>
             <button class="msg-act" type="button" data-reply="${esc(m.id||'')}" data-rnick="${esc(m.nick)}" data-rtext="${esc(String(m.msg||'').slice(0,90))}">${esc(I18N.t('ae.reply'))}</button>
+            ${me?'':`<button class="msg-act" type="button" data-rep="${esc(m.id||'')}" data-repwho="${esc(m.uid||'')}" data-repnick="${esc(m.nick)}" data-reptext="${esc(String(m.msg||'').slice(0,140))}">${esc(I18N.t('ae.report'))}</button>`}
             ${delBtn('aether/chat', m.id)}
           </div>
         </div></div>`;
     }).join('');
     chatLog.scrollTop=chatLog.scrollHeight;
     fetchAvas(list);
+    scanChatNotes(lastChatList);
     if(window.__chatSeen) window.__chatSeen(lastChatList);
   }
+  /* L-03, L-04: заглушение смотрителем. Клиент читает bans/{uid}, чтобы
+     объяснить человеку, почему его сообщения не проходят: молчаливый отказ
+     выглядит как поломка узла. */
+  var banUntil = 0, banWhy = '';
+  function banText(){
+    if(!banUntil) return '';
+    var left = banUntil - Date.now();
+    if(left > 86400000) return I18N.t('ae.banDays').replace('{n}', Math.ceil(left/86400000));
+    if(left > 3600000)  return I18N.t('ae.banHours').replace('{n}', Math.ceil(left/3600000));
+    return I18N.t('ae.banMinutes').replace('{n}', Math.max(1, Math.ceil(left/60000)));
+  }
+  function watchBan(D, db){
+    if(!ID.uid) return;
+    D.onValue(D.ref(db,'bans/'+ID.uid), function(sn){
+      var v=sn.val()||null;
+      banUntil = v ? (Number(v.until)||0) : 0;
+      banWhy = v ? String(v.why||'') : '';
+      var note=$('#banNote');
+      if(note){
+        note.hidden = !(banUntil > Date.now());
+        if(!note.hidden){
+          note.textContent = I18N.t('ae.banB').replace('{t}', banText()) + (banWhy?' — '+banWhy:'');
+        }
+      }
+    }, function(){});
+  }
+
+  /* L-14: согласие спрашиваем ровно один раз и ровно тогда, когда человек
+     собрался писать. На входе такой баннер не читают — его закрывают. */
+  function agreed(){ try{ return localStorage.getItem('fb_agreed')==='1'; }catch(e){ return true; } }
+  (function initAgree(){
+    var y=$('#agreeYes'); if(!y) return;
+    y.addEventListener('click',function(){
+      try{ localStorage.setItem('fb_agreed','1'); }catch(e){}
+      $('#agreeBox').hidden=true;
+      if(window.FrostSFX) FrostSFX.play('click');
+      $('#chatInput').focus();
+    });
+  })();
+
   async function sendChat(){
     const inp=$('#chatInput'); let txt=inp.value.trim(); if(!txt) return;
+    if(!agreed()){ $('#agreeBox').hidden=false; return; }
     if(!ID.nick){ openProfile(); if(window.FrostExtras) FrostExtras.toast(I18N.t('ae.toastNeedNickT'),I18N.t('ae.toastNeedNickB')); return; }
     if(rateLimited()){ if(window.FrostExtras) FrostExtras.toast(I18N.t('ae.toastRateT'),I18N.t('ae.toastRateB')); return; }
     txt=clean(txt).slice(0,500);
@@ -2277,7 +2729,25 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
     inp.value=''; inp.style.height='auto';
     if(window.FrostSFX) FrostSFX.play('click');
     setReply(null);
-    if(FB.live){ try{ await FB.m.push(FB.refs.chat,msg); }catch(e){ console.warn(e); } }
+    if(FB.live){
+      try{
+        /* L-02: антифлуд теперь и на сервере. Правила принимают сообщение,
+           только если его ts совпадает с chatLast/{uid}, а эту ветку разрешено
+           двигать не чаще раза в 1,5 секунды. Клиентскую проверку обойти можно,
+           эту — нет. */
+        await FB.m.set(FB.m.ref(FB.db,'chatLast/'+ID.uid), msg.ts);
+        await FB.m.push(FB.refs.chat,msg);
+      }catch(e){
+        console.warn('chat send', e && e.code);
+        /* Отказ означает одно из двух: слишком часто или человек заглушён.
+           Что именно — знает ветка bans, и врать про причину не нужно. */
+        var muted = banUntil > Date.now();
+        if(window.FrostExtras) FrostExtras.toast(
+          I18N.t(muted?'ae.banT':'ae.toastRateT'),
+          muted ? I18N.t('ae.banB').replace('{t}', banText()) : I18N.t('ae.toastRateB'));
+        inp.value = txt;     // текст возвращаем: терять написанное нельзя
+      }
+    }
     else { msg.id='m'+msg.ts; demo.chat.push(msg); demo.chat=demo.chat.slice(-100); saveDemo(); renderChat(demo.chat); }
   }
   $('#chatSend').addEventListener('click',sendChat);
@@ -2343,17 +2813,59 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
   (function initUnread(){
     const baseTitle=document.title;
     let unread=0, known=null;
+    /* Заголовком вкладки владеет FrostNotify: у него же считаются сигналы
+       колокола, и два счётчика в одном title перетирали бы друг друга. */
+    const setTitle=(n)=>{
+      if(window.FrostNotify) FrostNotify.setExtra(n);
+      else document.title = n ? '('+n+') '+baseTitle : baseTitle;
+    };
     window.__chatSeen=(list)=>{
       const n=(list||[]).filter(m=>m&&m.uid!=='sys').length;
       if(known===null){ known=n; return; }
       if(document.hidden && n>known) unread+=n-known;
       known=n;
-      document.title = unread ? '('+unread+') '+baseTitle : baseTitle;
+      setTitle(unread);
     };
     document.addEventListener('visibilitychange',()=>{
-      if(!document.hidden){ unread=0; document.title=baseTitle; }
+      if(!document.hidden){ unread=0; setTitle(0); }
     });
   })();
+
+  /* ── сигналы: позвали или ответили (E-02, E-03) ────────────────
+     Считаем только то, что пришло уже при нас: иначе первый заход
+     звонил бы всей историей чата. */
+  var noteFloor = 0;
+  function scanChatNotes(list){
+    if(!window.FrostNotify || !list || !list.length) return;
+    if(!noteFloor){
+      noteFloor = list.reduce((m,x)=>Math.max(m, x.ts||0), 0);
+      return;
+    }
+    var me = (ID.nick||'').trim();
+    list.forEach(function(m){
+      if(!m || !m.id || m.uid==='sys') return;
+      if(!m.ts || m.ts <= noteFloor) return;
+      if(isMineUid(m.uid)) return;                       // своё не звонит
+      if(window.FrostAuth && FrostAuth.isMuted && FrostAuth.isMuted(m.uid)) return;
+
+      if(me && m.rn && m.rn.toLowerCase()===me.toLowerCase()){
+        FrostNotify.push({
+          id:'reply:'+m.id, type:'reply', ts:m.ts,
+          title:I18N.t('nt.reply').replace('{n}', m.nick||'—'),
+          body:String(m.msg||'').slice(0,120), url:'aether.html'
+        });
+        return;
+      }
+      if(me && me.length>2 && String(m.msg||'').toLowerCase().indexOf(me.toLowerCase())>=0){
+        FrostNotify.push({
+          id:'mention:'+m.id, type:'mention', ts:m.ts,
+          title:I18N.t('nt.mention').replace('{n}', m.nick||'—'),
+          body:String(m.msg||'').slice(0,120), url:'aether.html'
+        });
+      }
+    });
+    noteFloor = list.reduce((m,x)=>Math.max(m, x.ts||0), noteFloor);
+  }
 
   let lastOnlineList=[];
   function renderOnline(list){
@@ -2413,7 +2925,10 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
     const post={uid:ID.uid,nick:callsign(),title:clean(title),body:clean(body),ts:now(),votes:{[ID.uid]:1}};
     $('#ideaTitle').value=''; $('#ideaBody').value='';
     if(window.FrostSFX) FrostSFX.play('unlock');
-    if(FB.live){ try{ await FB.m.push(FB.refs.ideas,post); }catch(e){} }
+    if(FB.live){
+      try{ await FB.m.push(FB.refs.ideas,post); }catch(e){}
+      if(window.FrostFeed) FrostFeed.post('idea', {nick: post.nick, a: post.title, once:false});
+    }
     else { post.id='i'+now(); demo.ideas.push(post); saveDemo(); renderIdeas(demo.ideas); }
     if(window.FrostExtras) FrostExtras.toast(I18N.t('ae.toastIdeaPostedT'),I18N.t('ae.toastIdeaPostedB'));
   });
@@ -2512,7 +3027,9 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
     const low=' '+q.toLowerCase()+' ';
     const KB=I18N.t('ae.kb'), GLITCHES=I18N.t('ae.glitches');
     let hit=KB.find(e=>e.k.some(k=>low.includes(k)));
-    let ans=hit?hit.a:I18N.t('ae.aiUnrecognized');
+    let fromCodex = '';
+    if(!hit) fromCodex = codexAnswer(q);          // I-22: словарь молчит — спросим Кодекс
+    let ans = hit ? hit.a : (fromCodex || I18N.t('ae.aiUnrecognized'));
     // glitch — иногда вставляем жуткую фразу и «исправляемся»
     if(Math.random()<0.22){
       const g=GLITCHES[Math.floor(Math.random()*GLITCHES.length)];
@@ -2521,8 +3038,8 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
       $('#aiSub').classList.add('err'); $('#aiSub').textContent=I18N.t('ae.aiErrSub');
       setTimeout(()=>{ $('#aiSub').classList.remove('err'); $('#aiSub').textContent=I18N.t('ae.aiSub'); },1800);
     }
-    // A-34: если ответ нашёлся в базе знаний, предлагаем открыть карточку в Кодексе
-    if(hit) ans += '<br>' + codexLink(q);
+    // A-34: нашли ответ — предлагаем открыть карточку в Кодексе
+    if(hit || fromCodex) ans += '<br>' + codexLink(q);
     return ans;
   }
   function aiSend(text){
@@ -2554,23 +3071,51 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
   };
   const causeIcon={'Гипотермия':'🥶','Заражённые':'🧟','Голод':'🍖','Завод Create':'⚙','Буря':'🌨','Радиация':'☢'};
   const LOCALE_MAP={ru:'ru-RU',en:'en-US',uk:'uk-UA',de:'de-DE',be:'be-BY',kk:'kk-KZ'};
+  /* J-19: тот же разрез, но за последний месяц. Счётчики chronicle/causes
+     копятся за всё время и не умеют «за период» — поэтому месяц считаем по
+     ленте смертей, где у каждой записи есть ts.
+
+     ⚠ Лента приходит последними 30 записями: если за месяц погибло больше,
+     цифры будут по этим тридцати. Честнее показать это, чем притвориться,
+     что мы знаем всё — подпись под переключателем об этом говорит. */
+  var causeRange = 'all';
+
   function renderCauseBars(){
     const box=$('#chronBars'); if(!box) return;
-    let rows=Object.keys(chron.causesMap||{})
-      .map(k=>({c:decodeURIComponent(k), n:Number(chron.causesMap[k])||0}))
-      .filter(r=>r.n>0);
-    if(!rows.length){                                  // демо-режим: считаем по ленте
-      const acc={}; (chron.feed||[]).forEach(d=>{ if(d&&d.cause) acc[d.cause]=(acc[d.cause]||0)+1; });
+    let rows;
+    if(causeRange==='month'){
+      const since=Date.now()-30*86400000, acc={};
+      (chron.feed||[]).forEach(d=>{ if(d&&d.cause&&d.ts>=since) acc[d.cause]=(acc[d.cause]||0)+1; });
       rows=Object.keys(acc).map(c=>({c,n:acc[c]}));
+    } else {
+      rows=Object.keys(chron.causesMap||{})
+        .map(k=>({c:decodeURIComponent(k), n:Number(chron.causesMap[k])||0}))
+        .filter(r=>r.n>0);
+      if(!rows.length){                                // демо-режим: считаем по ленте
+        const acc={}; (chron.feed||[]).forEach(d=>{ if(d&&d.cause) acc[d.cause]=(acc[d.cause]||0)+1; });
+        rows=Object.keys(acc).map(c=>({c,n:acc[c]}));
+      }
     }
     rows.sort((a,b)=>b.n-a.n);
-    if(!rows.length){ box.innerHTML=`<div class="empty-state">${esc(I18N.t('ae.chronEmptyFeed'))}</div>`; return; }
+    const head=`<div class="crange">
+      <button type="button" class="crange-b${causeRange==='all'?' on':''}" data-crange="all">${esc(I18N.t('ae.crAll'))}</button>
+      <button type="button" class="crange-b${causeRange==='month'?' on':''}" data-crange="month">${esc(I18N.t('ae.crMonth'))}</button>
+      ${causeRange==='month'?`<span class="crange-n">${esc(I18N.t('ae.crNote'))}</span>`:''}
+    </div>`;
+    if(!rows.length){ box.innerHTML=head+`<div class="empty-state">${esc(I18N.t(causeRange==='month'?'ae.crEmpty':'ae.chronEmptyFeed'))}</div>`; return; }
     const total=rows.reduce((s,r)=>s+r.n,0), max=rows[0].n;
-    box.innerHTML=rows.map(r=>`<div class="cbar">
+    box.innerHTML=head+rows.map(r=>`<div class="cbar">
       <div class="cbar-top"><span class="cbar-ic">${causeIcon[r.c]||'☠'}</span><span class="cbar-name">${esc(dispCause(r.c))}</span><span class="cbar-num">${r.n} · ${Math.round(r.n/total*100)}%</span></div>
       <div class="cbar-track"><div class="cbar-fill" style="width:${Math.max(4,Math.round(r.n/max*100))}%"></div></div>
     </div>`).join('');
   }
+
+  document.addEventListener('click',function(e){
+    var b=e.target.closest('[data-crange]'); if(!b) return;
+    causeRange=b.dataset.crange;
+    renderCauseBars();
+    if(window.FrostSFX) FrostSFX.play('tab');
+  });
 
   function paintChron(){
     const loc=LOCALE_MAP[I18N.current()]||'ru-RU';
@@ -2620,6 +3165,14 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
       }catch(e){ console.warn('death tx',e); }
     } else { demo.deaths.push(rec); saveDemo(); }
     paintChron();
+    /* D-03: потеря уходит в ленту станции. Тип «тихий» — смерти случаются
+       часто, и кричать о каждой не нужно. */
+    if(window.FrostFeed) FrostFeed.post('death', {
+      nick: nick,
+      a: I18N.t('ae.feedDeath').replace('{nick}', nick).replace('{day}', day)
+                               .replace('{cause}', dispCause(chron.chosenCause)),
+      n: day, once: false
+    });
     if(window.FrostSFX) FrostSFX.play('boom');
     deathModal.classList.remove('open'); deathModal.setAttribute('aria-hidden','true');
     if(window.FrostExtras) FrostExtras.toast(I18N.t('ae.toastDeathT'), I18N.t('ae.toastDeathB').replace('{nick}',nick).replace('{day}',day).replace('{cause}',dispCause(chron.chosenCause)));
@@ -2635,6 +3188,7 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
   paintChron();
 
   /* ---------- boot ---------- */
+  if(window.FrostNotify) FrostNotify.mount('#bellMount');
   initFB();
   if(!ID.nick){ setTimeout(openProfile,900); }
   else writePresence();
@@ -2644,6 +3198,8 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
     paintIdentity();
     paintIdentityState();
     paintRoles();          // список смотрителей рисуется из JS — сам не переведётся
+    paintNotes();
+    paintBadges();
     if(idModal.classList.contains('open')) updatePreview();
     renderAccordion('#faqAcc',I18N.t('ae.faq'));
     renderPatch();

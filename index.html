@@ -18,7 +18,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Oswald:wght@500;600;700&family=Rajdhani:wght@600;700&family=Share+Tech+Mono&display=swap&subset=cyrillic,cyrillic-ext,latin,latin-ext" rel="stylesheet">
-  <link rel="stylesheet" href="extras.css?v=2.29">
+  <link rel="stylesheet" href="extras.css?v=2.30">
   <style>
   /* ============================================================
      FROSTBORNE DEADLANDS — Релизный лендинг v2.0
@@ -537,11 +537,14 @@
           <a href="journal.html" class="nav-link" data-i18n="nav.journal">Журнал</a>
           <a href="tech.html" class="nav-link" data-i18n="nav.tech">Отсек</a>
           <a href="aether.html" class="nav-link" data-i18n="nav.aether">Эфир</a>
+          <a href="feed.html" class="nav-link" data-i18n="nav.feed">Лента</a>
+          <a href="rules.html" class="nav-link" data-i18n="nav.rules">Устав</a>
           <a href="#download" class="nav-link" data-i18n="nav.download">Скачать</a>
         </nav>
         <a href="#download" class="nav-cta" id="nav-cta" aria-label="Скачать сборку">
           <span aria-hidden="true">💾</span><span data-i18n="nav.download">Скачать</span><b data-ver="pack">R1.1</b>
         </a>
+        <span id="bellMount"></span>
         <span class="lang-switch" id="langMount"></span>
         <div class="social-links">
           <a href="https://www.youtube.com/@firilare" target="_blank" rel="noopener noreferrer" class="pill-link">YouTube</a>
@@ -561,6 +564,8 @@
           <a href="journal.html" class="nav-link" data-i18n="nav.journal">Журнал</a>
           <a href="tech.html" class="nav-link" data-i18n="nav.tech">Отсек</a>
           <a href="aether.html" class="nav-link" data-i18n="nav.aether">Эфир</a>
+          <a href="feed.html" class="nav-link" data-i18n="nav.feed">Лента</a>
+          <a href="rules.html" class="nav-link" data-i18n="nav.rules">Устав</a>
           <a href="#download" class="nav-link" data-i18n="nav.download">Скачать</a>
         </div>
         <div class="social-links">
@@ -799,6 +804,18 @@
     </section>
 
     <!-- ============ SOCIALS ============ -->
+    <section id="station-feed" hidden>
+      <div class="container">
+        <div class="eyebrow reveal" data-i18n="fdw.kicker">// Журнал станции</div>
+        <h2 class="section-title reveal" data-i18n-html="fdw.title">Что <span class="hl">происходит</span></h2>
+        <p class="section-subtitle reveal" data-i18n="fdw.sub">Последние события узла: рекорды, чертежи и потери выживших.</p>
+        <div class="feed-w" id="feedWidget"></div>
+        <div style="text-align:center;margin-top:22px">
+          <a class="btn btn-ghost" href="feed.html" data-i18n="fdw.all">Открыть ленту →</a>
+        </div>
+      </div>
+    </section>
+
     <section id="socials">
       <div class="container">
         <div class="eyebrow reveal" data-i18n="soc.kicker">// Связь</div>
@@ -867,11 +884,32 @@
     <div class="lb-counter" id="lb-counter"></div>
   </div>
 
-  <script src="version.js?v=2.29"></script>
-<script src="sfx.js?v=2.29"></script>
-  <script src="i18n.js?v=2.29"></script>
-  <script src="frostextras.js?v=2.29"></script>
-  <script src="firebase-config.js?v=2.29"></script>
+  <style>
+    /* D-07: точка «в ленте есть новое». Число не пишем — на главной оно
+       было бы шумом; важно лишь, стоит ли заглянуть. */
+    .feed-w{display:flex;flex-direction:column;gap:1px;background:var(--line);
+      border:1px solid var(--line);border-radius:16px;overflow:hidden;max-width:760px;margin:0 auto}
+    .feed-w .w-ev{display:flex;gap:13px;align-items:flex-start;padding:15px 17px;background:#070d16}
+    .feed-w .w-ic{width:30px;height:30px;flex:none;border-radius:9px;display:grid;place-items:center;
+      font-size:.95rem;background:rgba(255,255,255,.03);border:1px solid var(--line)}
+    .feed-w .w-tx{flex:1;min-width:0}
+    .feed-w .w-a{margin:0;color:#e8f5ff;font-size:.94rem;line-height:1.45}
+    .feed-w .w-a b{color:#fff;font-weight:600}
+    .feed-w .w-m{margin-top:5px;font-family:'Share Tech Mono',monospace;font-size:.58rem;
+      letter-spacing:.06em;color:var(--muted-2)}
+    .nav-link.has-new{position:relative}
+    .nav-link.has-new::after{content:"";position:absolute;top:2px;right:-9px;width:6px;height:6px;
+      border-radius:50%;background:var(--ice,#7cceff);box-shadow:0 0 8px rgba(124,206,255,.8)}
+  </style>
+  <script src="version.js?v=2.30"></script>
+<script src="sfx.js?v=2.30"></script>
+  <script src="i18n.js?v=2.30"></script>
+  <script src="frostextras.js?v=2.30"></script>
+<script src="frostsearch.js?v=2.30"></script>
+  <script src="frostauth.js?v=2.30"></script>
+  <script src="frostfeed.js?v=2.30"></script>
+  <script src="frostnotify.js?v=2.30"></script>
+  <script src="firebase-config.js?v=2.30"></script>
   <script>
   (function () {
     'use strict';
@@ -937,7 +975,30 @@
     ];
 
     const CHANGELOG = [
-      { v:'STATION OS 2.29', t:'Личность выжившего', open:true, items:[
+      { v:'STATION OS 2.30', t:'Лента, сигналы и защита узла', open:true, items:[
+        'У станции появилась лента событий — седьмой раздел. Рекорды выживания, новые чертежи, потери и объявления смотрителя собираются в одном месте, с фильтром по типам и архивом по месяцам.',
+        'События заносятся сами: погиб — попал в ленту, выложил чертёж — попал, побил личный рекорд — попал. Рекорды считаются от десяти дней, иначе лента состояла бы из «выжил один день».',
+        'Вернулся после отлучки — узел покажет сводку «пока тебя не было» и подсветит то, что появилось без тебя. Отметка о прочтении ставится, только если страницу действительно смотрят.',
+        'К событиям можно ставить отметки и писать короткие ответы. Итоги недели и чертёж недели по голосам — там же.',
+        'На главной появился блок последних событий, а в шапке — точка, если в ленте есть что-то новое. Своё за новое не считается.',
+        'В шапке зажёгся колокол: зовут по позывному, отвечают на сообщение, происходит что-то на станции — сигнал придёт. Со звуком, счётчиком на вкладке и настройками, что уведомляет, а что молчит.',
+        'Есть тихие часы и отписка одним нажатием. Разрешение на уведомления браузера узел просит по нажатию, а не на входе: запрос в первую секунду почти всегда получает отказ навсегда.',
+        'Про iPhone сказано честно: там сигналы приходят только после добавления сайта на экран «Домой».',
+        'Антифлуд чата переехал в правила базы. Раньше он жил в браузере, и обойти его мог любой, кто откроет консоль. Теперь предел держит сама база.',
+        'Под сообщениями появилась кнопка «пожаловаться» — в два нажатия, без формы с причинами. Жалобы уходят в очередь смотрителя, где их можно закрыть, удалить сообщение или заглушить автора на сутки.',
+        'Действия смотрителей пишутся в открытый журнал: кто что удалил, видно всем. Модерация, которую нельзя проверить, — это не модерация.',
+        'Ссылки наружу теперь показывают, куда ведут. Свои домены пропускаются молча, остальные просят подтверждения — фишинг живёт ровно на том, что человек не смотрит в адресную строку.',
+        'Появился устав станции: правила эфира, честная таблица о том, какие данные и зачем хранятся, и возрастная оговорка. Согласие спрашивается перед первым сообщением, а не баннером на входе.',
+        'Добавлена поддержка App Check — запросы к базе можно ограничить одним нашим сайтом.',
+        'Журнал стал книгой, с которой можно работать: поиск по тексту, заметки на полях, несколько закладок, режим чтения, автолистание и печать. В оглавлении видно, сколько прочитано и сколько времени займёт глава.',
+        'Понятия, о которых пишет выживший, теперь ведут в Кодекс: подчёркнутое слово открывает карточку справочника.',
+        'В Кодексе появился маршрут: Alt + клик по цели — и узел покажет, что осталось сделать. Отмечаешь пройденное — остаток сокращается.',
+        'Ctrl + K открывает поиск по всему узлу: разделы, узлы дерева и предметы в одном окне. Недавние запросы запоминаются.',
+        'МОРОЗ-01 научился отвечать данными Кодекса, а не только заготовками: если словаря не хватает, он смотрит в справочник.',
+        'У станции появились знаки — за дни, за Кодекс, за прочитанное, за вклад в эфир и за разгаданный шифр. Их не выдают кнопкой: знак считается из того, что узел и так проверяет, поэтому накрутить его нельзя.',
+        'В Хрониках можно посмотреть причины гибели не только за всё время, но и за последний месяц.'
+      ]},
+      { v:'STATION OS 2.29', t:'Личность выжившего', items:[
         'Узел научился узнавать людей. Раньше личность жила только в браузере: сменил его — стал другим выжившим, а база не отличала одного от другого. Теперь у каждого постоянный пропуск, и на нём держится всё будущее: кланы, личные каналы, репутация.',
         'Прошлое не потеряно. Узел помнит старый пропуск и считает своими прежние сообщения, голоса и реакции — авторство никуда не делось.',
         'В профиле появилась честная строка о состоянии личности: закреплена она или живёт до первой смены браузера. Рядом кнопка, которая привязывает её к Google, сохраняя всё нажитое.',
@@ -1515,6 +1576,46 @@
       setInterval(()=>{ if(Math.random()<.5){ ht.classList.add('glitching'); setTimeout(()=>ht.classList.remove('glitching'),260); } }, 6000);
     }
 
+    if(window.FrostNotify) FrostNotify.mount('#bellMount');
+
+    /* ---------- лента станции: бейдж и виджет (D-07, D-21) ---------- */
+    let feedList=null;
+    function feedAgo(ts){
+      const d=Date.now()-ts;
+      if(d<60000) return I18N.t('fd.justNow');
+      if(d<3600000) return I18N.t('fd.minAgo').replace('{n}',Math.max(1,Math.round(d/60000)));
+      if(d<86400000) return I18N.t('fd.hourAgo').replace('{n}',Math.round(d/3600000));
+      return I18N.t('fd.dayAgo').replace('{n}',Math.round(d/86400000));
+    }
+    function paintFeedWidget(list){
+      if(list) feedList=list;
+      const box=$('#feedWidget'), sec=$('#station-feed');
+      if(!box||!sec) return;
+
+      /* Пустую ленту не показываем вовсе: раздел «что происходит» без событий
+         выглядит хуже, чем его отсутствие. */
+      if(!feedList || !feedList.length){ sec.hidden=true; return; }
+      sec.hidden=false;
+
+      box.innerHTML=feedList.slice(0,4).map(e=>{
+        const T=FrostFeed.TYPES[e.t]||{icon:'•',color:'var(--muted)'};
+        const key='fd.ev_'+e.t;
+        let line=I18N.t(key); if(line===key) line='{a}';
+        line=line.replace('{a}','<b>'+esc(e.a)+'</b>').replace('{n}',esc(String(e.n||'')));
+        return `<div class="w-ev"><div class="w-ic" style="color:${T.color}" aria-hidden="true">${T.icon}</div>
+          <div class="w-tx"><p class="w-a">${line}</p>
+          <div class="w-m">${esc(e.nick)} · ${esc(feedAgo(e.ts))}</div></div></div>`;
+      }).join('');
+
+      // точка «есть новое» на ссылке в шапке
+      const n=FrostFeed.countNew(feedList);
+      $$('.nav-link[href="feed.html"]').forEach(a=>{
+        a.classList.toggle('has-new', n>0);
+        if(n>0) a.setAttribute('title', I18N.t('fd.newBadge')); else a.removeAttribute('title');
+      });
+    }
+    document.addEventListener('i18n:changed', ()=>paintFeedWidget());
+
     /* ---------- Firebase (optional, live stats) ---------- */
     async function initFirebase(){
       if(!fbConfigured){ telemetryFallback(); return; }
@@ -1523,6 +1624,7 @@
         const fbDb = await import('https://www.gstatic.com/firebasejs/10.12.5/firebase-database.js');
         const app = fbApp.getApps().length ? fbApp.getApps()[0] : fbApp.initializeApp(fbConfig);
         const db = fbDb.getDatabase(app);
+        if(window.FrostAuth && fbConfig.appCheckKey) FrostAuth.appCheck(app, fbConfig.appCheckKey);
         const viewsRef = fbDb.ref(db,'counters/views');
         const downloadsRef = fbDb.ref(db,'counters/downloads');
         const presenceRef = fbDb.ref(db,'presence');
@@ -1536,6 +1638,16 @@
         fbDb.onValue(connectedRef, s=>{ if(s.val()===true){ const me=fbDb.ref(db,`presence/${state.presenceId}`); fbDb.set(me,{active:true,lastSeen:Date.now()}); fbDb.onDisconnect(me).remove(); setInterval(()=>fbDb.set(me,{active:true,lastSeen:Date.now()}),15000); } });
         state.firebase={ live:true, db, fbDb, refs:{viewsRef,downloadsRef,presenceRef,connectedRef} };
         renderTelemetryStatus();
+
+        /* D-07 и D-21: лента. Главная её не показывает целиком — только
+           отмечает, что появилось новое, и рисует три последних события. */
+        if(window.FrostFeed){
+          FrostFeed.attach(db, fbDb);
+          FrostFeed.subscribe(list=>{
+            paintFeedWidget(list);
+            if(window.FrostNotify) FrostNotify.scanFeed(list);
+          }, 20);
+        }
       }catch(err){ console.warn('Firebase offline:', err); telemetryFallback(); }
     }
     $$('.download-link').forEach(link=>link.addEventListener('click', async ()=>{

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Устав станции — Frostborne Deadlands</title>
+<meta name="description" content="Правила поведения в Эфире и честное описание того, какие данные хранит станция Буран.">
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&family=Inter:wght@400;500;600&family=Share+Tech+Mono&display=swap&subset=cyrillic,cyrillic-ext,latin,latin-ext">
+<link rel="stylesheet" href="extras.css?v=2.30">
+
+<style>
+  :root{
+    --bg:#04070b; --panel:rgba(10,20,33,.72);
+    --ice:#7cceff; --ice-bright:#a8e0ff; --steel:#3a86ff;
+    --text:#c5d6e8; --muted:#6b8299; --muted-2:#4a5d70;
+    --line:rgba(124,206,255,.12); --line-2:rgba(124,206,255,.22);
+    --good:#34d399; --warn:#fbbf24; --red:#ef4444;
+    --mono:'Share Tech Mono',ui-monospace,monospace;
+    --disp:'Oswald','Arial Narrow',system-ui,sans-serif;
+    --body:'Inter',system-ui,-apple-system,'Segoe UI',sans-serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--text);font-family:var(--body);
+    font-size:16px;line-height:1.65;-webkit-font-smoothing:antialiased;min-height:100vh}
+  body::before{content:"";position:fixed;inset:0;z-index:0;pointer-events:none;
+    background:radial-gradient(1100px 520px at 18% -8%,rgba(58,134,255,.12),transparent 62%)}
+  body::after{content:"";position:fixed;inset:0;z-index:1;pointer-events:none;opacity:.3;
+    background:repeating-linear-gradient(0deg,rgba(0,0,0,.28) 0 1px,transparent 1px 3px)}
+
+  .wrap{position:relative;z-index:2;max-width:800px;margin:0 auto;padding:26px 20px 90px}
+  .top{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:28px}
+  .back{font-family:var(--mono);font-size:.66rem;letter-spacing:.08em;text-transform:uppercase;
+    color:var(--muted);text-decoration:none;border:1px solid var(--line);border-radius:9px;
+    padding:8px 12px;transition:.2s}
+  .back:hover{color:var(--ice-bright);border-color:var(--line-2)}
+  .top .sp{flex:1}
+
+  .kicker{font-family:var(--mono);font-size:.66rem;letter-spacing:.2em;text-transform:uppercase;
+    color:var(--muted-2);margin:0 0 10px}
+  h1{font-family:var(--disp);font-weight:600;font-size:clamp(1.8rem,5vw,2.5rem);
+    text-transform:uppercase;color:#fff;margin:0 0 10px;line-height:1.05}
+  .lead{margin:0 0 30px;color:var(--muted);max-width:62ch}
+
+  h2{font-family:var(--disp);font-weight:500;font-size:1.25rem;text-transform:uppercase;
+    letter-spacing:.02em;color:var(--ice-bright);margin:34px 0 14px;scroll-margin-top:20px}
+  .card{border:1px solid var(--line);border-radius:16px;background:var(--panel);padding:22px 24px}
+  ol,ul{margin:0;padding-left:22px}
+  li{margin-bottom:11px}
+  li b{color:#fff;font-weight:600}
+  .tag{display:inline-block;font-family:var(--mono);font-size:.58rem;letter-spacing:.08em;
+    text-transform:uppercase;color:var(--muted-2);border:1px solid var(--line);
+    border-radius:999px;padding:3px 9px;margin-left:6px;vertical-align:1px}
+  .tag.red{color:#ff9f9f;border-color:rgba(239,68,68,.3)}
+
+  table{width:100%;border-collapse:collapse;font-size:.9rem}
+  th,td{text-align:left;padding:11px 12px;border-bottom:1px solid var(--line);vertical-align:top}
+  th{font-family:var(--mono);font-size:.58rem;letter-spacing:.09em;text-transform:uppercase;
+    color:var(--muted-2);font-weight:400}
+  td b{color:#fff;font-weight:600}
+  .scroll{overflow-x:auto}
+
+  .note{margin-top:16px;padding:13px 15px;border:1px solid var(--line);border-radius:12px;
+    background:rgba(124,206,255,.05);color:var(--muted);font-size:.9rem}
+  .foot{margin-top:36px;font-family:var(--mono);font-size:.62rem;letter-spacing:.1em;
+    text-transform:uppercase;color:var(--muted-2);text-align:center}
+  @media (max-width:560px){ .wrap{padding:20px 14px 60px} .card{padding:18px} }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <div class="top">
+    <a class="back" href="index.html">← <span data-i18n="rl.home">На станцию</span></a>
+    <a class="back" href="aether.html"><span data-i18n="rl.toAether">В эфир</span></a>
+    <span class="sp"></span>
+    <span id="langMount"></span>
+  </div>
+
+  <p class="kicker" data-i18n="rl.kicker">// Устав узла · станция Буран</p>
+  <h1 data-i18n="rl.title">Как здесь принято</h1>
+  <p class="lead" data-i18n="rl.lead">Эфир держится на нескольких простых договорённостях. Их немного, и они не про формальности — а про то, чтобы сюда хотелось возвращаться.</p>
+
+  <h2 id="rules" data-i18n="rl.h1">Правила эфира</h2>
+  <div class="card">
+    <ol>
+      <li data-i18n-html="rl.r1"><b>Уважай выживших.</b> Оскорбления, травля и угрозы — прямой путь к заглушению. Спорить о шейдерах можно, переходить на человека — нет.</li>
+      <li data-i18n-html="rl.r2"><b>Никакой рекламы и спама.</b> Ссылки на свои проекты уместны в ответ на вопрос, а не в каждом сообщении.</li>
+      <li data-i18n-html="rl.r3"><b>Не выкладывай чужие данные.</b> Реальные имена, адреса, переписки, скриншоты личных сообщений — не сюда.</li>
+      <li data-i18n-html="rl.r4"><b>Держи возрастную планку.</b> Эфир читают подростки: без порнографии, жестокости ради жестокости и пропаганды наркотиков.</li>
+      <li data-i18n-html="rl.r5"><b>Ссылки — на страницы, а не на файлы.</b> Прямые ссылки на архивы и исполняемые файлы удаляются: проверить их содержимое станция не может.</li>
+      <li data-i18n-html="rl.r6"><b>Один голос — один выживший.</b> Накрутка голосов, вторые аккаунты ради апвоутов и подделка чужого позывного пресекаются.</li>
+      <li data-i18n-html="rl.r7"><b>Жалуйся, а не воюй.</b> Кнопка «пожаловаться» под сообщением работает и доходит до смотрителя. Ответная перепалка — нет.</li>
+    </ol>
+    <div class="note" data-i18n="rl.rNote">Смотритель может удалить сообщение и заглушить выжившего на сутки. Все такие действия попадают в журнал, который открыт для чтения любому.</div>
+  </div>
+
+  <h2 id="data" data-i18n="rl.h2">Что станция о тебе хранит</h2>
+  <div class="card">
+    <p style="margin-top:0" data-i18n="rl.dLead">Коротко: только то, что нужно эфиру, чтобы работать. Ни рекламы, ни аналитики, ни продажи данных — здесь просто нет ни того, ни другого.</p>
+    <div class="scroll">
+      <table>
+        <thead><tr>
+          <th data-i18n="rl.tWhat">Что</th>
+          <th data-i18n="rl.tWhere">Где лежит</th>
+          <th data-i18n="rl.tWhy">Зачем</th>
+        </tr></thead>
+        <tbody>
+          <tr><td><b data-i18n="rl.d1a">Позывной, статус, класс, фракция</b></td>
+              <td data-i18n="rl.d1b">База узла + твой браузер</td>
+              <td data-i18n="rl.d1c">Чтобы тебя узнавали в эфире и в личном деле</td></tr>
+          <tr><td><b data-i18n="rl.d2a">Анонимный номер (uid)</b></td>
+              <td data-i18n="rl.d2b">База узла</td>
+              <td data-i18n="rl.d2c">Отличает одного выжившего от другого. Имени и почты в нём нет</td></tr>
+          <tr><td><b data-i18n="rl.d3a">Сообщения, идеи, чертежи, записи о гибели</b></td>
+              <td data-i18n="rl.d3b">База узла, открыто на чтение</td>
+              <td data-i18n="rl.d3c">Это и есть эфир — всё написанное видно всем</td></tr>
+          <tr><td><b data-i18n="rl.d4a">День выживания и рекорд</b></td>
+              <td data-i18n="rl.d4b">База узла + твой браузер</td>
+              <td data-i18n="rl.d4c">Ранг на удостоверении и строка в личном деле</td></tr>
+          <tr><td><b data-i18n="rl.d5a">Скрытые выжившие, настройки сигналов, прогресс Кодекса</b></td>
+              <td data-i18n="rl.d5b">Только твой браузер</td>
+              <td data-i18n="rl.d5c">Это личное дело устройства и на узел не уезжает</td></tr>
+          <tr><td><b data-i18n="rl.d6a">Счётчики просмотров и загрузок</b></td>
+              <td data-i18n="rl.d6b">База узла</td>
+              <td data-i18n="rl.d6c">Общие числа без привязки к людям — просто «сколько всего»</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="note" data-i18n="rl.dNote">Выгрузить всё, что станция о тебе знает, и стереть личность можно в профиле Эфира — раздел «Твои данные». Сказанное в эфир при этом останется: удалять чужие записи узел не умеет, и обещать обратное было бы неправдой.</div>
+  </div>
+
+  <h2 id="age" data-i18n="rl.h3">Возраст и ответственность</h2>
+  <div class="card">
+    <ul>
+      <li data-i18n="rl.a1">Эфир — открытый чат. Всё, что ты пишешь, видно любому, кто зайдёт на узел, включая поисковые системы.</li>
+      <li data-i18n="rl.a2">Если тебе меньше 14 лет, пиши сюда только с ведома родителей.</li>
+      <li data-i18n="rl.a3">Сборка и сайт — любительский проект одного человека. Он делается по вечерам и может быть недоступен без предупреждения.</li>
+    </ul>
+  </div>
+
+  <p class="foot">FROSTBORNE DEADLANDS · <span data-ver="siteFull">STATION OS</span></p>
+</div>
+
+<script src="version.js?v=2.30"></script>
+<script src="i18n.js?v=2.30"></script>
+<script src="frostextras.js?v=2.30"></script>
+<script src="frostsearch.js?v=2.30"></script>
+<script>
+(function(){
+  'use strict';
+  if(window.FROST_VERSION) FROST_VERSION.apply();
+  if(window.I18N) I18N.buildSwitcher('#langMount');
+})();
+</script>
+</body>
+</html>

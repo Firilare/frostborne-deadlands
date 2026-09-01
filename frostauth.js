@@ -81,6 +81,33 @@
     A._state = anon ? 'anon' : 'linked';
   }
 
+  /* ── App Check (L-01) ─────────────────────────────────────────
+     Проверяет, что запрос пришёл с нашего сайта, а не из чужого скрипта.
+     Ключ публичный — он и должен быть виден в коде; защищает не он, а
+     привязка к домену на стороне Google.
+
+     ⚠ Включается только если ключ задан. Пустое поле не должно ничего
+     ломать: в 2.27 пустой adminUid уже уводил весь узел в демо-режим,
+     повторять эту ошибку нельзя.
+
+     ⚠ Вызывать ДО первых обращений к базе, иначе первые запросы уйдут
+     без токена и будут отклонены после включения Enforce. */
+  A.appCheck = function (app, siteKey) {
+    if (!app || !siteKey) return Promise.resolve(false);
+    return import('https://www.gstatic.com/firebasejs/10.12.5/firebase-app-check.js')
+      .then(function (m) {
+        m.initializeAppCheck(app, {
+          provider: new m.ReCaptchaV3Provider(siteKey),
+          isTokenAutoRefreshEnabled: true
+        });
+        return true;
+      })
+      .catch(function (e) {
+        console.warn('FrostAuth: App Check не поднялся', e && e.code || e);
+        return false;
+      });
+  };
+
   /* ── подключение ──────────────────────────────────────────────── */
   A.attach = function (app, authMod, dbMod, db) {
     A.app = app; A.authMod = authMod; A.dbMod = dbMod; A.db = db;
