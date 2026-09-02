@@ -331,6 +331,17 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
 .ban-note{margin:0 0 10px;padding:10px 13px;border:1px solid rgba(239,68,68,.35);
   border-radius:10px;background:rgba(239,68,68,.08);color:#ff9f9f;font-size:.85rem;line-height:1.45}
 .ban-note[hidden]{display:none}
+/* вкладки профиля: разделы больше не идут одной лентой */
+.pt-tabs{display:flex;gap:6px;flex-wrap:wrap;margin:4px 0 18px;
+  border-bottom:1px solid var(--line);padding-bottom:12px}
+.pt-tab{font-family:'Share Tech Mono',monospace;font-size:.6rem;letter-spacing:.07em;
+  text-transform:uppercase;color:var(--muted);background:none;border:1px solid var(--line);
+  border-radius:9px;padding:8px 12px;cursor:pointer;transition:.2s}
+.pt-tab:hover{color:#fff;border-color:var(--line-2)}
+.pt-tab.on{color:#04070b;background:var(--ice);border-color:var(--ice);font-weight:600}
+.pt-pane{display:none}
+.pt-pane.on{display:block}
+
 .rep-box{margin-top:12px;border:1px solid rgba(239,68,68,.22);border-radius:12px;
   background:rgba(239,68,68,.05);padding:13px 15px}
 .rep-t{font-family:'Share Tech Mono',monospace;font-size:.62rem;letter-spacing:.11em;
@@ -466,6 +477,10 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
 .post-title{font-family:'Oswald',sans-serif;font-weight:600;font-size:1.12rem;color:#fff;margin-bottom:6px;letter-spacing:.01em}
 .post-text{font-size:.9rem;color:var(--text);word-wrap:break-word;overflow-wrap:anywhere;line-height:1.55}
 .post-text a{color:var(--ice);text-decoration:underline}
+.bug-toggle{margin-left:8px;font-family:'Share Tech Mono',monospace;font-size:.55rem;
+  letter-spacing:.06em;text-transform:uppercase;color:var(--muted);background:none;
+  border:1px solid var(--line);border-radius:7px;padding:4px 8px;cursor:pointer;transition:.2s}
+.bug-toggle:hover{color:#fff;border-color:var(--line-2)}
 .bug-status{display:inline-flex;align-items:center;gap:6px;font-family:'Share Tech Mono',monospace;font-size:.62rem;letter-spacing:.06em;text-transform:uppercase;padding:4px 9px;border-radius:7px;margin-left:auto}
 .bug-status.open{color:var(--warn);background:rgba(251,191,36,.1);border:1px solid rgba(251,191,36,.25)}
 .bug-status.solved{color:var(--good);background:rgba(52,211,153,.1);border:1px solid rgba(52,211,153,.25)}
@@ -936,6 +951,17 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
       <label data-i18n="ae.nickLabel">Позывной (ник Minecraft — подтянет скин)</label>
       <input type="text" id="modalNick" maxlength="16" placeholder="Firilare">
     </div>
+    <div class="pt-tabs" id="ptTabs">
+      <button class="pt-tab on" type="button" data-pane="who" data-i18n="ae.ptWho">Личность</button>
+      <button class="pt-tab" type="button" data-pane="prog" data-i18n="ae.ptProgress">Прогресс</button>
+      <button class="pt-tab" type="button" data-pane="set" data-i18n="ae.ptSettings">Настройки</button>
+      <button class="pt-tab" type="button" data-pane="mod" hidden data-i18n="ae.ptKeeper">Смотритель</button>
+    </div>
+    <div class="pt-pane on" id="ptWho"></div>
+    <div class="pt-pane" id="ptProg"></div>
+    <div class="pt-pane" id="ptSet"></div>
+    <div class="pt-pane" id="ptMod"></div>
+
     <div class="id-field">
       <label data-i18n="ae.avaLabel">Аватар</label>
       <div class="status-chips" id="avaChips">
@@ -1001,7 +1027,7 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
       <button class="btn btn-ghost" id="idDownload" style="flex:1;min-width:160px" data-i18n="ae.downloadId">⬇ Скачать ID</button>
     </div>
 
-    <div class="cdx-stat" id="cdxStat" hidden>
+    <div class="cdx-stat" id="cdxStat">
       <span class="cs-n" id="cdxNum">0/0</span>
       <div class="cs-b">
         <div class="cs-l" data-i18n="ae.cdxProgress">Пройдено в Кодексе</div>
@@ -1282,7 +1308,7 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
     $('#avaUrlBox').hidden = (mode!=='url');
     $('#avaUrlInput').value = (mode==='url') ? ID.ava : '';
     updatePreview(); paintIdentityState(); paintPrivacy(); paintMuted(); paintNotes();
-    loadBadgeStats();
+    loadBadgeStats(); paintKeeperTab();
     idModal.classList.add('open'); idModal.setAttribute('aria-hidden','false');
     if(window.FrostSFX) FrostSFX.play('tab');
   }
@@ -1467,6 +1493,63 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
       if(lastChatList && lastChatList.length) renderChat(lastChatList);
     });
   })();
+
+  /* Раскладываем уже существующие блоки по вкладкам. Переносим узлы, а не
+     переписываем разметку: все обработчики, что на них висят, остаются живыми. */
+  (function buildProfileTabs(){
+    var panes={
+      who:  ['#avaChips','#avaUrlBox','#rankLine','#statusChips','#modalCustomStatus','#modalDay'],
+      prog: ['#cdxStat','#bdgRow'],
+      set:  ['#noteBox','#dataBox'],
+      mod:  ['.mod-row','#repBox','#rolesBox']
+    };
+    function fieldOf(el){
+      /* переносим целиком поле с подписью, а не голый элемент */
+      var f=el.closest('.id-field, .data-box, .mod-row, .rep-box, .roles-box, .cdx-stat, .id-state');
+      return f || el;
+    }
+    var map={who:$('#ptWho'), prog:$('#ptProg'), set:$('#ptSet'), mod:$('#ptMod')};
+    if(!map.who) return;
+
+    Object.keys(panes).forEach(function(k){
+      panes[k].forEach(function(sel){
+        var el=document.querySelector(sel); if(!el) return;
+        var block=fieldOf(el);
+        if(block && block.parentNode && map[k]) map[k].appendChild(block);
+      });
+    });
+
+    /* Личность: класс, фракция и состояние — туда же, но после статуса */
+    ['#classChips','#factionChips','#idState'].forEach(function(sel){
+      var el=document.querySelector(sel); if(!el) return;
+      var block=fieldOf(el);
+      if(block && map.who) map.who.appendChild(block);
+    });
+
+    $('#ptTabs').addEventListener('click',function(e){
+      var b=e.target.closest('[data-pane]'); if(!b) return;
+      $$('.pt-tab').forEach(function(x){ x.classList.toggle('on', x===b); });
+      var id={who:'#ptWho',prog:'#ptProg',set:'#ptSet',mod:'#ptMod'}[b.dataset.pane];
+      $$('.pt-pane').forEach(function(p){ p.classList.toggle('on', p===$(id)); });
+      if(window.FrostSFX) FrostSFX.play('tab');
+    });
+  })();
+
+  /* Вкладка смотрителя — только тем, кому есть что там делать.
+     ⚠ Наличие adminUid в конфиге правами НЕ является: он есть у всех клиентов.
+     Показываем при реальных правах либо тому, кто входил через Google —
+     иначе владельцу неоткуда было бы войти. */
+  function paintKeeperTab(){
+    var t=document.querySelector('[data-pane="mod"]');
+    if(!t) return;
+    var linked = window.FrostAuth && FrostAuth.state()==='linked';
+    t.hidden = !(MOD.on || linked);
+    if(t.hidden && t.classList.contains('on')){
+      // если скрыли активную вкладку — возвращаем человека на «Личность»
+      $$('.pt-tab').forEach(function(x){ x.classList.toggle('on', x.dataset.pane==='who'); });
+      $$('.pt-pane').forEach(function(p){ p.classList.toggle('on', p.id==='ptWho'); });
+    }
+  }
 
   /* J-06: витрина знаков. Контекст собираем из браузера и из активности,
      которую уже посчитал FrostAuth — отдельного хранилища знаков нет. */
@@ -2277,7 +2360,7 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
     MOD.uid = user.uid;
     var want = (fbConfig && fbConfig.adminUid) || '';
     MOD.on = hasMod(user.uid);
-    paintRoles(); paintReports();
+    paintRoles(); paintReports(); paintKeeperTab();
     if(MOD.on){
       modState(I18N.t('ae.modOk'), 'ok');
       if(window.FrostSFX) FrostSFX.play('unlock');
@@ -2594,7 +2677,12 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
         paintRoles(); repaintAll();
       });
 
-      D.onValue(FB.refs.presence,s=>{ renderOnline(Object.values(s.val()||{})); });
+      /* ⚠ uid лежит КЛЮЧОМ, а не полем: Object.values его теряет, и сайдбар
+         показывал «никого в эфире» при живых людях. Собираем с ключами. */
+      D.onValue(FB.refs.presence,s=>{
+        const v=s.val()||{};
+        renderOnline(Object.keys(v).map(uid=>Object.assign({uid:uid}, v[uid]||{})));
+      });
       D.onValue(FB.refs.connected,s=>{ if(s.val()===true) writePresence(); });
       // chronicle
       D.onValue(FB.refs.dtotal,s=>{ if(s.exists()){ chron.total=Number(s.val())||chron.total; localStorage.setItem('fb_deaths',String(chron.total)); paintChron(); } });
@@ -2714,7 +2802,10 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
       try{ localStorage.setItem('fb_agreed','1'); }catch(e){}
       $('#agreeBox').hidden=true;
       if(window.FrostSFX) FrostSFX.play('click');
-      $('#chatInput').focus();
+      /* Человек уже написал сообщение и нажал «отправить» — значит после
+         согласия его надо ДОСЛАТЬ, а не заставлять нажимать второй раз. */
+      if($('#chatInput').value.trim()) sendChat();
+      else $('#chatInput').focus();
     });
   })();
 
@@ -2731,11 +2822,21 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
     setReply(null);
     if(FB.live){
       try{
-        /* L-02: антифлуд теперь и на сервере. Правила принимают сообщение,
-           только если его ts совпадает с chatLast/{uid}, а эту ветку разрешено
-           двигать не чаще раза в 1,5 секунды. Клиентскую проверку обойти можно,
-           эту — нет. */
-        await FB.m.set(FB.m.ref(FB.db,'chatLast/'+ID.uid), msg.ts);
+        /* L-02: антифлуд на стороне базы. Правила принимают сообщение, только
+           если его ts совпадает с chatLast/{uid}, а эту ветку разрешено двигать
+           не чаще раза в 1,5 секунды.
+
+           ⚠ Замок ставим ОТДЕЛЬНО от отправки и не считаем его обязательным.
+           Пока новые правила не опубликованы, ветки chatLast в базе нет, запись
+           в неё отклоняется — и раньше это роняло всю отправку: человек видел
+           «слишком часто» и не мог написать вообще ничего. Сообщение важнее
+           замка: не вышло запереть — пробуем отправить, а решение всё равно
+           за правилами. */
+        try{
+          await FB.m.set(FB.m.ref(FB.db,'chatLast/'+ID.uid), msg.ts);
+        }catch(lockErr){
+          console.warn('chatLast', lockErr && lockErr.code);
+        }
         await FB.m.push(FB.refs.chat,msg);
       }catch(e){
         console.warn('chat send', e && e.code);
@@ -2884,6 +2985,48 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
       <span class="online-dot"></span></div>`).join('');
   }
 
+  /* Смотритель закрывает неполадку. Правила разрешают править запись только
+     ему — обычный выживший статус не сменит, даже если подделает кнопку. */
+  document.addEventListener('click', async function(e){
+    var b=e.target.closest('[data-bugid]'); if(!b || !MOD.on || !FB.live) return;
+    var id=b.dataset.bugid, to=b.dataset.bugto;
+    if(!id) return;
+    b.disabled=true;
+    try{
+      await FB.m.set(FB.m.ref(FB.db,'aether/bugs/'+id+'/status'), to);
+      modLog(to==='solved'?'bug-close':'bug-open','aether/bugs',id);
+      if(window.FrostSFX) FrostSFX.play('click');
+    }catch(err){
+      console.warn('bug status', err && err.code);
+      if(window.FrostExtras) FrostExtras.toast(I18N.t('ae.modDelFailT'), I18N.t('ae.modDelFailB'));
+    }
+    b.disabled=false;
+  });
+
+  /* Автор узнаёт, что его неполадку закрыли. Push с сервера мы слать не можем
+     (см. трек E), поэтому сравниваем статус с запомненным и показываем сигнал
+     при заходе — честный максимум без серверной части. */
+  function watchMyBugs(list){
+    if(!window.FrostNotify) return;
+    var seen={};
+    try{ seen=JSON.parse(localStorage.getItem('fb_bug_seen')||'{}')||{}; }catch(e){ seen={}; }
+    var changed=false;
+    (list||[]).forEach(function(b){
+      if(!b || !b.id || !isMineUid(b.uid)) return;
+      var was=seen[b.id];
+      if(was && was!==b.status && b.status==='solved'){
+        FrostNotify.push({
+          id:'bug:'+b.id+':'+b.status, type:'feed', ts:Date.now(),
+          title:I18N.t('ae.bugClosedT'),
+          body:I18N.t('ae.bugClosedB').replace('{t}', String(b.title||'').slice(0,60)),
+          url:'aether.html'
+        });
+      }
+      if(was!==b.status){ seen[b.id]=b.status; changed=true; }
+    });
+    if(changed){ try{ localStorage.setItem('fb_bug_seen', JSON.stringify(seen)); }catch(e){} }
+  }
+
   /* ================= FORUM: IDEAS ================= */
   let lastIdeasList=[];
   function renderIdeas(list){
@@ -2937,12 +3080,15 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
   let lastBugsList=[];
   function renderBugs(list){
     lastBugsList=list;
+    watchMyBugs(list);
     list.sort((a,b)=>b.ts-a.ts);
     const box=$('#bugsList');
     if(!list.length){ box.innerHTML=`<div class="empty-state">${esc(I18N.t('ae.noBugs'))}</div>`; return; }
     box.innerHTML=list.map(p=>`<div class="post">
       <div class="post-body">
-        <div class="post-head"><img class="post-av" src="${skinUrl(p.nick,26)}" onerror="this.src='${skinUrl('Steve',26)}'" alt=""><span class="post-author">${esc(p.nick)}</span><span class="post-time">${fmtTime(p.ts)}</span><span class="bug-status ${p.status==='solved'?'solved':'open'}">${p.status==='solved'?I18N.t('ae.bugSolved'):I18N.t('ae.bugOpen')}</span></div>
+        <div class="post-head"><img class="post-av" src="${skinUrl(p.nick,26)}" onerror="this.src='${skinUrl('Steve',26)}'" alt=""><span class="post-author">${esc(p.nick)}</span><span class="post-time">${fmtTime(p.ts)}</span><span class="bug-status ${p.status==='solved'?'solved':'open'}">${p.status==='solved'?I18N.t('ae.bugSolved'):I18N.t('ae.bugOpen')}</span>${
+        MOD.on ? `<button class="bug-toggle" type="button" data-bugid="${esc(p.id||'')}" data-bugto="${p.status==='solved'?'open':'solved'}">${
+          esc(I18N.t(p.status==='solved'?'ae.bugReopen':'ae.bugClose'))}</button>` : ''}</div>
         <div class="post-title">${esc(p.title)}</div>
         <div class="post-text">${renderContent(p.body)}</div>
       </div></div>`).join('');

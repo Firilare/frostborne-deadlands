@@ -223,3 +223,15 @@ a.nb-i:hover{background:rgba(124,206,255,.06)}
 .bdg i{font-style:normal;font-size:.85rem;line-height:1}
 .bdg b{font-weight:400;color:#c5d6e8}
 .bdg-none{font-size:.85rem;color:#4a5d70}
+
+
+/* ── страховка от горизонтальной прокрутки ──────────────────────────
+   Один элемент шире экрана растягивает весь документ, и вместе с ним
+   уезжает всё, что прибито к краям: шапка, тикер, модалки. Дешевле
+   запретить это на уровне страницы, чем ловить каждого виновника. */
+html,body{max-width:100%;overflow-x:hidden}
+img,video,canvas,svg,table,pre{max-width:100%}
+@media (max-width:680px){
+  /* длинные ссылки и коды не должны распирать карточки */
+  .msg-text,.entry-b,.note,.a,.bp-n{overflow-wrap:anywhere}
+}

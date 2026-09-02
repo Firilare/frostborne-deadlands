@@ -102,6 +102,47 @@
   @keyframes auroraDrift{0%{transform:translateX(-4%) skewX(-2deg); opacity:.4}100%{transform:translateX(4%) skewX(2deg); opacity:.65}}
   body.storm .aurora{background:radial-gradient(60% 80% at 50% 0%, rgba(255,61,86,.12), transparent 70%)}
 
+  /* ---------- загрузочный шлюз ----------
+     ⚠ Разметка этого блока жила без единого правила CSS — цифры валились
+     в столбик, карточка не читалась. Стили ниже — недостающая половина. */
+  .dl-cta{position:relative; max-width:980px; margin:0 auto; border-radius:var(--radius-lg);
+    border:1px solid rgba(124,206,255,.2); background:linear-gradient(180deg,
+      rgba(10,20,33,.86), rgba(5,10,17,.94)); overflow:hidden;
+    box-shadow:0 24px 70px rgba(0,0,0,.45)}
+  .dl-cta-glow{position:absolute; inset:-40% 30% auto -10%; height:280px; pointer-events:none;
+    background:radial-gradient(closest-side, rgba(124,206,255,.16), transparent 70%);
+    filter:blur(6px)}
+  .dl-cta-body{position:relative; z-index:1; padding:38px 40px}
+  .dl-cta-badge{display:inline-block; font-family:"Share Tech Mono", monospace; font-size:.64rem;
+    letter-spacing:.16em; text-transform:uppercase; color:var(--ice);
+    border:1px solid rgba(124,206,255,.28); border-radius:999px; padding:6px 13px; margin-bottom:16px}
+  .dl-cta-title{font-family:var(--font-display, Oswald), sans-serif; font-weight:600;
+    font-size:clamp(1.6rem, 3.4vw, 2.4rem); line-height:1.08; text-transform:uppercase;
+    color:#fff; margin:0 0 12px}
+  .dl-cta-text{max-width:62ch; color:var(--muted); margin:0 0 26px; line-height:1.65}
+
+  /* Цифры — в ряд: их четыре, и в столбик они читаются как список покупок. */
+  .dl-cta-meta{display:grid; grid-template-columns:repeat(4, minmax(0,1fr)); gap:1px;
+    background:var(--line); border:1px solid var(--line); border-radius:14px;
+    overflow:hidden; margin-bottom:28px}
+  .dl-cta-stat{background:rgba(6,12,20,.9); padding:16px 14px; text-align:center}
+  .dl-cta-stat .v{font-family:var(--font-display, Oswald), sans-serif; font-size:1.35rem;
+    color:var(--ice-bright); line-height:1.1}
+  .dl-cta-stat .l{margin-top:5px; font-family:"Share Tech Mono", monospace; font-size:.58rem;
+    letter-spacing:.1em; text-transform:uppercase; color:var(--muted-2)}
+  .dl-cta-btn{display:inline-flex; align-items:center; justify-content:center; gap:10px;
+    padding:16px 30px; font-size:1rem}
+
+  @media (max-width:760px){
+    .dl-cta-body{padding:26px 20px}
+    .dl-cta-meta{grid-template-columns:repeat(2, minmax(0,1fr))}
+    .dl-cta-btn{width:100%}
+  }
+  @media (max-width:420px){
+    .dl-cta-stat{padding:13px 10px}
+    .dl-cta-stat .v{font-size:1.15rem}
+  }
+
   /* ---------- ticker ---------- */
   .ticker{
     position:fixed; top:0; left:0; right:0; height:var(--ticker-h); z-index:1001;
@@ -492,6 +533,20 @@
     .gallery{grid-template-columns:repeat(2,1fr)}
     .lb-nav{width:46px; height:46px}
   }
+  /* ⚠ Шапка на телефоне: логотип + кнопка скачивания + колокол + язык + меню
+     не помещаются в 375px и растягивают документ, а вместе с ним и всё, что
+     прибито к его краям (тикер, шапка). Лишнее убираем: кнопка скачивания
+     дублируется на первом экране, а колокол и язык живут в меню. */
+  @media (max-width:680px){
+    .nav-cta{display:none}
+    .nav-actions{gap:9px}
+    .brand-text small{display:none}
+  }
+  @media (max-width:420px){
+    .nb-btn{width:34px;height:34px}
+    .lang-switch{transform:scale(.9);transform-origin:right center}
+  }
+
   @media (max-width:560px){
     .features,.socials,.shader-tiers,.lore-grid{grid-template-columns:1fr}
     .stat-grid,.hud-grid,.metrics-row{grid-template-columns:1fr}
@@ -996,7 +1051,11 @@
         'Ctrl + K открывает поиск по всему узлу: разделы, узлы дерева и предметы в одном окне. Недавние запросы запоминаются.',
         'МОРОЗ-01 научился отвечать данными Кодекса, а не только заготовками: если словаря не хватает, он смотрит в справочник.',
         'У станции появились знаки — за дни, за Кодекс, за прочитанное, за вклад в эфир и за разгаданный шифр. Их не выдают кнопкой: знак считается из того, что узел и так проверяет, поэтому накрутить его нельзя.',
-        'В Хрониках можно посмотреть причины гибели не только за всё время, но и за последний месяц.'
+        'В Хрониках можно посмотреть причины гибели не только за всё время, но и за последний месяц.',
+        'Профиль разложен по вкладкам: личность, прогресс, настройки и отдельная вкладка смотрителя. Раньше всё это шло одной лентой.',
+        'Блок «Скачать сборку» на главной наконец получил оформление — он всё это время жил без стилей, поэтому цифры валились в столбик.',
+        'Техно-доктор стал глубже: распознаёт конфликт OptiFine с Sodium, смерть драйвера, нехватку видеопамяти, битый мир, повреждённый jar, ошибку конфига, несобравшиеся шейдеры и конфликт аддонов Create. Плюс расшифровывает код выхода процесса.',
+        'Смотритель может закрыть неполадку в Костре, а её автор получает об этом сигнал.'
       ]},
       { v:'STATION OS 2.29', t:'Личность выжившего', items:[
         'Узел научился узнавать людей. Раньше личность жила только в браузере: сменил его — стал другим выжившим, а база не отличала одного от другого. Теперь у каждого постоянный пропуск, и на нём держится всё будущее: кланы, личные каналы, репутация.',

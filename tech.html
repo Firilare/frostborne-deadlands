@@ -439,9 +439,47 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
     return env;
   }
 
+  /* Код выхода процесса. Java его не пишет — его пишет система, и по нему
+     часто видно то, чего нет в стектрейсе: смерть драйвера, нехватку
+     видеопамяти, убийство процесса нехваткой ОЗУ. */
+  function exitHint(text){
+    const m=/(?:Process crashed with exit code|exit code:?|Exit Code:?)\s*(-?\d+)/i.exec(text);
+    if(!m) return null;
+    const code=parseInt(m[1],10);
+    const map={
+      '-1073740791': 'tch.x1',   // 0xC0000409 — порча стека, чаще всего драйвер/шейдеры
+      '-1073741819': 'tch.x2',   // 0xC0000005 — обращение по неверному адресу
+      '-1073741795': 'tch.x3',   // 0xC000001D — инструкция не поддерживается процессором
+      '-805306369':  'tch.x4',   // 0xCFFFFFFF — процесс убит извне
+      '1':           'tch.x5',
+      '137':         'tch.x6',   // убит по нехватке памяти (Linux/Docker)
+      '143':         'tch.x6'
+    };
+    const key=map[String(code)];
+    return { code:code, text: key ? I18N.t(key) : I18N.t('tch.xUnknown') };
+  }
+
   function getRules(){
     const t=I18N.t;
     return [
+    /* ── добавлено по опыту разбора реальных логов сборки ── */
+    { re:/optifine/i, sev:'crit', icon:'🧊', title:t('tch.r16t'), body:t('tch.r16b'),
+      also:/embeddium|sodium|rubidium|oculus|iris/i },
+    { re:/GLFW error|Failed to create window|Pixel format not accelerated|OpenGL 3\.2|nvoglv|ig[dx0-9]+icd|atio6axx|amdvlk/i,
+      sev:'crit', icon:'🖥', title:t('tch.r17t'), body:t('tch.r17b') },
+    { re:/Out of video memory|OutOfVideoMemoryError|VRAM|failed to allocate.*(?:texture|buffer)/i,
+      sev:'crit', icon:'🎞', title:t('tch.r18t'), body:t('tch.r18b') },
+    { re:/Adding entity with duplicated UUID|Chunk file at .* is missing|failed to load chunk|ChunkHolder|Level chunk .* was not loaded|corrupted chunk/i,
+      sev:'warn', icon:'🗺', title:t('tch.r19t'), body:t('tch.r19b') },
+    { re:/zip END header not found|Invalid or corrupt jarfile|java\.util\.zip\.ZipException|EOFException.*\.jar|Unable to read jar/i,
+      sev:'crit', icon:'📦', title:t('tch.r20t'), body:t('tch.r20b') },
+    { re:/Failed to load config|ConfigLoadingException|ParsingException.*toml|is not correct\. Correcting|com\.electronwill/i,
+      sev:'warn', icon:'⚙', title:t('tch.r21t'), body:t('tch.r21b') },
+    { re:/Shader compilation failed|Failed to load shaderpack|shaders?\/.*\.(?:vsh|fsh)|IrisRenderingPipeline|net\.coderbot|net\.irisshaders/i,
+      sev:'warn', icon:'🌘', title:t('tch.r22t'), body:t('tch.r22b') },
+    { re:/com\.simibubi\.create.*(?:NoSuchMethodError|NoClassDefFoundError)|NoSuchMethodError.*create|createaddition|createdieselgenerators.*Exception/i,
+      sev:'warn', icon:'🔧', title:t('tch.r23t'), body:t('tch.r23b') },
+
     { re:/OutOfMemoryError|Could not reserve enough space|requested \d+ bytes for|GC overhead limit exceeded|Java heap space|unable to create new native thread|Metaspace/i, sev:'crit', icon:'🧠', title:t('tch.r1t'),
       body:t('tch.r1b') },
     { re:/Mixin apply failed|Mixin transformation|InvalidMixinException|InjectionError|CrashReportExtender|mixin\.injection|MixinApplyError/i, sev:'crit', icon:'🧩', title:t('tch.r2t'),
@@ -477,7 +515,10 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
 
   function analyze(text){
     const env=detectEnv(text);
-    const found=getRules().filter(r=>r.re.test(text));
+    /* Правило может требовать двух признаков сразу: OptiFine сам по себе не
+       беда, а вот вместе с Sodium/Iris — почти всегда конфликт. */
+    const found=getRules().filter(r=>r.re.test(text) && (!r.also || r.also.test(text)));
+    const exitInfo=exitHint(text);
     const culprit=findCulprit(text);
     const box=$('#crashResult');
     const lines=text.split('\n').length, kb=(text.length/1024).toFixed(0);
@@ -494,6 +535,7 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
     ec(I18N.t('tch.envJava'), env.java||'—', env.java && /^(?:1\.8|8|9|10|11|21|22)/.test(env.java)?'warn':(env.java?'good':'dim'));
     ec(I18N.t('tch.envMem'), env.mem||'—', env.mem?'':'dim');
     if(env.os) ec(I18N.t('tch.envOs'), env.os, 'dim');
+    if(exitInfo) ec(I18N.t('tch.envExit'), exitInfo.code, 'warn');
 
     let causeHtml='';
     if(env.cause||env.desc){
@@ -504,6 +546,12 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
         </div></div>`;
     } else if(culprit){
       causeHtml=`<div class="diag info"><div class="di">🧷</div><div><h4>${I18N.t('tch.likelySource')}</h4><div class="culprit">⚠ ${I18N.t('tch.likelyModIssue')} <b>${esc(culprit.name)}</b></div></div></div>`;
+    }
+
+    if(exitInfo){
+      causeHtml += `<div class="diag warn"><div class="di">🏁</div><div>` +
+        `<h4>${I18N.t('tch.exitTitle').replace('{c}', exitInfo.code)}</h4>` +
+        `<p>${exitInfo.text}</p></div></div>`;
     }
 
     const seen=new Set();
