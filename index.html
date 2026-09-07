@@ -5,9 +5,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
   <meta name="color-scheme" content="dark" />
   <meta name="theme-color" content="#04070b" />
-  <meta name="description" content="Frostborne Deadlands — хардкорная сборка Minecraft 1.20.1: ледяной зомби-апокалипсис, вечная ядерная зима, реализм выживания, кастомные шейдеры и 197 модов." />
+  <meta name="description" content="Frostborne Deadlands — хардкорная сборка Minecraft 1.20.1: ледяной зомби-апокалипсис, вечная ядерная зима, реализм выживания, кастомные шейдеры и 200 модов." />
   <meta property="og:title" content="Frostborne Deadlands — ледяной зомби-апокалипсис" />
-  <meta property="og:description" content="Survive the endless winter. Хардкорное выживание в замёрзшем мёртвом мире. Minecraft 1.20.1 · Forge 47.4.20 · 197 модов." />
+  <meta property="og:description" content="Survive the endless winter. Хардкорное выживание в замёрзшем мёртвом мире. Minecraft 1.20.1 · Forge 47.4.20 · 200 модов." />
   <meta property="og:type" content="website" />
   <meta property="og:image" content="assets/images/og-cover.jpg" />
   <meta property="og:image:width" content="1200" />
@@ -18,7 +18,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Oswald:wght@500;600;700&family=Rajdhani:wght@600;700&family=Share+Tech+Mono&display=swap&subset=cyrillic,cyrillic-ext,latin,latin-ext" rel="stylesheet">
-  <link rel="stylesheet" href="extras.css?v=2.30">
+  <link rel="stylesheet" href="extras.css?v=2.35">
   <style>
   /* ============================================================
      FROSTBORNE DEADLANDS — Релизный лендинг v2.0
@@ -87,6 +87,11 @@
   ::selection{background:rgba(124,206,255,.3); color:#fff}
 
   .container{width:min(var(--max), calc(100% - 36px)); margin:0 auto; position:relative; z-index:2}
+  /* ⚠ Шапке — свой предел. Общие 1240px рассчитаны на колонку текста, а в
+     шапке помимо логотипа стоят девять ссылок, кнопка, колокол, язык и
+     соцсети: на украинском это 1454px. В 1240 они не влезали никогда, и
+     хвост уезжал за край — незаметно, потому что body прячет переполнение. */
+  header .container{width:min(1480px, calc(100% - 36px))}
   .skip-link{position:absolute; top:-100px; left:16px; z-index:3000; background:var(--ice); color:#001018; padding:10px 14px; border-radius:12px; font-weight:800}
   .skip-link:focus{top:12px}
 
@@ -167,7 +172,10 @@
   header.scrolled{background:rgba(4,7,11,.9); box-shadow:0 10px 40px rgba(0,0,0,.4)}
   .nav{height:100%; display:flex; align-items:center; justify-content:space-between; gap:16px}
   .logo{display:flex; align-items:center; gap:12px; font-family:Oswald,sans-serif; font-weight:700; letter-spacing:.06em; text-transform:uppercase; user-select:none; cursor:pointer; white-space:nowrap}
-  .logo-mark{width:44px; height:44px; border-radius:13px; display:grid; place-items:center; background:linear-gradient(135deg, rgba(124,206,255,.18), rgba(58,134,255,.08)); border:1px solid rgba(124,206,255,.26); position:relative; overflow:hidden}
+  .lg-tail{font-style:normal}
+  /* ⚠ flex:none — знак не сжимается никогда. Без этого на десктопе, где
+     .nav-actions занимает 1199px, space-between ужимал иконку до 2px. */
+  .logo-mark{flex:none; width:44px; height:44px; border-radius:13px; display:grid; place-items:center; background:linear-gradient(135deg, rgba(124,206,255,.18), rgba(58,134,255,.08)); border:1px solid rgba(124,206,255,.26); position:relative; overflow:hidden}
   .logo-mark::after{content:""; position:absolute; inset:0; background:linear-gradient(120deg, transparent, rgba(255,255,255,.18), transparent); transform:translateX(-120%); transition:transform .5s ease}
   .logo:hover .logo-mark::after{transform:translateX(120%)}
   .logo-mark svg{width:22px; height:22px; fill:var(--ice); filter:drop-shadow(0 0 6px rgba(124,206,255,.5))}
@@ -334,7 +342,11 @@
 
   /* ---------- shaders compare ---------- */
   .compare-wrap{max-width:1040px; margin:0 auto}
-  .compare{position:relative; aspect-ratio:16/9; min-height:340px; border-radius:var(--radius); overflow:hidden; border:1px solid rgba(124,206,255,.2); user-select:none; box-shadow:var(--shadow); touch-action:none}
+  /* ⚠ width:100% обязателен. При aspect-ratio + min-height и БЕЗ явной ширины
+     браузер выводит ширину из высоты: на телефоне min-height 340px давал
+     340/9*16 = 604px при экране 375px — то самое «растягивается на полтора
+     экрана». Теперь ширину задаёт родитель, а min-height только тянет вверх. */
+  .compare{position:relative; width:100%; aspect-ratio:16/9; min-height:340px; border-radius:var(--radius); overflow:hidden; border:1px solid rgba(124,206,255,.2); user-select:none; box-shadow:var(--shadow); touch-action:none}
   .compare-layer{position:absolute; inset:0; background-size:cover; background-position:center; pointer-events:none}
   .compare-before{background-color:#0c0f16}
   .compare-before.ld{background-image:url('assets/images/shader-before.webp')}
@@ -345,6 +357,8 @@
   .compare-badge{position:absolute; top:16px; z-index:4; padding:8px 13px; border-radius:999px; font-size:.7rem; font-weight:800; letter-spacing:.06em; text-transform:uppercase; background:rgba(4,7,11,.78); border:1px solid var(--line-2); backdrop-filter:blur(10px)}
   .badge-left{left:16px; color:var(--muted)} .badge-right{right:16px; color:var(--ice)}
   .shader-tiers{display:grid; grid-template-columns:repeat(5,1fr); gap:10px; margin-top:24px}
+  /* Оговорка под таблицей: цифры пересчитаны, а не заново замерены. */
+  .tier-calc{margin-top:14px; font-size:.82rem; color:var(--muted); max-width:72ch}
   .tier{background:var(--panel); border:1px solid var(--line-2); border-radius:14px; padding:16px 12px; text-align:center; transition:transform .2s var(--ease), border-color .2s ease}
   .tier:hover{transform:translateY(-3px); border-color:rgba(124,206,255,.25)}
   .tier .tn{font-family:Oswald,sans-serif; font-weight:700; text-transform:uppercase; letter-spacing:.06em; font-size:.96rem; color:#fff}
@@ -520,6 +534,17 @@
     .shader-tiers{grid-template-columns:repeat(3,1fr)}
     .lore-grid{grid-template-columns:repeat(3,1fr)}
   }
+  /* ⚠ Порог взят из замера, а не на глаз. Полная навигация вместе с
+     логотипом занимает 1497px (en) … 1629px (uk); со снятым дублем
+     «Скачать» — около 1537px. Порог 820px означал, что на 1280, 1366,
+     1440 и 1536 шапка молча уезжала за правый край: её прятал
+     overflow-x:hidden на body, поэтому дефект не бросался в глаза.
+     Ниже порога работает бургер, кнопка скачивания остаётся на месте. */
+  @media (max-width:1520px){
+    .nav-links,.social-links{display:none}
+    .menu-btn{display:inline-grid; place-items:center}
+  }
+
   @media (max-width:820px){
     :root{--header-h:64px}
     section{padding:68px 0}
@@ -540,7 +565,17 @@
   @media (max-width:680px){
     .nav-cta{display:none}
     .nav-actions{gap:9px}
-    .brand-text small{display:none}
+    /* ⚠ Здесь стояло .brand-text small — селектор из Эфира, на главной такого
+       элемента нет вовсе, и правило било в пустоту. Убираем то, что есть:
+       хвост « // DEADLANDS». «FROSTBORNE» узнаётся и без него. */
+    .lg-tail{display:none}
+    /* ⚠ min-width:0 только здесь. В базовом правиле он позволял логотипу
+       схлопнуться в ноль на десктопе; на телефоне же это нужная страховка —
+       без неё заготовленные overflow/ellipsis у .logo-text не срабатывают. */
+    .logo, .logo-text{min-width:0}
+    .logo-mark{width:38px; height:38px; border-radius:11px}
+    .logo-mark svg{width:19px; height:19px}
+    .logo{gap:9px}
   }
   @media (max-width:420px){
     .nb-btn{width:34px;height:34px}
@@ -582,7 +617,7 @@
         <div class="logo-mark" aria-hidden="true">
           <svg viewBox="0 0 24 24"><path d="M12 2 4 13h6l-2 9 12-14h-7l-1-6Z"></path></svg>
         </div>
-        <div class="logo-text">FROSTBORNE // <span>DEADLANDS</span></div>
+        <div class="logo-text">FROSTBORNE<i class="lg-tail"> // <span>DEADLANDS</span></i></div>
       </div>
       <div class="nav-actions">
         <nav class="nav-links" aria-label="Основная навигация">
@@ -594,7 +629,6 @@
           <a href="aether.html" class="nav-link" data-i18n="nav.aether">Эфир</a>
           <a href="feed.html" class="nav-link" data-i18n="nav.feed">Лента</a>
           <a href="rules.html" class="nav-link" data-i18n="nav.rules">Устав</a>
-          <a href="#download" class="nav-link" data-i18n="nav.download">Скачать</a>
         </nav>
         <a href="#download" class="nav-cta" id="nav-cta" aria-label="Скачать сборку">
           <span aria-hidden="true">💾</span><span data-i18n="nav.download">Скачать</span><b data-ver="pack">R1.1</b>
@@ -674,7 +708,7 @@
           <div class="hero-meta">
             <span class="meta-chip">MINECRAFT <b>1.20.1</b></span>
             <span class="meta-chip">FORGE <b>47.4.20</b></span>
-            <span class="meta-chip"><b>197</b> <span data-i18n="hero.mc">МОДОВ</span></span>
+            <span class="meta-chip"><b>200</b> <span data-i18n="hero.mc">МОДОВ</span></span>
             <span class="meta-chip">VERSION <b data-ver="pack">R1.1</b></span>
           </div>
         </div>
@@ -732,7 +766,7 @@
           <p class="reveal d2" data-i18n="about.body">Frostborne Deadlands — это хардкорная сборка о выживании в замёрзшем постъядерном мире. Холод убивает быстрее зомби. Еда гниёт. Топливо на вес золота. Каждое решение — между «рискнуть» и «замёрзнуть в темноте». Здесь нет лёгких побед, только цена, которую ты готов заплатить за ещё один день.</p>
           <div class="lore-grid">
             <div class="lore-stat reveal d1"><div class="n">−34°</div><div class="t" data-i18n="about.s1">Стартовый мороз</div></div>
-            <div class="lore-stat reveal d2"><div class="n">197</div><div class="t" data-i18n="about.s2">Модов в сборке</div></div>
+            <div class="lore-stat reveal d2"><div class="n">200</div><div class="t" data-i18n="about.s2">Модов в сборке</div></div>
             <div class="lore-stat reveal d3"><div class="n">100</div><div class="t" data-i18n="about.s3">Дней на видео</div></div>
           </div>
         </div>
@@ -769,12 +803,13 @@
             <div class="compare-badge badge-right" data-i18n="sh.after">Frostborne пресет</div>
           </div>
           <div class="shader-tiers">
-            <div class="tier"><div class="tn">Potato</div><div class="td" data-i18n="tier.potato">Слабые ПК / встройка</div><div class="fps">40–60 FPS</div></div>
-            <div class="tier"><div class="tn">Low</div><div class="td">GTX 1060 / RX 580</div><div class="fps">50–75 FPS</div></div>
-            <div class="tier"><div class="tn">Medium</div><div class="td">RTX 3060 / RX 6600</div><div class="fps">55–80 FPS</div></div>
-            <div class="tier"><div class="tn">High</div><div class="td">RTX 3070+ / RX 6800</div><div class="fps">60–90 FPS</div></div>
-            <div class="tier"><div class="tn">Extreme</div><div class="td" data-i18n="tier.extreme">RTX 4070+ / кино-кадры</div><div class="fps">60–80 FPS</div></div>
+            <div class="tier"><div class="tn">Potato</div><div class="td" data-i18n="tier.potato">Слабые ПК / встройка</div><div class="fps">50–75 FPS</div></div>
+            <div class="tier"><div class="tn">Low</div><div class="td">GTX 1060 / RX 580</div><div class="fps">62–94 FPS</div></div>
+            <div class="tier"><div class="tn">Medium</div><div class="td">RTX 3060 / RX 6600</div><div class="fps">69–100 FPS</div></div>
+            <div class="tier"><div class="tn">High</div><div class="td">RTX 3070+ / RX 6800</div><div class="fps">75–112 FPS</div></div>
+            <div class="tier"><div class="tn">Extreme</div><div class="td" data-i18n="tier.extreme">RTX 4070+ / кино-кадры</div><div class="fps">75–100 FPS</div></div>
           </div>
+          <p class="tier-calc" data-i18n="sh.fpsCalc">Числа пересчитаны от замеров R1.2 после исправления пресетов шейдера (+25%). Новых замеров пока нет — на практике может быть выше.</p>
         </div>
       </div>
     </section>
@@ -848,8 +883,8 @@
             <p class="dl-cta-text" data-i18n="dl.ctaText">Отдельная страница проведёт тебя через установку шаг за шагом: системные требования, выбор лаунчера, загрузка, настройка памяти и шейдеров. Ничего не сломается с первого раза.</p>
             <div class="dl-cta-meta">
               <div class="dl-cta-stat"><div class="v" data-ver="pack">R1.1</div><div class="l" data-i18n="dl.lVersion">Версия</div></div>
-              <div class="dl-cta-stat"><div class="v" data-i18n="dl.vSize">437 МБ</div><div class="l" data-i18n="dl.lSize">Размер</div></div>
-              <div class="dl-cta-stat"><div class="v">197</div><div class="l" data-i18n="dl.lMods">Модов</div></div>
+              <div class="dl-cta-stat"><div class="v" data-i18n="dl.vSize">426 МБ</div><div class="l" data-i18n="dl.lSize">Размер</div></div>
+              <div class="dl-cta-stat"><div class="v">200</div><div class="l" data-i18n="dl.lMods">Модов</div></div>
               <div class="dl-cta-stat"><div class="v" data-i18n="dl.vSteps">5 шагов</div><div class="l" data-i18n="dl.lInstall">Установка</div></div>
             </div>
             <a href="download.html" class="btn btn-ice dl-cta-btn" data-i18n="dl.openBtn">⬇ Открыть протокол установки →</a>
@@ -913,7 +948,7 @@
   <footer class="footer">
     <div class="container">
       <div class="footer-logo">FROSTBORNE <span>DEADLANDS</span></div>
-      <p>Хардкорная сборка Minecraft 1.20.1 · Forge 47.4.20 · 197 модов</p>
+      <p>Хардкорная сборка Minecraft 1.20.1 · Forge 47.4.20 · 200 модов</p>
       <p class="made">Created by Firilare · Frostborne Deadlands © 2026</p>
     </div>
   </footer>
@@ -956,15 +991,17 @@
     .nav-link.has-new::after{content:"";position:absolute;top:2px;right:-9px;width:6px;height:6px;
       border-radius:50%;background:var(--ice,#7cceff);box-shadow:0 0 8px rgba(124,206,255,.8)}
   </style>
-  <script src="version.js?v=2.30"></script>
-<script src="sfx.js?v=2.30"></script>
-  <script src="i18n.js?v=2.30"></script>
-  <script src="frostextras.js?v=2.30"></script>
-<script src="frostsearch.js?v=2.30"></script>
-  <script src="frostauth.js?v=2.30"></script>
-  <script src="frostfeed.js?v=2.30"></script>
-  <script src="frostnotify.js?v=2.30"></script>
-  <script src="firebase-config.js?v=2.30"></script>
+  <script src="version.js?v=2.35"></script>
+<script src="sfx.js?v=2.35"></script>
+  <script src="i18n.js?v=2.35"></script>
+  <script src="i18n-index.js?v=2.35"></script>
+  <script src="i18n-fd.js?v=2.35"></script>
+  <script src="frostextras.js?v=2.35"></script>
+<script src="frostsearch.js?v=2.35"></script>
+  <script src="frostauth.js?v=2.35"></script>
+  <script src="frostfeed.js?v=2.35"></script>
+  <script src="frostnotify.js?v=2.35"></script>
+  <script src="firebase-config.js?v=2.35"></script>
   <script>
   (function () {
     'use strict';
@@ -1030,7 +1067,43 @@
     ];
 
     const CHANGELOG = [
-      { v:'STATION OS 2.30', t:'Лента, сигналы и защита узла', open:true, items:[
+      { v:'STATION OS 2.35', t:'Принята сборка R1.2.1 «Живая зима»', open:true, items:[
+        'Вышел хотфикс R1.2.1 от 7 сентября. В Эфире — полный патчноут из шести блоков на всех шести языках: живая погода, барометр, разбор жалобы на руду, производительность, картинка и тихие поломки. Прошлые релизы ушли в архив, но остались доступны вкладками.',
+        'Ссылки на скачивание заменены: универсальный архив и инстанс для Prism теперь ведут на новые файлы. CurseForge остался по прежнему адресу — там уже обновлено.',
+        'Размер архива: 437 МБ → 426 МБ. Число модов: 197 → 200 — Distant Horizons и Snow! Real Magic убраны, но пришли новые. Цифру взял из собранного архива, а не из описания: в материале релиза стояло 203, в файле оказалось 200.',
+        'Таблицы FPS подняты на четверть — ровно настолько вернулось кадров после исправления пресетов шейдера. Под обеими таблицами теперь написано, что это пересчёт от прежних замеров, а не новый замер: обещать точность, которой у нас нет, нечестно.',
+        'Закреплённое объявление о релизе показывается заново и говорит уже про R1.2.1.'
+      ]},
+      { v:'STATION OS 2.34', t:'Свою неполадку можно закрыть самому', open:true, items:[
+        'Автор теперь закрывает и открывает свою неполадку в Костре сам — раньше это мог только смотритель, и записи висели открытыми, пока до них не дойдут руки. Право дано точечно, только на статус: переписать заголовок или текст задним числом нельзя, иначе обсуждение под ними теряло бы смысл.',
+        'Техно-доктор научился называть виновника краша поимённо. В него встроена карта из 237 пакетов, собранная прямо из 200 jar-файлов сборки, — теперь по стектрейсу видно точное имя мода, а не «похоже, какой-то мод».',
+        'Проверено на 32 настоящих крашлогах сборки: одиннадцать из них стали разбираться иначе. В трёх случаях прежний разбор обвинял не тот мод — Create вместо Starlight, Supplementaries вместо Amendments; ещё в четырёх виновник не назывался вовсе.',
+        'Появились три новых блока разбора: цепочка вызовов по модам, моды не из сборки и сверка версий. Если версии расходятся у нескольких модов сразу — узел не кричит о поломке, а спокойно говорит, что версия сборки не текущая.',
+        'Техотсек показывал сырой ключ вместо «МБ», когда память в логе указана в мегабайтах, и определял версию Forge как «.1». Оба места починены; заодно инструмент разделения словаря теперь знает про ключи, которые обязаны оставаться общими, и больше не растащит их обратно.'
+      ]},
+      { v:'STATION OS 2.33', t:'Узел перестал вылезать за экран', open:true, items:[
+        'Слайдер сравнения шейдеров на телефоне был шириной 604 точки при экране 375 — отсюда и «растягивается на полтора экрана». Причина оказалась не в картинке: у блока была задана пропорция и минимальная высота, но не ширина, и браузер выводил ширину из высоты. Теперь слайдер ровно по экрану.',
+        'Шапка главной не помещалась ни в телефон, ни в ноутбук. Полная навигация с логотипом занимает до 1629 точек, а контейнер шапки был ограничен 1240 — хвост просто уезжал за правый край на любом мониторе. Шапке дан свой простор, на узких экранах включается меню-бургер, а логотип на телефоне сокращается до «FROSTBORNE».',
+        'Переключатель языка на Ленте, в Уставе и в Личном деле не открывался вовсе: у него не было класса, на котором держится вся видимость меню. Кнопка нажималась, меню оставалось прозрачным. Теперь класс ставит сам переключатель — новые страницы на это уже не наступят.',
+        'Меню языка больше не уезжает за край: сторона раскрытия выбирается по месту, а не задана заранее. На узком экране оно вылезало на 124 точки — половина списка была за экраном.',
+        'Проверено замером на девяти страницах, шести языках и ширинах от 320 до 1920: горизонтальных переполнений не осталось нигде.'
+      ]},
+      { v:'STATION OS 2.32', t:'МОРОЗ-01 научился признавать незнание', open:true, items:[
+        'У МОРОЗ-01 появился запасной канал. Порядок жёсткий: сначала своя база на 21 тему, потом Кодекс, и только если молчат оба — вопрос можно переслать внешней языковой модели. Наоборот не будет: своё отвечает точно, чужое про сборку не знает ничего.',
+        'Наружу ничего не уходит без спроса. Согласие спрашивается один раз, отдельным окном, и в нём прямо написано, что уйдёт только текст вопроса — ни позывного, ни номера узла. Отказался — больше не спросят.',
+        'Ответ внешней модели помечен, чтобы его нельзя было спутать с ответом станции. Под вводом видно, включён канал или нет, и его можно отключить в одно нажатие.',
+        'В Уставе появилась строка про этот канал: станция обещала не отдавать данные на сторону, значит обязана сказать, когда это может произойти.',
+        'Протокол установки теперь помнит, где ты остановился: шаг, отметки чек-листа, лаунчер и выставленную память. Установка редко делается в один присест.',
+        'На последнем шаге появилась сводка — что за лаунчер, сколько памяти, какой профиль шейдеров, какая версия. К ней приложена шпаргалка «первые десять минут в игре» со ссылкой в Кодекс.'
+      ]},
+      { v:'STATION OS 2.31', t:'Узел стал легче', open:true, items:[
+        'Словарь переводов разделён по разделам. Раньше все 778 КБ приезжали на каждую страницу — вместе с ключами Кодекса, журнала и устава, которые ей не нужны. Теперь страница берёт только своё: главная грузит 131 КБ вместо 778, устав — 69, журнал — 196.',
+        'Переводы Кодекса в Эфире подтягиваются только при заходе к МОРОЗ-01 — до этого их никто не читает.',
+        'Ничего не изменилось внешне: все шесть языков работают как прежде, проверено на каждой странице.',
+        'Кодекс встречает тремя дверями вместо стены разделов: «я только начал», «ищу предмет», «иду к цели». Каждая ведёт туда, куда нужно, и раскрывает то, что свёрнуто.',
+        'Калькулятор ОЗУ стал «Настройкой»: кроме памяти и флагов он теперь показывает, что выставить в самой игре — облака, частицы, дистанцию существ, потолок кадров — и объясняет, зачем каждое.'
+      ]},
+      { v:'STATION OS 2.30', t:'Лента, сигналы и защита узла', items:[
         'У станции появилась лента событий — седьмой раздел. Рекорды выживания, новые чертежи, потери и объявления смотрителя собираются в одном месте, с фильтром по типам и архивом по месяцам.',
         'События заносятся сами: погиб — попал в ленту, выложил чертёж — попал, побил личный рекорд — попал. Рекорды считаются от десяти дней, иначе лента состояла бы из «выжил один день».',
         'Вернулся после отлучки — узел покажет сводку «пока тебя не было» и подсветит то, что появилось без тебя. Отметка о прочтении ставится, только если страницу действительно смотрят.',
@@ -1198,7 +1271,7 @@
         'Сайт наконец действительно говорит на шести языках. Раньше на любом языке, кроме русского, переводились только заголовки разделов, а всё содержимое оставалось русским.',
         'Причина оказалась не в отсутствии перевода: восемнадцать ключей были заведены ещё в версии 2.4 и всё это время лежали неиспользованными — разметка на них просто не ссылалась.',
         'Переведены девять карточек особенностей, обе таблицы системных требований, подписи галереи, лор-блок, тиры шейдеров, показатели телеметрии и подписи соцсетей.',
-        'Экран входа и блок скачивания, которые были русскими на всех языках, тоже закрыты — вместе с единицей размера, показывавшей «437 МБ» даже в английской версии.',
+        'Экран входа и блок скачивания, которые были русскими на всех языках, тоже закрыты — вместе с единицей размера, показывавшей «426 МБ» даже в английской версии.',
         'Проверено измерением: на английской и немецкой версии из семидесяти одного русского элемента остался один — кодовое имя релиза, а его переводить и не следует.'
       ]},
       { v:'STATION OS 2.8', t:'Кодекс: дерево прогрессии', open:false, items:[

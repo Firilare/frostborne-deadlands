@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Oswald:wght@400;500;600;700&family=Share+Tech+Mono&display=swap&subset=cyrillic,cyrillic-ext,latin,latin-ext" rel="stylesheet">
-<link rel="stylesheet" href="extras.css?v=2.30">
+<link rel="stylesheet" href="extras.css?v=2.35">
 <style>
 :root{
   --bg:#04070b;--bg-2:#07121f;--ice:#7cceff;--ice-bright:#a8e0ff;--steel:#3a86ff;
@@ -116,6 +116,26 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
 .why-body p{margin-bottom:8px}
 
 /* ===== CRASH ANALYZER ===== */
+/* настройки внутри игры: то, что человек пойдёт выставлять руками */
+.ingame{margin-top:22px;border:1px solid var(--line);border-radius:16px;
+  background:rgba(10,20,33,.5);overflow:hidden}
+.ingame-h{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap;
+  padding:14px 18px;border-bottom:1px solid var(--line)}
+.ingame-h b{font-family:'Oswald',sans-serif;font-weight:600;font-size:1rem;
+  text-transform:uppercase;letter-spacing:.02em;color:#fff}
+.ingame-h span{font-family:'Share Tech Mono',monospace;font-size:.58rem;
+  letter-spacing:.09em;text-transform:uppercase;color:var(--muted-2)}
+.ig-row{display:grid;grid-template-columns:minmax(0,1.1fr) auto minmax(0,1.4fr);
+  gap:12px;align-items:baseline;padding:11px 18px;border-bottom:1px solid rgba(124,206,255,.07)}
+.ig-row:last-child{border-bottom:none}
+.ig-k{color:var(--text);font-size:.9rem}
+.ig-v{font-family:'Share Tech Mono',monospace;font-size:.78rem;color:var(--ice-bright);white-space:nowrap}
+.ig-why{color:var(--muted);font-size:.82rem;line-height:1.45}
+@media (max-width:640px){
+  .ig-row{grid-template-columns:1fr auto;gap:6px 10px}
+  .ig-why{grid-column:1/-1}
+}
+
 .crash-wrap{max-width:920px;margin:0 auto}
 .dropzone{padding:44px 30px;border:2px dashed rgba(124,206,255,.3);border-radius:var(--radius-lg);text-align:center;cursor:pointer;transition:.25s;background:rgba(124,206,255,.03)}
 .dropzone:hover,.dropzone.drag{border-color:var(--ice);background:rgba(124,206,255,.08)}
@@ -150,6 +170,16 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
 .diag p{font-size:.9rem;color:var(--text);line-height:1.55}
 .diag code{font-family:'Share Tech Mono',monospace;font-size:.82em;background:rgba(2,8,16,.6);padding:2px 7px;border-radius:5px;color:var(--ice-bright);word-break:break-all}
 .diag .culprit{margin-top:8px;font-family:'Share Tech Mono',monospace;font-size:.74rem;color:var(--warn)}
+/* цепочка модов из стектрейса и сверка версий со сборкой */
+.chain{margin-top:10px;display:flex;flex-wrap:wrap;gap:6px}
+.chain .m{font-family:'Share Tech Mono',monospace;font-size:.66rem;letter-spacing:.04em;
+  padding:4px 9px;border-radius:999px;border:1px solid var(--line-2);
+  background:rgba(124,206,255,.06);color:var(--ice-bright)}
+.chain .m.first{border-color:rgba(251,191,36,.45);background:rgba(251,191,36,.1);color:var(--warn)}
+.chain .m.alien{border-color:rgba(239,68,68,.4);background:rgba(239,68,68,.08);color:#fca5a5}
+.vercmp{margin-top:9px;font-size:.82rem;color:var(--text)}
+.vercmp code{font-family:'Share Tech Mono',monospace;color:var(--ice-bright)}
+.vercmp .bad{color:var(--warn)}
 .crash-meta{font-family:'Share Tech Mono',monospace;font-size:.72rem;color:var(--muted);text-align:center;margin-top:14px}
 .crash-flash{animation:flashRed .5s 2}
 @keyframes flashRed{0%,100%{background:var(--bg)}50%{background:rgba(239,68,68,.06)}}
@@ -245,6 +275,14 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
         <div class="rec-line"><span class="k" data-i18n="tch.recShaderLbl">🌑 Профиль шейдеров</span><span class="v" id="recShader">Medium / High</span></div>
         <div class="rec-line"><span class="k" data-i18n="tch.recFpsLbl">📈 Ожидаемый FPS</span><span class="v" id="recFps">60–90</span></div>
         <div class="alloc-note" id="allocNote"></div>
+
+        <div class="ingame">
+          <div class="ingame-h">
+            <b data-i18n="tch.igTitle">Что выставить в игре</b>
+            <span data-i18n="tch.igSub">настройки → графика</span>
+          </div>
+          <div id="igRows"></div>
+        </div>
         <div class="ram-guard" data-i18n="tch.ramWarn">Не отдавай Minecraft почти всю память: системе и драйверам нужно оставить минимум 2–3 ГБ. Иначе начнётся своп, и фризы будут хуже, чем при нехватке ОЗУ.</div>
         <div class="launcher-tabs" id="launcherTabs">
           <button class="active" data-launcher="prism">Prism</button>
@@ -304,11 +342,13 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
   </div>
 </footer>
 
-<script src="version.js?v=2.30"></script>
-<script src="sfx.js?v=2.30"></script>
-<script src="i18n.js?v=2.30"></script>
-<script src="frostextras.js?v=2.30"></script>
-<script src="frostsearch.js?v=2.30"></script>
+<script src="version.js?v=2.35"></script>
+<script src="sfx.js?v=2.35"></script>
+<script src="i18n.js?v=2.35"></script>
+<script src="i18n-tch.js?v=2.35"></script>
+<script src="frostextras.js?v=2.35"></script>
+<script src="frostsearch.js?v=2.35"></script>
+<script src="techsig.js?v=2.35"></script>
 <script>
 (function(){
   'use strict';
@@ -339,8 +379,34 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
   function flags(mb){
     return `-Xms${mb}M -Xmx${mb}M -XX:+UseG1GC -XX:+ParallelRefProcEnabled -XX:MaxGCPauseMillis=200 -XX:+UnlockExperimentalVMOptions -XX:+DisableExplicitGC -XX:+AlwaysPreTouch -XX:G1NewSizePercent=30 -XX:G1MaxNewSizePercent=40 -XX:G1HeapRegionSize=8M -XX:G1ReservePercent=20 -XX:G1HeapWastePercent=5 -XX:G1MixedGCCountTarget=4 -XX:InitiatingHeapOccupancyPercent=15 -XX:G1MixedGCLiveThresholdPercent=90 -XX:G1RSetUpdatingPauseTimePercent=5 -XX:SurvivorRatio=32 -XX:+PerfDisableSharedMem -XX:MaxTenuringThreshold=1 -Dusing.aikars.flags=https://mcflags.emc.gs -Daikars.new.flags=true`;
   }
+  /* Настройки внутри игры считаются от того же железа и профиля, что и память.
+     Человек не должен гадать, что значит «Баланс» — он видит конкретные
+     значения и причину каждого. */
+  function paintInGame(){
+    var box=document.getElementById('igRows'); if(!box) return;
+    var weak = R.preset==='potato' || R.total<=8 || R.gpu==='weak';
+    var strong = R.preset==='quality' && R.total>=16 && R.gpu==='strong';
+    var T=I18N.t.bind(I18N);
+
+    var rows=[
+      [T('tch.igClouds'),    weak?T('tch.igOff'):(strong?T('tch.igFancy'):T('tch.igFast')), T('tch.igCloudsWhy')],
+      [T('tch.igParticles'), weak?T('tch.igMinimal'):(strong?T('tch.igAll'):T('tch.igDecreased')), T('tch.igParticlesWhy')],
+      [T('tch.igSmooth'),    weak?T('tch.igOff'):T('tch.igOn'), T('tch.igSmoothWhy')],
+      [T('tch.igMipmap'),    weak?'0':(strong?'4':'2'), T('tch.igMipmapWhy')],
+      [T('tch.igEntity'),    weak?'50%':(strong?'100%':'75%'), T('tch.igEntityWhy')],
+      [T('tch.igVsync'),     T('tch.igOff'), T('tch.igVsyncWhy')],
+      [T('tch.igFps'),       weak?'60':(strong?T('tch.igUnlimited'):'120'), T('tch.igFpsWhy')]
+    ];
+    box.innerHTML = rows.map(function(r){
+      return '<div class="ig-row"><span class="ig-k">'+esc(r[0])+'</span>'+
+        '<span class="ig-v">'+esc(r[1])+'</span>'+
+        '<span class="ig-why">'+esc(r[2])+'</span></div>';
+    }).join('');
+  }
+
   function render(){
     const a=calc(), mb=a*1024;
+    paintInGame();
     $('#ramTotalVal').textContent=R.total; $('#coresVal').textContent=R.cores;
     const av=$('#allocVal'); av.textContent=a; av.className='v'+(a<=4?' warn':a>=10?' good':'');
     $('#allocMbCard').textContent=mb;
@@ -413,11 +479,103 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
       [/ferritecore|modernfix|memoryleakfix/i,I18N.t('tch.sigOptimizer')+' (FerriteCore/ModernFix)'],
     ];
   }
+  /* Кадры стектрейса по порядку: первый — тот, где всё сломалось. */
+  function stackFrames(text){
+    return [...text.matchAll(/\bat\s+([a-z0-9_]+(?:\.[a-z0-9_]+){2,})/gi)].map(m=>m[1]).slice(0,600);
+  }
+
+  /* Мод по имени пакета. Сперва спрашиваем карту сборки — она собрана из
+     самих jar-файлов и знает все 200 модов поимённо; общие сигнатуры
+     остаются запасным вариантом для чужих сборок.
+     ⚠ Ищем самое ДЛИННОЕ совпадение: `com.simibubi.create.foundation`
+     должен опознаться как Create, а не по случайному короткому корню. */
+  function modOfFrame(fr){
+    const PKG = (window.FROST_MODSIG && FROST_MODSIG.PKG) || null;
+    if(PKG){
+      let best=null;
+      for(const p in PKG){
+        if((fr===p || fr.indexOf(p+'.')===0) && (!best || p.length>best.length)) best=p;
+      }
+      if(best) return {name:PKG[best], pkg:best, known:true};
+    }
+    for(const [re,name] of getModsig()){ if(re.test(fr)) return {name, known:false}; }
+    return null;
+  }
+
   function findCulprit(text){
-    const frames=[...text.matchAll(/\bat\s+([a-z0-9_]+(?:\.[a-z0-9_]+){2,})/gi)].map(m=>m[1]).slice(0,500);
-    for(const fr of frames){ for(const [re,name] of getModsig()){ if(re.test(fr)) return {name, frame:fr}; } }
+    for(const fr of stackFrames(text)){
+      const m=modOfFrame(fr);
+      if(m) return {name:m.name, frame:fr, known:m.known};
+    }
     const mf=text.match(/Mod File:\s*(.+)/i); if(mf) return {name:mf[1].trim().split(/[\/\\]/).pop()};
     return null;
+  }
+
+  /* Цепочка модов в стектрейсе по порядку появления. Один виновник — это
+     догадка; цепочка показывает, кто кого звал, и часто объясняет конфликт
+     («Create упал внутри вызова из аддона»). */
+  function modChain(text){
+    const seen=[], out=[];
+    for(const fr of stackFrames(text)){
+      const m=modOfFrame(fr);
+      if(!m || seen.indexOf(m.name)>=0) continue;
+      seen.push(m.name);
+      out.push(m);
+      if(out.length>=8) break;
+    }
+    return out;
+  }
+
+  /* Список модов из лога. Разбираем один раз — им пользуются и поиск чужих
+     модов, и сверка версий.
+     ⚠ Формат проверен на настоящих crash-report сборки:
+       `файл.jar | Название | modid | версия | DONE | Manifest`
+     то есть идентификатор ТРЕТИЙ по счёту, а не первый. Плюс поддержан
+     формат latest.log («- modid 1.2.3»), где список печатается иначе. */
+  const SKIP_IDS = {minecraft:1, forge:1, fml:1, mcp:1, javafml:1, lowcodefml:1, mixin:1};
+  function modsInLog(text){
+    const out={};
+    for(const m of text.matchAll(/^[ \t]*\S+\.jar\s*\|([^|]*)\|\s*([a-z][a-z0-9_\-]{1,40})\s*\|\s*([^|]+?)\s*\|/gmi)){
+      const id=m[2].toLowerCase();
+      if(SKIP_IDS[id]) continue;
+      out[id]={id:id, name:m[1].trim(), ver:m[3].trim()};
+    }
+    if(!Object.keys(out).length){
+      for(const m of text.matchAll(/^[ \t]*[-*]\s+([a-z][a-z0-9_\-]{1,40})\s+([\w.+\-]+)\s*$/gmi)){
+        const id=m[1].toLowerCase();
+        if(SKIP_IDS[id]) continue;
+        out[id]={id:id, name:'', ver:m[2]};
+      }
+    }
+    return out;
+  }
+
+  /* Моды в логе, которых нет в нашей сборке. Самая частая причина
+     «у меня крашится, а у всех работает» — доставленный сверху мод.
+     ⚠ Считаем только когда список действительно разобран: пустой разбор
+     не должен превращаться в «у тебя нет ни одного нашего мода». */
+  function alienMods(text){
+    const IDS=(window.FROST_MODSIG && FROST_MODSIG.IDS)||null;
+    if(!IDS) return [];
+    const mods=modsInLog(text);
+    const ids=Object.keys(mods);
+    if(ids.length<20) return [];          // список не найден или обрезан
+    return ids.filter(id=>!IDS[id]).slice(0,12);
+  }
+
+  /* Версии модов в логе против версий сборки. Расхождение объясняет краш
+     точнее любого правила: человек подменил файл. */
+  function versionMismatch(text){
+    const VER=(window.FROST_MODSIG && FROST_MODSIG.VER)||null;
+    const IDS=(window.FROST_MODSIG && FROST_MODSIG.IDS)||null;
+    if(!VER||!IDS) return [];
+    const mods=modsInLog(text), out=[];
+    for(const id in mods){
+      if(!VER[id] || !IDS[id]) continue;
+      if(VER[id]!==mods[id].ver) out.push({name:IDS[id], want:VER[id], got:mods[id].ver});
+      if(out.length>=8) break;
+    }
+    return out;
   }
   function pick(re,text,g=1){ const m=text.match(re); return m?m[g]:null; }
   function detectEnv(t){
@@ -428,10 +586,24 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
     else if(/org\.quiltmc|quilt/i.test(t)) env.loader='Quilt';
     else if(/minecraftforge|\bFML\b|forge/i.test(t)) env.loader='Forge';
     else env.loader=null;
-    env.loaderVer = pick(/Forge(?:\sversion)?:?\s*([\d.]+)/i,t) || pick(/Fabric Loader[:\s]+([\d.]+)/i,t) || pick(/neoforge[:\s]+([\d.]+)/i,t);
+    /* ⚠ Сначала точная строка отчёта, и только потом свободный поиск.
+       Раньше первым шёл `Forge...([\d.]+)`, и он цеплялся за имя файла вроде
+       `starlight-1.1.2+forge.1cda73c.jar` — версия выходила «.1». */
+    env.loaderVer = pick(/Forge:\s*net\.minecraftforge:([\d.]+)/i,t)
+      || pick(/forge-1\.\d+\.\d+-([\d.]+)-universal/i,t)
+      || pick(/Fabric Loader[:\s]+([\d.]+)/i,t)
+      || pick(/neoforge[:\s]+([\d.]+)/i,t)
+      || pick(/Forge\s+version:?\s*([\d.]+)/i,t);
     env.java = pick(/Java Version:\s*([\w.\-+]+)/i,t) || pick(/java\.version[",\s:]+([\w.\-+]+)/i,t) || pick(/JRE version:[^(]*\(([\d._]+)/i,t);
     let xnum = pick(/-Xmx(\d+)([gGmM])/,t), xunit = pick(/-Xmx\d+([gGmM])/,t);
-    if(xnum) env.mem = xnum+' '+(/g/i.test(xunit||'')?I18N.t('dlp.gb'):I18N.t('dlp.mb'));
+    /* ⚠ `dlp.gb` вынесен в ядро словаря, а `dlp.mb` остался в части
+       download — на этой странице её нет, и вместо «МБ» показывался сырой
+       ключ. Пока ключ не переехал в ядро, держим запасной вариант. */
+    if(xnum){
+      var unit = /g/i.test(xunit||'') ? I18N.t('dlp.gb') : I18N.t('dlp.mb');
+      if(unit==='dlp.mb') unit='MB';
+      env.mem = xnum+' '+unit;
+    }
     env.os = pick(/Operating System:\s*([^\n]+)/i,t) || pick(/os\.name[",\s:]+([^\n",]+)/i,t);
     env.desc = pick(/Description:\s*([^\n]+)/i,t);
     const causes=[...t.matchAll(/Caused by:\s*([^\n]+)/gi)].map(m=>m[1].trim());
@@ -520,6 +692,9 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
     const found=getRules().filter(r=>r.re.test(text) && (!r.also || r.also.test(text)));
     const exitInfo=exitHint(text);
     const culprit=findCulprit(text);
+    const chain=modChain(text);
+    const alien=alienMods(text);
+    const vmis=versionMismatch(text);
     const box=$('#crashResult');
     const lines=text.split('\n').length, kb=(text.length/1024).toFixed(0);
 
@@ -542,7 +717,7 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
       causeHtml=`<div class="diag info"><div class="di">📋</div><div><h4>${I18N.t('tch.whatHappened')}</h4>
         ${env.desc?`<p><b>${I18N.t('tch.descLbl')}</b> <code>${esc(env.desc)}</code></p>`:''}
         ${env.cause?`<p style="margin-top:6px"><b>${I18N.t('tch.causeLbl')}</b> <code>${esc(env.cause.slice(0,200))}</code></p>`:''}
-        ${culprit?`<div class="culprit">⚠ ${I18N.t('tch.culpritLbl')} <b>${esc(culprit.name)}</b>${culprit.frame?` &nbsp;<span style="color:var(--muted-2)">(${esc(culprit.frame.slice(0,60))})</span>`:''}</div>`:''}
+        ${culprit?`<div class="culprit">⚠ ${I18N.t('tch.culpritLbl')} <b>${esc(culprit.name)}</b>${culprit.known?` <span style="color:var(--good)">${esc(I18N.t('tch.fromPack'))}</span>`:''}${culprit.frame?` &nbsp;<span style="color:var(--muted-2)">(${esc(culprit.frame.slice(0,60))})</span>`:''}</div>`:''}
         </div></div>`;
     } else if(culprit){
       causeHtml=`<div class="diag info"><div class="di">🧷</div><div><h4>${I18N.t('tch.likelySource')}</h4><div class="culprit">⚠ ${I18N.t('tch.likelyModIssue')} <b>${esc(culprit.name)}</b></div></div></div>`;
@@ -552,6 +727,41 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
       causeHtml += `<div class="diag warn"><div class="di">🏁</div><div>` +
         `<h4>${I18N.t('tch.exitTitle').replace('{c}', exitInfo.code)}</h4>` +
         `<p>${exitInfo.text}</p></div></div>`;
+    }
+
+    /* Цепочка вызовов по модам. Одно имя — догадка; цепочка показывает, кто
+       кого звал, и часто объясняет конфликт лучше любого правила. */
+    if(chain.length>1){
+      causeHtml += `<div class="diag info"><div class="di">🔗</div><div>` +
+        `<h4>${I18N.t('tch.chainTitle')}</h4><p>${I18N.t('tch.chainBody')}</p>` +
+        `<div class="chain">` + chain.map((m,i)=>
+          `<span class="m${i===0?' first':''}">${esc(m.name)}</span>`).join('') +
+        `</div></div></div>`;
+    }
+
+    /* Мод, которого нет в сборке. Самая частая причина «у меня падает, а у
+       всех работает» — добавленный сверху мод. Утверждать, что виноват он,
+       нельзя, поэтому формулировка осторожная. */
+    if(alien.length){
+      causeHtml += `<div class="diag warn"><div class="di">🧩</div><div>` +
+        `<h4>${I18N.t('tch.alienTitle')}</h4><p>${I18N.t('tch.alienBody')}</p>` +
+        `<div class="chain">` + alien.map(id=>
+          `<span class="m alien">${esc(id)}</span>`).join('') + `</div></div></div>`;
+    }
+
+    /* Версия мода в логе против версии в сборке. Расхождение объясняет краш
+       точнее правил: человек подменил файл или поставил чужой архив. */
+    if(vmis.length){
+      /* Одна-две расхождения — подменённый файл, и это стоит показать
+         поимённо. Много сразу — просто другая версия сборки, и список
+         превратился бы в простыню, выдающую обновление за поломку. */
+      const many = vmis.length > 3;
+      causeHtml += `<div class="diag ${many?'info':'warn'}"><div class="di">🔀</div><div>` +
+        `<h4>${I18N.t(many?'tch.verPackTitle':'tch.verTitle')}</h4>` +
+        `<p>${I18N.t(many?'tch.verPackBody':'tch.verBody')}</p>` +
+        (many ? '' : vmis.map(v=>`<div class="vercmp">${esc(v.name)}: ` +
+          `<code class="bad">${esc(v.got)}</code> → <code>${esc(v.want)}</code></div>`).join('')) +
+        `</div></div>`;
     }
 
     const seen=new Set();

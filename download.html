@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Oswald:wght@400;500;600;700&family=Share+Tech+Mono&display=swap&subset=cyrillic,cyrillic-ext,latin,latin-ext" rel="stylesheet">
-<link rel="stylesheet" href="extras.css?v=2.30">
+<link rel="stylesheet" href="extras.css?v=2.35">
 <style>
 :root{
   --bg:#04070b;--bg-2:#07121f;--ice:#7cceff;--ice-bright:#a8e0ff;--steel:#3a86ff;
@@ -83,6 +83,33 @@ header.scrolled{background:rgba(4,7,11,.9);border-bottom-color:var(--line)}
 .step-head .sh-sub{font-family:'Share Tech Mono',monospace;font-size:.68rem;letter-spacing:.08em;color:var(--ice);text-transform:uppercase;margin-top:4px}
 .step-content{padding:28px 30px}
 .step-content p.lead{color:var(--text);margin-bottom:20px;font-size:.98rem}
+
+/* сводка установки и первые шаги в игре */
+.summary-box{margin:22px 0;border:1px solid rgba(124,206,255,.25);border-radius:16px;
+  background:rgba(124,206,255,.05);overflow:hidden}
+.sb-h{padding:13px 18px;border-bottom:1px solid rgba(124,206,255,.15);
+  font-family:'Share Tech Mono',monospace;font-size:.62rem;letter-spacing:.11em;
+  text-transform:uppercase;color:var(--ice)}
+.sb-row{display:flex;justify-content:space-between;gap:14px;padding:10px 18px;
+  border-bottom:1px solid rgba(124,206,255,.07);font-size:.9rem}
+.sb-row:last-child{border-bottom:none}
+.sb-row .k{color:var(--muted)}
+.sb-row .v{font-family:'Share Tech Mono',monospace;color:var(--ice-bright);text-align:right}
+
+.first10{margin:22px 0;border:1px solid var(--line);border-radius:16px;
+  background:rgba(10,20,33,.5);padding:18px 20px}
+.first10 h3{font-family:'Oswald',sans-serif;font-weight:600;font-size:1rem;
+  text-transform:uppercase;letter-spacing:.02em;color:#fff;margin:0 0 12px}
+.first10 ol{margin:0;padding-left:20px}
+.first10 li{margin-bottom:9px;color:var(--text);font-size:.92rem;line-height:1.5}
+.first10 li b{color:#fff}
+.first10 .f10-link{display:inline-block;margin-top:8px;font-family:'Share Tech Mono',monospace;
+  font-size:.62rem;letter-spacing:.07em;text-transform:uppercase;color:var(--ice-bright);
+  text-decoration:none;border:1px solid var(--line-2);border-radius:9px;padding:9px 14px}
+.first10 .f10-link:hover{background:rgba(124,206,255,.1)}
+
+.rail-step .rt{display:block;font-family:'Share Tech Mono',monospace;font-size:.5rem;
+  letter-spacing:.06em;color:var(--muted-2);margin-top:2px}
 
 /* checklist */
 .check{display:flex;align-items:center;gap:13px;padding:14px 16px;cursor:pointer;border:1px solid var(--line-2);border-radius:13px;margin-bottom:10px;transition:.2s;background:rgba(255,255,255,.02)}
@@ -234,7 +261,7 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
       <label class="check"><input type="checkbox" class="scan-check"><span class="box"></span><span class="ct"><b data-i18n="dlp.c2t">Java 17 (64-bit)</b><span data-i18n="dlp.c2d">Установлена и будет выбрана в лаунчере</span></span></label>
       <label class="check"><input type="checkbox" class="scan-check"><span class="box"></span><span class="ct"><b data-i18n="dlp.c3t">Видеокарта</b><span data-i18n="dlp.c3d">Дискретная (GTX 1060 / RX 580 и выше), не встройка</span></span></label>
       <label class="check"><input type="checkbox" class="scan-check"><span class="box"></span><span class="ct"><b data-i18n="dlp.c4t">Свободное место</b><span data-i18n="dlp.c4d">Минимум 10 ГБ на диске, желательно SSD</span></span></label>
-      <label class="check"><input type="checkbox" class="scan-check"><span class="box"></span><span class="ct"><b data-i18n="dlp.c5t">Соединение</b><span data-i18n="dlp.c5d">Стабильный интернет для загрузки 437 МБ</span></span></label>
+      <label class="check"><input type="checkbox" class="scan-check"><span class="box"></span><span class="ct"><b data-i18n="dlp.c5t">Соединение</b><span data-i18n="dlp.c5d">Стабильный интернет для загрузки 426 МБ</span></span></label>
       <div class="step-nav">
         <button class="btn btn-ghost" id="autoScan" data-i18n="dlp.autoScan">⚡ Авто-сканирование</button>
         <button class="btn btn-primary" data-next disabled id="next-0" data-i18n="dlp.next">Дальше →</button>
@@ -276,10 +303,10 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
     <div class="step-content">
       <p class="lead" data-i18n="dlp.s3lead">Скачай архив сборки с любого зеркала. Google Drive — быстрее в СНГ, CurseForge — официальная страница со статистикой.</p>
       <div class="dl-grid">
-        <a href="https://drive.google.com/file/d/1XrFoiEXC2F20X1Rk3gwPMxH71-wWXteC/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="dl-btn drive download-link">
+        <a href="https://drive.google.com/file/d/1xCr6H_EqMBSP4-txz9XjVFPqQJ0zixzE/view?usp=drivesdk" target="_blank" rel="noopener noreferrer" class="dl-btn drive download-link">
           <span class="dbi">💾</span><span class="dbt"><b>Универсальный</b><span data-i18n="dlp.driveDesc">Универсальный архив · любой лаунчер</span></span>
         </a>
-        <a href="https://drive.google.com/file/d/1kc0nKaVA5qVm2SJ1_Oq-UvD-WiJD7AYK/view?usp=drive_link" target="_blank" rel="noopener noreferrer" class="dl-btn prism download-link">
+        <a href="https://drive.google.com/file/d/1RSgnRT_njil6uRSMuKoPBQVYbnOrEDKF/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="dl-btn prism download-link">
           <span class="dbi">🧩</span><span class="dbt"><b>Prism / MultiMC</b><span data-i18n="dlp.prismDesc">Готовый инстанс · импорт в один шаг</span></span>
         </a>
         <a href="https://www.curseforge.com/minecraft/modpacks/frostborne-deadlands" target="_blank" rel="noopener noreferrer" class="dl-btn curse download-link">
@@ -288,10 +315,10 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
       </div>
       <div class="dl-meta-row">
         <div class="mi"><div class="v" data-ver="pack">R1.1</div><div class="l" data-i18n="dlp.metaVersion">Версия</div></div>
-        <div class="mi"><div class="v" data-i18n="dl.vSize">437 МБ</div><div class="l" data-i18n="dlp.metaSize">Размер</div></div>
+        <div class="mi"><div class="v" data-i18n="dl.vSize">426 МБ</div><div class="l" data-i18n="dlp.metaSize">Размер</div></div>
         <div class="mi"><div class="v">1.20.1</div><div class="l">Minecraft</div></div>
         <div class="mi"><div class="v">47.4.20</div><div class="l">Forge</div></div>
-        <div class="mi"><div class="v">197</div><div class="l" data-i18n="hero.mc">Модов</div></div>
+        <div class="mi"><div class="v">200</div><div class="l" data-i18n="hero.mc">Модов</div></div>
       </div>
       <div class="step-nav">
         <button class="btn btn-ghost" data-prev data-i18n="dlp.prev">← Назад</button>
@@ -345,6 +372,23 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
         <div class="spick" data-s="extreme"><div class="sn">Extreme</div><div class="sf" data-i18n="dlp.extremeFps">кино-кадры</div></div>
       </div>
       <div class="tip" id="shaderTipWrap" data-i18n-html="dlp.shaderTip"><b>Активация шейдеров:</b> в игре — <code>Options → Video Settings → Shader Packs</code>, выбери профиль <span id="chosenShader">Medium</span> и нажми Done. Если FPS низкий — спустись на ступень ниже или отключи шейдеры совсем (механика от этого не меняется).</div>
+      <div class="summary-box" id="deploySummary">
+        <div class="sb-h" data-i18n="dlp.sumTitle">Что у тебя получилось</div>
+        <div id="sumRows"></div>
+      </div>
+
+      <div class="first10">
+        <h3 data-i18n="dlp.f10Title">Первые десять минут в игре</h3>
+        <ol>
+          <li data-i18n-html="dlp.f10a"><b>Не беги никуда.</b> Осмотрись, найди дерево. Топор и костёр важнее любого сундука.</li>
+          <li data-i18n-html="dlp.f10b"><b>Смотри на градусник.</b> Он в углу экрана. Ниже нуля — ищи укрытие, а не приключения.</li>
+          <li data-i18n-html="dlp.f10c"><b>Стены и крыша до заката.</b> Даже четыре блока земли лучше открытого поля.</li>
+          <li data-i18n-html="dlp.f10d"><b>Не промокай.</b> Мокрая одежда отнимает тепло быстрее мороза.</li>
+          <li data-i18n-html="dlp.f10e"><b>Открой квестбук.</b> Он ведёт по шагам и выдаёт первые ресурсы.</li>
+        </ol>
+        <a class="f10-link" href="codex.html" data-i18n="dlp.f10Codex">Открыть Кодекс: первые часы →</a>
+      </div>
+
       <div class="final">
         <div class="final-icon">❄️</div>
         <h2 data-i18n-html="dlp.finalTitle">Добро пожаловать в <span class="ice">мёртвый мир</span></h2>
@@ -372,13 +416,14 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
   </div>
 </footer>
 
-<script src="version.js?v=2.30"></script>
-<script src="sfx.js?v=2.30"></script>
-<script src="i18n.js?v=2.30"></script>
-<script src="frostextras.js?v=2.30"></script>
-<script src="frostsearch.js?v=2.30"></script>
-<script src="frostauth.js?v=2.30"></script>
-<script src="firebase-config.js?v=2.30"></script>
+<script src="version.js?v=2.35"></script>
+<script src="sfx.js?v=2.35"></script>
+<script src="i18n.js?v=2.35"></script>
+<script src="i18n-dlp.js?v=2.35"></script>
+<script src="frostextras.js?v=2.35"></script>
+<script src="frostsearch.js?v=2.35"></script>
+<script src="frostauth.js?v=2.35"></script>
+<script src="firebase-config.js?v=2.35"></script>
 <script>
 (function(){
   'use strict';
@@ -406,10 +451,17 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
   typeBoot();
 
   /* ---------- stepper ---------- */
+  /* ⚠ Установка — дело не на один присест: человек уходит скачивать архив,
+     закрывает вкладку, возвращается через час. Шаг и отметки чек-листа
+     запоминаются, иначе он каждый раз начинает с нуля. */
+  const SKEY='fb_deploy_step', CKEY='fb_deploy_checks';
   let step=0; const TOTAL=5;
+
   function goto(n){
     n=Math.max(0,Math.min(TOTAL-1,n));
     step=n;
+    try{ localStorage.setItem(SKEY, String(n)); }catch(e){}
+    if(n===TOTAL-1) paintSummary();
     $$('.step').forEach((s,i)=>s.classList.toggle('active',i===n));
     $$('.rail-step').forEach((r,i)=>{ r.classList.toggle('active',i===n); r.classList.toggle('done',i<n); });
     window.scrollTo({top:0,behavior:'smooth'});
@@ -418,7 +470,39 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
   $$('[data-next]').forEach(b=>b.addEventListener('click',()=>{ if(!b.disabled) goto(step+1); }));
   $$('[data-prev]').forEach(b=>b.addEventListener('click',()=>goto(step-1)));
   $$('.rail-step').forEach(r=>r.addEventListener('click',()=>{ const i=+r.dataset.i; if(i<=step) goto(i); }));
-  $('#restart').addEventListener('click',()=>{ goto(0); });
+  $('#restart').addEventListener('click',()=>{
+    try{
+      localStorage.removeItem(SKEY); localStorage.removeItem(CKEY);
+      localStorage.removeItem('fb_launcher'); localStorage.removeItem('fb_ram');
+    }catch(e){}
+    scanChecks.forEach(function(c){ c.checked=false; c.closest('.check').classList.remove('checked'); });
+    updateScan();
+    goto(0);
+  });
+
+  /* Сводка на финале: человек прошёл пять шагов и уже не помнит, что выбрал.
+     Собираем ответы в одну карточку — её видно перед выходом в игру. */
+  function paintSummary(){
+    var box=document.getElementById('sumRows'); if(!box) return;
+    var launcherName = { prism:'Prism / MultiMC', curse:'CurseForge', at:'ATLauncher' };
+    var big = document.getElementById('allocBig');   // «8 ГБ», единицы уже внутри
+    var rows=[
+      [I18N.t('dlp.sumLauncher'), currentLauncher ? (launcherName[currentLauncher]||currentLauncher)
+                                                  : I18N.t('dlp.sumNotPicked')],
+      [I18N.t('dlp.sumMemory'),   big ? big.textContent.trim() : '—'],
+      [I18N.t('dlp.sumShader'),   (currentShader||'medium').replace(/^./,function(c){return c.toUpperCase();})],
+      [I18N.t('dlp.sumVersion'),  (window.FROST_VERSION ? FROST_VERSION.pack : 'R1.2')+' · Forge 47.4.20']
+    ];
+    /* ⚠ Строим узлами, а не склейкой разметки: на этой странице нет esc(),
+       а подставляются в том числе значения из localStorage. */
+    box.innerHTML = '';
+    rows.forEach(function(r){
+      var row=document.createElement('div'); row.className='sb-row';
+      var k=document.createElement('span'); k.className='k'; k.textContent=r[0];
+      var v=document.createElement('span'); v.className='v'; v.textContent=String(r[1]);
+      row.appendChild(k); row.appendChild(v); box.appendChild(row);
+    });
+  }
 
   /* ---------- step 1: scan ---------- */
   const scanChecks=$$('.scan-check');
@@ -427,7 +511,15 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
     $('#next-0').disabled=!all;
     if(all && window.FrostExtras) FrostExtras.toast(I18N.t('dlp.toastReadyT'),I18N.t('dlp.toastReadyB'));
   }
-  scanChecks.forEach(c=>c.addEventListener('change',()=>{ c.closest('.check').classList.toggle('checked',c.checked); updateScan(); }));
+  scanChecks.forEach((c,i)=>c.addEventListener('change',()=>{
+    c.closest('.check').classList.toggle('checked',c.checked);
+    try{
+      var st=scanChecks.map(x=>x.checked?'1':'0').join('');
+      localStorage.setItem(CKEY, st);
+    }catch(e){}
+    updateScan();
+  }));
+
   $('#autoScan').addEventListener('click',function(){
     this.disabled=true; this.textContent=I18N.t('dlp.scanning'); let i=0;
     const id=setInterval(()=>{
@@ -445,12 +537,19 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
     const g=I18N.t(key);
     const box=$('#launcherGuide'); box.innerHTML='<ol>'+g.map(s=>`<li>${s}</li>`).join('')+'</ol>'; box.classList.add('show');
   }
-  $$('#launchers .launcher').forEach(l=>l.addEventListener('click',()=>{
-    $$('#launchers .launcher').forEach(x=>x.classList.remove('sel')); l.classList.add('sel');
-    currentLauncher=l.dataset.l;
+  /* Выбор лаунчера переживает уход со страницы — как и профиль шейдеров.
+     Без этого сводка на финале честно, но бесполезно писала «не выбран». */
+  function selectLauncher(id, persist){
+    var btn=$$('#launchers .launcher').find(function(x){ return x.dataset.l===id; });
+    if(!btn) return;
+    $$('#launchers .launcher').forEach(x=>x.classList.remove('sel')); btn.classList.add('sel');
+    currentLauncher=id;
     renderLauncherGuide();
     $('#next-1').disabled=false;
-  }));
+    if(persist){ try{ localStorage.setItem('fb_launcher', id); }catch(e){} }
+  }
+  $$('#launchers .launcher').forEach(l=>l.addEventListener('click',()=>selectLauncher(l.dataset.l, true)));
+  try{ selectLauncher(localStorage.getItem('fb_launcher')||'', false); }catch(e){}
 
   /* ---------- step 4: RAM ---------- */
   const ramSlider=$('#ramSlider');
@@ -464,7 +563,17 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
     else tip=I18N.t('dlp.ramTipHigh');
     $('#ramTip').innerHTML=tip;
   }
-  ramSlider.addEventListener('input',calcRam); calcRam();
+  ramSlider.addEventListener('input',function(){
+    try{ localStorage.setItem('fb_ram', ramSlider.value); }catch(e){}
+    calcRam();
+  });
+  /* ⚠ Восстанавливаем до первого calcRam(): иначе на финале окажется цифра
+     авто-детекта, а не та, что человек выставил руками. */
+  try{
+    var savedRam=localStorage.getItem('fb_ram');
+    if(savedRam && !isNaN(+savedRam)) ramSlider.value=savedRam;
+  }catch(e){}
+  calcRam();
 
   /* ---------- step 5: shaders ---------- */
   const names={potato:'Potato',low:'Low',medium:'Medium',high:'High',extreme:'Extreme'};
@@ -475,6 +584,9 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
     $$('#shaderPicks .spick').forEach(x=>x.classList.toggle('sel', x.dataset.s===id));
     const label=$('#chosenShader'); if(label) label.textContent=names[id];
     if(persist) localStorage.setItem('fb_shader', id);
+    /* ⚠ Шейдер выбирают на пятом шаге — сводка к этому моменту уже нарисована
+       и без перерисовки навсегда осталась бы с прошлым профилем. */
+    paintSummary();
   }
   $$('#shaderPicks .spick').forEach(s=>s.addEventListener('click',()=>selectShader(s.dataset.s, true)));
   selectShader(currentShader, false);   // восстановить прошлый выбор
@@ -485,6 +597,7 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
     renderLauncherGuide();
     calcRam();
     const cs=$('#chosenShader'); if(cs) cs.textContent=names[currentShader];
+    paintSummary();   // подписи сводки тоже переводятся
   });
 
   /* ---------- download counting (Firebase, optional) ---------- */
@@ -509,6 +622,27 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
     const cur=Number(localStorage.getItem('fb_downloads')||3584)+1; localStorage.setItem('fb_downloads',String(cur));
     if(window.FrostExtras) FrostExtras.toast(I18N.t('dlp.toastDlT'),I18N.t('dlp.toastDlB'));
   }));
+
+  /* Возвращаем человека туда, где он остановился.
+     ⚠ Блок стоит В КОНЦЕ скрипта не для красоты: goto() на последнем шаге
+     рисует сводку, а та читает currentLauncher и currentShader. Выше по файлу
+     они ещё в мёртвой зоне let — восстановление падало бы в try/catch молча,
+     и человек оказывался на первом шаге при сохранённом пятом.
+     ⚠ Отметки восстанавливаем до шага: без них кнопка «дальше» заблокирована. */
+  (function restoreDeploy(){
+    try{
+      var marks=localStorage.getItem(CKEY)||'';
+      scanChecks.forEach(function(c,i){
+        if(marks.charAt(i)==='1'){ c.checked=true; c.closest('.check').classList.add('checked'); }
+      });
+      updateScan();
+      var saved=parseInt(localStorage.getItem(SKEY)||'0',10);
+      if(saved>0 && saved<TOTAL){
+        goto(saved);
+        window.scrollTo({top:0,behavior:'instant'});
+      }
+    }catch(e){ console.warn('restoreDeploy', e && e.message); }
+  })();
 })();
 </script>
 </body>

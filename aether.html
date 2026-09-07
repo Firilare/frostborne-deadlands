@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Oswald:wght@400;500;600;700&family=Share+Tech+Mono&display=swap&subset=cyrillic,cyrillic-ext,latin,latin-ext" rel="stylesheet">
-<link rel="stylesheet" href="extras.css?v=2.30">
+<link rel="stylesheet" href="extras.css?v=2.35">
 <style>
 :root{
   --bg:#04070b;--bg-2:#07121f;--ice:#7cceff;--ice-bright:#a8e0ff;--steel:#3a86ff;
@@ -51,7 +51,21 @@ header.scrolled{background:rgba(4,7,11,.9);border-bottom-color:var(--line)}
 .nav-right{display:flex;align-items:center;gap:12px}
 .back-link{display:inline-flex;align-items:center;gap:7px;padding:10px 15px;border-radius:999px;border:1px solid var(--line);background:rgba(124,206,255,.06);color:var(--ice-bright);font-size:.8rem;font-weight:700;text-transform:uppercase;letter-spacing:.05em;transition:.2s}
 .back-link:hover{transform:translateY(-2px);background:rgba(124,206,255,.13)}
-@media(max-width:640px){.back-link span{display:none}.brand-text small{display:none}}
+/* ⚠ У Эфира шапка тяжелее прочих: колокол, язык и ТРИ кнопки (лента, устав,
+   на станцию) — 243px против 324px, что остаётся от экрана 360px. Одних
+   иконок вместо подписей не хватало, шапка уезжала за край на 64px. */
+@media(max-width:640px){
+  .back-link span{display:none}
+  .brand-text small{display:none}
+  .back-link{padding:9px 12px}
+  .nav-right{gap:9px}
+}
+@media(max-width:560px){
+  /* Знак станции узнаётся и без подписи, а кнопки прятать нельзя — это
+     единственная навигация по узлу на телефоне. */
+  .brand-text{display:none}
+  .brand-mark{width:38px;height:38px}
+}
 
 /* hero / terminal banner */
 .aether-hero{padding:calc(var(--header-h) + 40px) 0 22px}
@@ -529,6 +543,37 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
 .ai-id .sub{font-family:'Share Tech Mono',monospace;font-size:.66rem;letter-spacing:.08em;color:var(--ice);margin-top:2px}
 .ai-id .sub.err{color:var(--red-bright)}
 .ai-log{flex:1;overflow-y:auto;padding:20px;display:flex;flex-direction:column;gap:14px}
+/* предложение спросить внешнюю модель + пометка её ответов */
+.ai-offer{margin-top:9px;padding:11px 13px;border:1px solid rgba(167,139,250,.3);
+  border-radius:11px;background:rgba(167,139,250,.07);font-size:.86rem;line-height:1.5;
+  color:var(--text)}
+.ai-offer b{display:block;font-family:'Share Tech Mono',monospace;font-size:.6rem;
+  letter-spacing:.09em;text-transform:uppercase;color:#c4b5fd;font-weight:400;margin-bottom:5px}
+.ai-offer-row{display:flex;gap:7px;flex-wrap:wrap;margin-top:9px}
+.ai-offer button{font-family:'Share Tech Mono',monospace;font-size:.58rem;letter-spacing:.06em;
+  text-transform:uppercase;border-radius:8px;padding:7px 12px;cursor:pointer;transition:.2s}
+.ai-offer .yes{color:#04070b;background:#a78bfa;border:1px solid #a78bfa;font-weight:600}
+.ai-offer .yes:hover{background:#c4b5fd}
+.ai-offer .no{color:var(--muted);background:none;border:1px solid var(--line)}
+.ai-offer .no:hover{color:#fff}
+.ext-mark{display:inline-block;font-family:'Share Tech Mono',monospace;font-size:.52rem;
+  letter-spacing:.08em;text-transform:uppercase;color:#c4b5fd;
+  border:1px solid rgba(167,139,250,.35);border-radius:999px;padding:2px 7px;margin-bottom:7px}
+.ext-body{white-space:pre-wrap}
+
+/* строка настройки под вводом: видно состояние и есть путь назад */
+/* ⚠ .ai-shell — flex-колонка с overflow:hidden и своей высотой, а отступы
+   живут на .ai-composer. Строка обязана повторить их сама, иначе прилипает
+   к краю панели. */
+.ai-ext{display:flex;align-items:center;gap:9px;flex-wrap:wrap;padding:0 16px 14px;
+  font-family:'Share Tech Mono',monospace;font-size:.56rem;letter-spacing:.06em;
+  text-transform:uppercase;color:var(--muted-2)}
+.ai-ext[hidden]{display:none}
+.ai-ext.on{color:#a78bfa}
+.ai-ext button{font:inherit;color:var(--muted);background:none;border:1px solid var(--line);
+  border-radius:7px;padding:5px 10px;cursor:pointer;transition:.2s}
+.ai-ext button:hover{color:#fff;border-color:rgba(167,139,250,.45)}
+
 .ai-msg{display:flex;gap:11px;max-width:88%;animation:msgIn .3s}
 .ai-msg.user{align-self:flex-end;flex-direction:row-reverse}
 .ai-bubble{padding:12px 16px;border-radius:14px;font-size:.92rem;line-height:1.55;word-wrap:break-word;overflow-wrap:anywhere}
@@ -792,12 +837,13 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
           <thead><tr><th data-i18n="ae.thTier">Тир шейдеров</th><th data-i18n="ae.thFor">Для кого</th><th data-i18n="ae.thHeavy">FPS в тяжёлой сцене</th></tr></thead>
           <tbody>
             <tr><td>POTATO</td><td data-i18n="ae.tierPotato">слабые ПК и ноутбуки</td><td>—</td></tr>
-            <tr><td><b>MEDIUM</b> <span data-i18n="ae.flagship">— флагман</span></td><td data-i18n="ae.tierMedium">основной тир на каждый день</td><td>~40–50</td></tr>
-            <tr><td>HIGH</td><td data-i18n="ae.tierHigh">средне-высокие ПК</td><td>~30–35</td></tr>
-            <tr><td>EXTREME</td><td data-i18n="ae.tierExtreme">скриншоты и витрина</td><td>~25–30</td></tr>
+            <tr><td><b>MEDIUM</b> <span data-i18n="ae.flagship">— флагман</span></td><td data-i18n="ae.tierMedium">основной тир на каждый день</td><td>~50–62</td></tr>
+            <tr><td>HIGH</td><td data-i18n="ae.tierHigh">средне-высокие ПК</td><td>~38–44</td></tr>
+            <tr><td>EXTREME</td><td data-i18n="ae.tierExtreme">скриншоты и витрина</td><td>~31–38</td></tr>
           </tbody>
         </table>
       </div>
+      <p class="np-hint" style="margin-top:12px" data-i18n="ae.fpsCalc">Числа тиров пересчитаны от замеров R1.2 после перепривязки пресетов (+25%), новых замеров ещё нет — реальные значения могут отличаться в большую сторону.</p>
       <p class="np-hint" style="margin-top:12px" data-i18n="ae.patchFooterNote">Шейдеры выключены по умолчанию при первом запуске — специально ради слабого железа. Сцены с водой всегда просаживают FPS сильнее на любом профиле, это архитектура шейдерпака, а не баг. Базовые настройки по умолчанию: прорисовка 12, симуляция 8, лимит FPS 120, FOV 70°.</p>
     </div>
   </div>
@@ -890,6 +936,10 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
     <div class="ai-composer">
       <input type="text" class="ai-input" id="aiInput" placeholder="Запрос к системе станции…" maxlength="200" data-i18n-attr="placeholder:ae.aiInputPh">
       <button class="ai-send" id="aiSendBtn" data-i18n="ae.aiSendBtn">Запрос</button>
+    </div>
+    <div class="ai-ext" id="aiExtBar" hidden>
+      <span id="aiExtState"></span>
+      <button type="button" id="aiExtToggle"></button>
     </div>
   </div>
 </div>
@@ -1150,16 +1200,19 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
   </div>
 </div>
 
-<script src="version.js?v=2.30"></script>
-<script src="frostauth.js?v=2.30"></script>
-<script src="frostfeed.js?v=2.30"></script>
-<script src="frostnotify.js?v=2.30"></script>
-<script src="frostbadges.js?v=2.30"></script>
-<script src="sfx.js?v=2.30"></script>
-<script src="i18n.js?v=2.30"></script>
-<script src="frostextras.js?v=2.30"></script>
-<script src="frostsearch.js?v=2.30"></script>
-<script src="firebase-config.js?v=2.30"></script>
+<script src="version.js?v=2.35"></script>
+<script src="frostauth.js?v=2.35"></script>
+<script src="frostfeed.js?v=2.35"></script>
+<script src="frostnotify.js?v=2.35"></script>
+<script src="frostbadges.js?v=2.35"></script>
+<script src="frostai.js?v=2.35"></script>
+<script src="sfx.js?v=2.35"></script>
+<script src="i18n.js?v=2.35"></script>
+<script src="i18n-ae.js?v=2.35"></script>
+<script src="i18n-fd.js?v=2.35"></script>
+<script src="frostextras.js?v=2.35"></script>
+<script src="frostsearch.js?v=2.35"></script>
+<script src="firebase-config.js?v=2.35"></script>
 <script>
 (function(){
   'use strict';
@@ -1986,6 +2039,15 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
     if(AICDX || aiCdxLoading) return;
     if(window.FROST_CODEX){ AICDX = window.FROST_CODEX; return; }
     aiCdxLoading = true;
+    /* Вместе с данными подтягиваем и словарь Кодекса: 137 КБ переводов нужны
+       только здесь, и держать их на каждой загрузке Эфира незачем.
+       I18N.add() сам перерисует страницу, когда файл приедет. */
+    if(!document.querySelector('script[src^="i18n-cdx.js"]')){
+      var tr=document.createElement('script');
+      tr.src='i18n-cdx.js?v='+((window.FROST_VERSION && FROST_VERSION.site)||'1');
+      tr.async=true;
+      document.head.appendChild(tr);
+    }
     var sc=document.createElement('script');
     sc.src='codex-data.js?v='+((window.FROST_VERSION && FROST_VERSION.site)||'1');
     sc.async=true;
@@ -2988,17 +3050,41 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
   /* Смотритель закрывает неполадку. Правила разрешают править запись только
      ему — обычный выживший статус не сменит, даже если подделает кнопку. */
   document.addEventListener('click', async function(e){
-    var b=e.target.closest('[data-bugid]'); if(!b || !MOD.on || !FB.live) return;
+    var b=e.target.closest('[data-bugid]'); if(!b) return;
     var id=b.dataset.bugid, to=b.dataset.bugto;
     if(!id) return;
+    var post=(lastBugsList||[]).find(function(x){ return x.id===id; });
+    if(!canToggleBug(post)) return;
+
+    /* ⚠ Демо-фолбэк. Раньше обработчик выходил при !FB.live, и это было
+       незаметно: кнопку видел только смотритель, а он всегда с базой.
+       Теперь кнопка есть у автора — в демо она обязана работать, иначе
+       нажатие молча ничего не делает. */
+    if(!FB.live){
+      var rec=(demo.bugs||[]).find(function(x){ return x.id===id; });
+      /* Пометку ставим ДО перерисовки: watchMyBugs() вызывается из неё и
+         иначе присылает сигнал «твою неполадку закрыли» тому, кто её и закрыл. */
+      markBugSeen(id, to);
+      if(rec){ rec.status=to; saveDemo(); renderBugs(demo.bugs); }
+      if(window.FrostSFX) FrostSFX.play('click');
+      return;
+    }
+
     b.disabled=true;
+    /* ⚠ Метку ставим ДО записи, а не после: подписка на базу успевает
+       вернуть обновление и перерисовать список раньше, чем отработает
+       await — и тогда автор получает сигнал о собственном действии.
+       Если запись не пройдёт, метка лишь пропустит один сигнал. */
+    markBugSeen(id, to);
     try{
       await FB.m.set(FB.m.ref(FB.db,'aether/bugs/'+id+'/status'), to);
+      /* modLog сам выходит, если человек не смотритель: закрытие своей
+         неполадки — не модерация, и в журнале ему делать нечего. */
       modLog(to==='solved'?'bug-close':'bug-open','aether/bugs',id);
       if(window.FrostSFX) FrostSFX.play('click');
     }catch(err){
       console.warn('bug status', err && err.code);
-      if(window.FrostExtras) FrostExtras.toast(I18N.t('ae.modDelFailT'), I18N.t('ae.modDelFailB'));
+      if(window.FrostExtras) FrostExtras.toast(I18N.t('ae.bugToggleFailT'), I18N.t('ae.bugToggleFailB'));
     }
     b.disabled=false;
   });
@@ -3025,6 +3111,27 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
       if(was!==b.status){ seen[b.id]=b.status; changed=true; }
     });
     if(changed){ try{ localStorage.setItem('fb_bug_seen', JSON.stringify(seen)); }catch(e){} }
+  }
+
+  /* Кто вправе переключить статус неполадки.
+     ⚠ Автору мало `isMineUid`: тот считает своим и старый uid из миграции
+     2.29, а правило базы сверяет запись строго с `auth.uid`. Показали бы
+     кнопку по мягкой проверке — человек нажимал бы её и получал отказ.
+     Поэтому для автора сверка строгая, а смотрителю можно всё. */
+  function canToggleBug(p){
+    if(MOD.on) return true;
+    var me = window.FrostAuth ? FrostAuth.uid() : ID.uid;
+    return !!(p && p.uid && me && p.uid === me);
+  }
+
+  /* Своё изменение статуса не должно возвращаться сигналом самому себе:
+     запоминаем его до того, как придёт обновление из базы. */
+  function markBugSeen(id, status){
+    try{
+      var seen=JSON.parse(localStorage.getItem('fb_bug_seen')||'{}')||{};
+      seen[id]=status;
+      localStorage.setItem('fb_bug_seen', JSON.stringify(seen));
+    }catch(e){}
   }
 
   /* ================= FORUM: IDEAS ================= */
@@ -3087,7 +3194,7 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
     box.innerHTML=list.map(p=>`<div class="post">
       <div class="post-body">
         <div class="post-head"><img class="post-av" src="${skinUrl(p.nick,26)}" onerror="this.src='${skinUrl('Steve',26)}'" alt=""><span class="post-author">${esc(p.nick)}</span><span class="post-time">${fmtTime(p.ts)}</span><span class="bug-status ${p.status==='solved'?'solved':'open'}">${p.status==='solved'?I18N.t('ae.bugSolved'):I18N.t('ae.bugOpen')}</span>${
-        MOD.on ? `<button class="bug-toggle" type="button" data-bugid="${esc(p.id||'')}" data-bugto="${p.status==='solved'?'open':'solved'}">${
+        canToggleBug(p) ? `<button class="bug-toggle" type="button" data-bugid="${esc(p.id||'')}" data-bugto="${p.status==='solved'?'open':'solved'}">${
           esc(I18N.t(p.status==='solved'?'ae.bugReopen':'ae.bugClose'))}</button>` : ''}</div>
         <div class="post-title">${esc(p.title)}</div>
         <div class="post-text">${renderContent(p.body)}</div>
@@ -3123,7 +3230,8 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
      Актуальный релиз помечается current:true — только у него виден блок
      рекомендуемых настроек. Версия и имя актуального берутся из version.js. */
   const RELEASES = [
-    { id:'r12', v:'R1.2', name:'Сталь и слово', current:true },
+    { id:'r121', v:'R1.2.1', name:'Живая зима', current:true },
+    { id:'r12', v:'R1.2', name:'Сталь и слово' },
     { id:'r11', v:'R1.1', name:'Foundation Release' }
   ];
   let curRelease = RELEASES[0].id;
@@ -3169,12 +3277,16 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
     d.innerHTML=`<div class="ai-bubble">${role==='bot'?`<span class="ai-tag">[${esc(I18N.t('ae.aiName'))}]</span>`:''}${html}</div>`;
     aiLog.appendChild(d); aiLog.scrollTop=aiLog.scrollHeight; return d;
   }
+  /* Ответила ли станция своими данными. Флаг ставится здесь, а не считается
+     заново: повторная проверка со временем разошлась бы с самим ответом. */
+  let aiKnew=false;
   function aiAnswer(q){
     const low=' '+q.toLowerCase()+' ';
     const KB=I18N.t('ae.kb'), GLITCHES=I18N.t('ae.glitches');
     let hit=KB.find(e=>e.k.some(k=>low.includes(k)));
     let fromCodex = '';
     if(!hit) fromCodex = codexAnswer(q);          // I-22: словарь молчит — спросим Кодекс
+    aiKnew = !!(hit || fromCodex);
     let ans = hit ? hit.a : (fromCodex || I18N.t('ae.aiUnrecognized'));
     // glitch — иногда вставляем жуткую фразу и «исправляемся»
     if(Math.random()<0.22){
@@ -3188,6 +3300,83 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
     if(hit || fromCodex) ans += '<br>' + codexLink(q);
     return ans;
   }
+  /* Внешняя модель — только когда своё молчит.
+     ⚠ Порядок принципиален: словарь → Кодекс → чужая модель. Своё отвечает
+     точно, чужое про сборку не знает ничего и начнёт выдумывать рецепты.
+     ⚠ Ответ помечается: человек должен видеть, где говорит станция по своим
+     данным, а где — модель со стороны. */
+  function aiConsent(holder, titleKey, leadKey, onYes){
+    var lead = leadKey ? esc(I18N.t(leadKey))+' ' : '';
+    holder.innerHTML = '<div class="ai-offer"><b>'+esc(I18N.t(titleKey))+'</b>'+
+      lead + esc(I18N.t('ae.aiExtWhat'))+
+      '<div class="ai-offer-row">'+
+        '<button class="yes" type="button" data-ai="yes">'+esc(I18N.t('ae.aiExtYes'))+'</button>'+
+        '<button class="no" type="button" data-ai="no">'+esc(I18N.t('ae.aiExtNo'))+'</button>'+
+      '</div></div>';
+    holder.addEventListener('click', function(e){
+      var b=e.target.closest('[data-ai]'); if(!b) return;
+      if(b.dataset.ai==='yes'){ FrostAI.allow(); paintAiExt(); onYes(); }
+      else {
+        FrostAI.deny(); paintAiExt();
+        holder.innerHTML = '<div class="ai-offer">'+esc(I18N.t('ae.aiExtDenied'))+'</div>';
+      }
+      aiLog.scrollTop = aiLog.scrollHeight;
+    });
+    aiLog.scrollTop = aiLog.scrollHeight;
+  }
+
+  function aiAskExternal(q, holder){
+    holder.innerHTML = '<span class="typing"><span></span><span></span><span></span></span>';
+    aiLog.scrollTop = aiLog.scrollHeight;
+    FrostAI.ask(q).then(function(answer){
+      if(!answer){
+        holder.innerHTML = '<div class="ai-offer"><b>'+esc(I18N.t('ae.aiExtFailT'))+'</b>'+
+          esc(I18N.t('ae.aiExtFailB'))+'</div>';
+      } else {
+        holder.innerHTML = '<span class="ext-mark">'+esc(I18N.t('ae.aiExtMark'))+'</span>'+
+          '<div class="ext-body">'+esc(answer)+'</div>';
+        if(window.FrostSFX) FrostSFX.play('beep');
+      }
+      aiLog.scrollTop = aiLog.scrollHeight;
+    });
+  }
+
+  function aiOfferExternal(q, holder){
+    if(FrostAI.enabled()) aiAskExternal(q, holder);
+    else aiConsent(holder, 'ae.aiExtOfferT', 'ae.aiExtOfferB', function(){ aiAskExternal(q, holder); });
+  }
+
+  /* Состояние внешнего канала видно всегда, и его можно отозвать. Без этой
+     строки отказ был бы окончательным: предложение больше не показывается,
+     чтобы не выпрашивать согласие после каждого непонятого вопроса. */
+  function paintAiExt(){
+    var bar=$('#aiExtBar'); if(!bar || !window.FrostAI) return;
+    var on=FrostAI.enabled();
+    bar.hidden=false;
+    bar.classList.toggle('on', on);
+    $('#aiExtState').textContent = I18N.t(on ? 'ae.aiExtStateOn' : 'ae.aiExtStateOff');
+    $('#aiExtToggle').textContent = I18N.t(on ? 'ae.aiExtBtnOff' : 'ae.aiExtBtnOn');
+  }
+
+  if(window.FrostAI){
+    paintAiExt();
+    document.addEventListener('i18n:changed', paintAiExt);
+    $('#aiExtToggle').addEventListener('click', function(){
+      if(FrostAI.enabled()){
+        FrostAI.deny(); paintAiExt();
+        if(window.FrostExtras) FrostExtras.toast(I18N.t('ae.aiExtOffT'), I18N.t('ae.aiExtOffB'));
+        return;
+      }
+      /* Включение идёт через тот же текст согласия, что и предложение в
+         диалоге: человек обязан прочитать, что именно уходит наружу. */
+      var d=aiAppend('bot','');
+      aiConsent(d.querySelector('.ai-bubble'), 'ae.aiExtConnT', '', function(){
+        d.querySelector('.ai-bubble').innerHTML =
+          '<span class="ai-tag">['+esc(I18N.t('ae.aiName'))+']</span>'+esc(I18N.t('ae.aiExtStateOn'));
+      });
+    });
+  }
+
   function aiSend(text){
     const q=(text||$('#aiInput').value).trim(); if(!q) return;
     $('#aiInput').value='';
@@ -3197,8 +3386,20 @@ a.msg-nick:focus-visible{outline:2px solid var(--ice);outline-offset:2px;border-
     const typing=aiAppend('bot','<span class="typing"><span></span><span></span><span></span></span>');
     setTimeout(()=>{
       typing.remove();
-      aiAppend('bot',aiAnswer(q));
+      const node=aiAppend('bot',aiAnswer(q));
       if(window.FrostSFX) FrostSFX.play('beep');
+
+      /* Своё не ответило — предлагаем спросить снаружи. Предложение живёт
+         внутри того же пузыря, чтобы не выглядеть отдельным сообщением.
+         ⚠ Пока Кодекс едет (37 КБ), наружу не идём: справочник может знать.
+         ⚠ Отказавшемуся предложение больше не показываем — для него есть
+         строка настройки под вводом. */
+      if(!aiKnew && window.FrostAI && !aiCdxLoading &&
+         (FrostAI.enabled() || !FrostAI.asked())){
+        const slot=document.createElement('div');
+        node.querySelector('.ai-bubble').appendChild(slot);
+        aiOfferExternal(q, slot);
+      }
     },600+Math.random()*700);
   }
   $('#aiSendBtn').addEventListener('click',()=>aiSend());

@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Oswald:wght@400;500;600&family=Inter:wght@400;500;600&family=Share+Tech+Mono&display=swap&subset=cyrillic,cyrillic-ext,latin,latin-ext">
-<link rel="stylesheet" href="extras.css?v=2.30">
+<link rel="stylesheet" href="extras.css?v=2.35">
 
 <style>
   :root{
@@ -76,7 +76,7 @@
     <a class="back" href="index.html">← <span data-i18n="rl.home">На станцию</span></a>
     <a class="back" href="aether.html"><span data-i18n="rl.toAether">В эфир</span></a>
     <span class="sp"></span>
-    <span id="langMount"></span>
+    <span class="lang-switch" id="langMount"></span>
   </div>
 
   <p class="kicker" data-i18n="rl.kicker">// Устав узла · станция Буран</p>
@@ -126,6 +126,9 @@
           <tr><td><b data-i18n="rl.d6a">Счётчики просмотров и загрузок</b></td>
               <td data-i18n="rl.d6b">База узла</td>
               <td data-i18n="rl.d6c">Общие числа без привязки к людям — просто «сколько всего»</td></tr>
+          <tr><td><b data-i18n="rl.d7a">Вопрос к МОРОЗ-01, если ты разрешил внешнего собеседника</b></td>
+              <td data-i18n="rl.d7b">Уходит на сторонний сервис (js.puter.com)</td>
+              <td data-i18n="rl.d7c">Ответ на то, чего нет ни в памяти узла, ни в Кодексе. По умолчанию выключено, разрешение спрашивается отдельно и его можно отозвать</td></tr>
         </tbody>
       </table>
     </div>
@@ -144,10 +147,11 @@
   <p class="foot">FROSTBORNE DEADLANDS · <span data-ver="siteFull">STATION OS</span></p>
 </div>
 
-<script src="version.js?v=2.30"></script>
-<script src="i18n.js?v=2.30"></script>
-<script src="frostextras.js?v=2.30"></script>
-<script src="frostsearch.js?v=2.30"></script>
+<script src="version.js?v=2.35"></script>
+<script src="i18n.js?v=2.35"></script>
+<script src="i18n-rl.js?v=2.35"></script>
+<script src="frostextras.js?v=2.35"></script>
+<script src="frostsearch.js?v=2.35"></script>
 <script>
 (function(){
   'use strict';

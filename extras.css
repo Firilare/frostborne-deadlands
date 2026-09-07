@@ -25,9 +25,14 @@
 .lang-opt:hover{background:rgba(124,206,255,.08);color:#fff}
 .lang-opt.active{background:rgba(124,206,255,.14);color:var(--ice-bright,#a8e0ff)}
 .lang-opt.active::after{content:'✓';margin-left:auto;color:var(--ice,#7cceff)}
-@media(max-width:1080px){
-  .lang-menu{right:auto;left:0}
-}
+/* ⚠ Здесь стояло @media(max-width:1080px){.lang-menu{right:auto;left:0}} —
+   и это уводило меню за правый край на шести страницах из девяти: кнопка
+   языка стоит справа, а меню от неё росло вправо. Сторону теперь выбирает
+   buildSwitcher() при открытии (класс .to-left), потому что зависит она не
+   от ширины экрана, а от того, где на странице стоит сам переключатель. */
+.lang-switch.to-left .lang-menu{right:auto;left:0}
+/* Последняя страховка: на совсем узком экране меню не шире самого экрана. */
+.lang-menu{max-width:calc(100vw - 20px)}
 
 /* ---------- оверлей инея (Великое обледенение) ---------- */
 #frost-overlay{position:fixed;inset:0;z-index:3500;pointer-events:none;opacity:0;
