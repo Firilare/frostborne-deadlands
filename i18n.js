@@ -12,7 +12,7 @@
      подключаются только там, где нужны (см. tools/i18n-split.py). */
   const DICT = {
     ru: {
-      "dl.vSize": "426 МБ",
+      "dl.vSize": "551 МБ",
       "dlp.gb": "ГБ",
       "dlp.mb": "МБ",
       "hero.mc": "МОДОВ",
@@ -123,7 +123,7 @@
       "tech.title": "Технический отсек",
     },
     en: {
-      "dl.vSize": "426 MB",
+      "dl.vSize": "551 MB",
       "dlp.gb": "GB",
       "dlp.mb": "MB",
       "hero.mc": "MODS",
@@ -234,7 +234,7 @@
       "tech.title": "Tech Bay",
     },
     uk: {
-      "dl.vSize": "426 МБ",
+      "dl.vSize": "551 МБ",
       "dlp.gb": "ГБ",
       "dlp.mb": "МБ",
       "hero.mc": "МОДІВ",
@@ -345,7 +345,7 @@
       "tech.title": "Технічний відсік",
     },
     de: {
-      "dl.vSize": "426 MB",
+      "dl.vSize": "551 MB",
       "dlp.gb": "GB",
       "dlp.mb": "MB",
       "hero.mc": "MODS",
@@ -456,7 +456,7 @@
       "tech.title": "Technik-Bucht",
     },
     be: {
-      "dl.vSize": "426 МБ",
+      "dl.vSize": "551 МБ",
       "dlp.gb": "ГБ",
       "dlp.mb": "МБ",
       "hero.mc": "МОДАЎ",
@@ -567,7 +567,7 @@
       "tech.title": "Тэхнічны адсек",
     },
     kk: {
-      "dl.vSize": "426 МБ",
+      "dl.vSize": "551 МБ",
       "dlp.gb": "ГБ",
       "dlp.mb": "МБ",
       "hero.mc": "МОД",

@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Oswald:wght@400;500;600;700&family=Share+Tech+Mono&display=swap&subset=cyrillic,cyrillic-ext,latin,latin-ext" rel="stylesheet">
-<link rel="stylesheet" href="extras.css?v=2.35">
+<link rel="stylesheet" href="extras.css?v=2.36">
 <style>
 :root{
   --bg:#04070b;--bg-2:#07121f;--ice:#7cceff;--ice-bright:#a8e0ff;--steel:#3a86ff;
@@ -342,13 +342,13 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
   </div>
 </footer>
 
-<script src="version.js?v=2.35"></script>
-<script src="sfx.js?v=2.35"></script>
-<script src="i18n.js?v=2.35"></script>
-<script src="i18n-tch.js?v=2.35"></script>
-<script src="frostextras.js?v=2.35"></script>
-<script src="frostsearch.js?v=2.35"></script>
-<script src="techsig.js?v=2.35"></script>
+<script src="version.js?v=2.36"></script>
+<script src="sfx.js?v=2.36"></script>
+<script src="i18n.js?v=2.36"></script>
+<script src="i18n-tch.js?v=2.36"></script>
+<script src="frostextras.js?v=2.36"></script>
+<script src="frostsearch.js?v=2.36"></script>
+<script src="techsig.js?v=2.36"></script>
 <script>
 (function(){
   'use strict';
@@ -416,7 +416,9 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
     $('#recRender').textContent=rd+' '+chunks;
     $('#recSim').textContent=sd+' '+chunks;
     $('#recShader').textContent = R.gpu==='strong'?'High / Extreme':R.gpu==='mid'?(R.preset==='potato'?'Low / Medium':'Medium / High'):'Potato / Low';
-    $('#recFps').textContent = R.gpu==='strong'?'80–120':R.gpu==='mid'?'60–90':'40–60';
+    /* ⚠ Нижняя граница — замер R1.3: POTATO на GTX 750 Ti даёт около 30 кадров.
+       Прежние «40–60» были догадкой и обещали встройке больше, чем она даст. */
+    $('#recFps').textContent = R.gpu==='strong'?'80–120':R.gpu==='mid'?'60–90':'30–45';
     $('#recGC').textContent='G1GC (Aikar)'; $('#recJava').textContent='Java 17 (64-bit)';
     let note,warn=false;
     if(R.total<=6){ note=I18N.t('tch.noteMin'); warn=true; }
@@ -577,6 +579,21 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
     }
     return out;
   }
+  /* Версии модов, которые ТОЧНО не работают с этой сборкой. Не догадка по
+     стектрейсу, а факт из истории релизов, поэтому вердикт — критический.
+     Polymorph 0.49.11 требует JEI новее того, что лежит в сборке, и Forge
+     из-за этого не запускает ни одного из двухсот модов (выяснено к R1.3).
+     ⚠ Требование к JEI записано у Polymorph как НЕОБЯЗАТЕЛЬНОЕ, но Forge
+     сверяет версию и у необязательной зависимости, если мод установлен. */
+  const KNOWN_BAD = [
+    { id:'polymorph', name:'Polymorph', ver:'0.49.11', good:'0.49.10', body:'tch.badPolymorph',
+      re:/polymorph[\w\-+.]*?0\.49\.11|Requested by:\s*'polymorph'[^\n]*\n?[^\n]*jei|Mod ID:\s*'jei',\s*Requested by:\s*'polymorph'/i }
+  ];
+  function knownBad(text){
+    const mods=modsInLog(text);
+    return KNOWN_BAD.filter(b=>(mods[b.id] && mods[b.id].ver.indexOf(b.ver)===0) || b.re.test(text));
+  }
+
   function pick(re,text,g=1){ const m=text.match(re); return m?m[g]:null; }
   function detectEnv(t){
     const env={};
@@ -690,6 +707,11 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
     /* Правило может требовать двух признаков сразу: OptiFine сам по себе не
        беда, а вот вместе с Sodium/Iris — почти всегда конфликт. */
     const found=getRules().filter(r=>r.re.test(text) && (!r.also || r.also.test(text)));
+    knownBad(text).forEach(b=>found.unshift({ sev:'crit', icon:'⛔',
+      /* ⚠ Не {v}: этот плейсхолдер i18n.js сам заменяет версией СБОРКИ внутри t(),
+         и заголовок выходил «Polymorph R1.3». Версия мода — {mv}. */
+      title:I18N.t('tch.badTitle').replace('{m}', b.name).replace('{mv}', b.ver),
+      body:I18N.t(b.body).replace('{good}', b.good) }));
     const exitInfo=exitHint(text);
     const culprit=findCulprit(text);
     const chain=modChain(text);

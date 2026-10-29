@@ -9,7 +9,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Oswald:wght@400;500;600;700&family=Share+Tech+Mono&display=swap&subset=cyrillic,cyrillic-ext,latin,latin-ext" rel="stylesheet">
-<link rel="stylesheet" href="extras.css?v=2.35">
+<link rel="stylesheet" href="extras.css?v=2.36">
 <style>
 :root{
   --bg:#04070b;--bg-2:#07121f;--ice:#7cceff;--ice-bright:#a8e0ff;--steel:#3a86ff;
@@ -172,6 +172,21 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
 .alloc-out .lbl{font-family:'Share Tech Mono',monospace;font-size:.68rem;letter-spacing:.08em;text-transform:uppercase;color:var(--muted);margin-top:6px}
 .tip{font-size:.86rem;color:var(--text);background:rgba(255,255,255,.03);border:1px dashed var(--line);border-radius:12px;padding:14px;line-height:1.55}
 .tip b{color:var(--ice)}
+/* R1.3: что делать со старым миром. Рядом с кнопками загрузки — решают до скачивания. */
+.upd-box{margin-top:16px;border:1px solid rgba(251,191,36,.28);border-radius:14px;background:rgba(251,191,36,.04)}
+.upd-box summary{list-style:none;cursor:pointer;padding:13px 18px;display:flex;align-items:center;justify-content:space-between;gap:12px;
+  font-family:'Share Tech Mono',monospace;font-size:.7rem;letter-spacing:.11em;text-transform:uppercase;color:var(--warn)}
+.upd-box summary::-webkit-details-marker{display:none}
+.upd-box summary::after{content:'+';font-size:1rem;line-height:1;flex:none}
+.upd-box[open] summary::after{content:'−'}
+.upd-box summary:hover{background:rgba(251,191,36,.06)}
+.upd-box summary:focus-visible{outline:2px solid var(--warn);outline-offset:-2px;border-radius:14px}
+.upd-box ul{margin:0;padding:0 18px 14px 36px}
+.upd-box li{margin-bottom:8px;font-size:.88rem;line-height:1.55;color:var(--text);overflow-wrap:anywhere}
+.upd-box li:last-child{margin-bottom:0}
+.upd-box li b{color:#fff}
+.upd-box code{font-size:.8em}
+.upd-box a{color:var(--ice)}
 
 /* shader picks */
 .shader-picks{display:grid;grid-template-columns:repeat(5,1fr);gap:8px;margin-bottom:18px}
@@ -261,7 +276,7 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
       <label class="check"><input type="checkbox" class="scan-check"><span class="box"></span><span class="ct"><b data-i18n="dlp.c2t">Java 17 (64-bit)</b><span data-i18n="dlp.c2d">Установлена и будет выбрана в лаунчере</span></span></label>
       <label class="check"><input type="checkbox" class="scan-check"><span class="box"></span><span class="ct"><b data-i18n="dlp.c3t">Видеокарта</b><span data-i18n="dlp.c3d">Дискретная (GTX 1060 / RX 580 и выше), не встройка</span></span></label>
       <label class="check"><input type="checkbox" class="scan-check"><span class="box"></span><span class="ct"><b data-i18n="dlp.c4t">Свободное место</b><span data-i18n="dlp.c4d">Минимум 10 ГБ на диске, желательно SSD</span></span></label>
-      <label class="check"><input type="checkbox" class="scan-check"><span class="box"></span><span class="ct"><b data-i18n="dlp.c5t">Соединение</b><span data-i18n="dlp.c5d">Стабильный интернет для загрузки 426 МБ</span></span></label>
+      <label class="check"><input type="checkbox" class="scan-check"><span class="box"></span><span class="ct"><b data-i18n="dlp.c5t">Соединение</b><span data-i18n="dlp.c5d">Стабильный интернет для загрузки 551 МБ</span></span></label>
       <div class="step-nav">
         <button class="btn btn-ghost" id="autoScan" data-i18n="dlp.autoScan">⚡ Авто-сканирование</button>
         <button class="btn btn-primary" data-next disabled id="next-0" data-i18n="dlp.next">Дальше →</button>
@@ -303,10 +318,10 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
     <div class="step-content">
       <p class="lead" data-i18n="dlp.s3lead">Скачай архив сборки с любого зеркала. Google Drive — быстрее в СНГ, CurseForge — официальная страница со статистикой.</p>
       <div class="dl-grid">
-        <a href="https://drive.google.com/file/d/1xCr6H_EqMBSP4-txz9XjVFPqQJ0zixzE/view?usp=drivesdk" target="_blank" rel="noopener noreferrer" class="dl-btn drive download-link">
+        <a href="https://drive.google.com/file/d/1-pYK8qd1BwNe4eftdXM7HgSsqqSryo-B/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="dl-btn drive download-link">
           <span class="dbi">💾</span><span class="dbt"><b>Универсальный</b><span data-i18n="dlp.driveDesc">Универсальный архив · любой лаунчер</span></span>
         </a>
-        <a href="https://drive.google.com/file/d/1RSgnRT_njil6uRSMuKoPBQVYbnOrEDKF/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="dl-btn prism download-link">
+        <a href="https://drive.google.com/file/d/1-ZKZuEWzz4M39b8VltSQuKnV1rbBJlsq/view?usp=sharing" target="_blank" rel="noopener noreferrer" class="dl-btn prism download-link">
           <span class="dbi">🧩</span><span class="dbt"><b>Prism / MultiMC</b><span data-i18n="dlp.prismDesc">Готовый инстанс · импорт в один шаг</span></span>
         </a>
         <a href="https://www.curseforge.com/minecraft/modpacks/frostborne-deadlands" target="_blank" rel="noopener noreferrer" class="dl-btn curse download-link">
@@ -315,11 +330,21 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
       </div>
       <div class="dl-meta-row">
         <div class="mi"><div class="v" data-ver="pack">R1.1</div><div class="l" data-i18n="dlp.metaVersion">Версия</div></div>
-        <div class="mi"><div class="v" data-i18n="dl.vSize">426 МБ</div><div class="l" data-i18n="dlp.metaSize">Размер</div></div>
+        <div class="mi"><div class="v" data-i18n="dl.vSize">551 МБ</div><div class="l" data-i18n="dlp.metaSize">Размер</div></div>
         <div class="mi"><div class="v">1.20.1</div><div class="l">Minecraft</div></div>
-        <div class="mi"><div class="v">47.4.20</div><div class="l">Forge</div></div>
+        <div class="mi"><div class="v">47.4.23</div><div class="l">Forge</div></div>
         <div class="mi"><div class="v">200</div><div class="l" data-i18n="hero.mc">Модов</div></div>
       </div>
+      <details class="upd-box">
+        <summary><span data-i18n="dlp.updT">Обновляешься со старой версии?</span></summary>
+        <ul>
+          <li data-i18n-html="dlp.upd1"><b>Новый мир не нужен.</b> Тело, орда, тепло, свет, задания, интерфейс, перевод, звук и погода заработают сразу в уже созданном мире. Прогресс в книге заданий сохранится.</li>
+          <li data-i18n-html="dlp.upd2"><b>Новые правила руды и редкие руины — только в новых кусках мира,</b> там, куда ты ещё не доходил. Если в старом мире не находится обычная железная и медная руда — удали из папки сохранения <code>serverconfig/immersivegeology-server.toml</code>, он создастся заново.</li>
+          <li data-i18n-html="dlp.upd3"><b>Строил выше 320 блоков?</b> Снят мод lithosphere, и потолок мира возвращается с 512 к 320 — всё, что выше, сотрётся. Напиши автору в <a href="https://t.me/firilareoff" target="_blank" rel="noopener noreferrer">Telegram</a> до обновления.</li>
+          <li data-i18n-html="dlp.upd4"><b>Forge предупредит о пропавшем моде</b> — это снят Fallout Additions. Так и должно быть, продолжай. Исчезнут только картины НКР и Легиона, если они висели на стене.</li>
+          <li data-i18n-html="dlp.upd5"><b>Не обновляй моды по одному.</b> Сборка проверена ровно на версиях из архива: например, Polymorph 0.49.11 не даёт запуститься всем двумстам модам. Подробности — в <code>README.txt</code> внутри архива.</li>
+        </ul>
+      </details>
       <div class="step-nav">
         <button class="btn btn-ghost" data-prev data-i18n="dlp.prev">← Назад</button>
         <button class="btn btn-primary" data-next id="next-2" data-i18n="dlp.nextDownloaded">Я скачал, дальше →</button>
@@ -365,13 +390,13 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
     <div class="step-content">
       <p class="lead" data-i18n="dlp.s5lead">Финальная настройка. Выбери профиль шейдеров под своё железо — он уже откалиброван под холодную атмосферу. Можно сменить в любой момент в игре.</p>
       <div class="shader-picks" id="shaderPicks">
-        <div class="spick" data-s="potato"><div class="sn">Potato</div><div class="sf">40–60 FPS</div></div>
-        <div class="spick" data-s="low"><div class="sn">Low</div><div class="sf">50–75 FPS</div></div>
-        <div class="spick sel" data-s="medium"><div class="sn">Medium</div><div class="sf">55–80 FPS</div></div>
-        <div class="spick" data-s="high"><div class="sn">High</div><div class="sf">60–90 FPS</div></div>
+        <div class="spick" data-s="potato"><div class="sn">Potato</div><div class="sf">~30 FPS</div></div>
+        <div class="spick sel" data-s="low"><div class="sn">Low</div><div class="sf">62–94 FPS</div></div>
+        <div class="spick" data-s="medium"><div class="sn">Medium</div><div class="sf">69–100 FPS</div></div>
+        <div class="spick" data-s="high"><div class="sn">High</div><div class="sf">75–112 FPS</div></div>
         <div class="spick" data-s="extreme"><div class="sn">Extreme</div><div class="sf" data-i18n="dlp.extremeFps">кино-кадры</div></div>
       </div>
-      <div class="tip" id="shaderTipWrap" data-i18n-html="dlp.shaderTip"><b>Активация шейдеров:</b> в игре — <code>Options → Video Settings → Shader Packs</code>, выбери профиль <span id="chosenShader">Medium</span> и нажми Done. Если FPS низкий — спустись на ступень ниже или отключи шейдеры совсем (механика от этого не меняется).</div>
+      <div class="tip" id="shaderTipWrap" data-i18n-html="dlp.shaderTip"><b>Шейдеры приезжают выключенными,</b> а профиль LOW в них уже выбран — включишь, и сразу получишь разумный тир. Сменить профиль: в игре <code>Options → Video Settings → Shader Packs</code>, выбери <span id="chosenShader">Low</span> и нажми Done. Если FPS низкий — спустись на ступень ниже или отключи шейдеры совсем (механика от этого не меняется).</div>
       <div class="summary-box" id="deploySummary">
         <div class="sb-h" data-i18n="dlp.sumTitle">Что у тебя получилось</div>
         <div id="sumRows"></div>
@@ -384,7 +409,7 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
           <li data-i18n-html="dlp.f10b"><b>Смотри на градусник.</b> Он в углу экрана. Ниже нуля — ищи укрытие, а не приключения.</li>
           <li data-i18n-html="dlp.f10c"><b>Стены и крыша до заката.</b> Даже четыре блока земли лучше открытого поля.</li>
           <li data-i18n-html="dlp.f10d"><b>Не промокай.</b> Мокрая одежда отнимает тепло быстрее мороза.</li>
-          <li data-i18n-html="dlp.f10e"><b>Открой квестбук.</b> Он ведёт по шагам и выдаёт первые ресурсы.</li>
+          <li data-i18n-html="dlp.f10e"><b>Открой книгу заданий — клавиша J.</b> Она ведёт по шагам и выдаёт первые ресурсы.</li>
         </ol>
         <a class="f10-link" href="codex.html" data-i18n="dlp.f10Codex">Открыть Кодекс: первые часы →</a>
       </div>
@@ -416,14 +441,14 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
   </div>
 </footer>
 
-<script src="version.js?v=2.35"></script>
-<script src="sfx.js?v=2.35"></script>
-<script src="i18n.js?v=2.35"></script>
-<script src="i18n-dlp.js?v=2.35"></script>
-<script src="frostextras.js?v=2.35"></script>
-<script src="frostsearch.js?v=2.35"></script>
-<script src="frostauth.js?v=2.35"></script>
-<script src="firebase-config.js?v=2.35"></script>
+<script src="version.js?v=2.36"></script>
+<script src="sfx.js?v=2.36"></script>
+<script src="i18n.js?v=2.36"></script>
+<script src="i18n-dlp.js?v=2.36"></script>
+<script src="frostextras.js?v=2.36"></script>
+<script src="frostsearch.js?v=2.36"></script>
+<script src="frostauth.js?v=2.36"></script>
+<script src="firebase-config.js?v=2.36"></script>
 <script>
 (function(){
   'use strict';
@@ -490,8 +515,8 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
       [I18N.t('dlp.sumLauncher'), currentLauncher ? (launcherName[currentLauncher]||currentLauncher)
                                                   : I18N.t('dlp.sumNotPicked')],
       [I18N.t('dlp.sumMemory'),   big ? big.textContent.trim() : '—'],
-      [I18N.t('dlp.sumShader'),   (currentShader||'medium').replace(/^./,function(c){return c.toUpperCase();})],
-      [I18N.t('dlp.sumVersion'),  (window.FROST_VERSION ? FROST_VERSION.pack : 'R1.2')+' · Forge 47.4.20']
+      [I18N.t('dlp.sumShader'),   (currentShader||'low').replace(/^./,function(c){return c.toUpperCase();})],
+      [I18N.t('dlp.sumVersion'),  (window.FROST_VERSION ? FROST_VERSION.pack : 'R1.3')+' · Forge 47.4.23']
     ];
     /* ⚠ Строим узлами, а не склейкой разметки: на этой странице нет esc(),
        а подставляются в том числе значения из localStorage. */
@@ -577,9 +602,10 @@ input[type=range]::-moz-range-thumb{width:22px;height:22px;border-radius:50%;bac
 
   /* ---------- step 5: shaders ---------- */
   const names={potato:'Potato',low:'Low',medium:'Medium',high:'High',extreme:'Extreme'};
-  let currentShader = localStorage.getItem('fb_shader') || 'medium';
+  /* R1.3: шейдеры в сборке выключены, а LOW предвыбран — сайт предлагает то же. */
+  let currentShader = localStorage.getItem('fb_shader') || 'low';
   function selectShader(id, persist){
-    if(!names[id]) id='medium';
+    if(!names[id]) id='low';
     currentShader=id;
     $$('#shaderPicks .spick').forEach(x=>x.classList.toggle('sel', x.dataset.s===id));
     const label=$('#chosenShader'); if(label) label.textContent=names[id];

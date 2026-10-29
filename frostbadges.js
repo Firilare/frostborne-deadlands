@@ -95,8 +95,14 @@
       var st = String(localStorage.getItem('fb_codex_stat') || '');
       var m = /^(\d+)\/(\d+)$/.exec(st);
       if (m) { c.codexDone = num(m[1]); c.codexTotal = num(m[2]); }
+      /* С 2.36 прочитанное — список ключей записей (fb_jr_read). Старая
+         битовая строка живёт, пока человек не открыл журнал после обновления:
+         переезд делает сама страница журнала. Берём большее из двух. */
+      var keys = [];
+      try { keys = JSON.parse(localStorage.getItem('fb_jr_read') || '[]'); } catch (e2) {}
       var bits = String(localStorage.getItem('fb_journal_read') || '');
-      c.journalRead = (bits.match(/1/g) || []).length;
+      c.journalRead = Math.max(Array.isArray(keys) ? keys.length : 0,
+                               (bits.match(/1/g) || []).length);
       c.argSolved = localStorage.getItem('fb_journal_arg') === '1';
     } catch (e) {}
     return c;
